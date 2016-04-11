@@ -1,0 +1,987 @@
+﻿@import url("https://fonts.googleapis.com/css?family=PT+Sans");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700");
+@import url("font-awesome.min.css");
+
+/* Divider classes
+===============================================*/
+.DateDivider {
+    font-weight: bold;
+    font: 14px 'Helvetica Neue', sans-serif;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    min-height: 32px;
+    color: #00A2E8;
+}
+.DateDivider.assertive {
+    color: #00A2E8;
+}
+.SectionDividerActive {
+    color: #FF5E2E;
+}
+/* Action Sheet
+===============================================*/
+.action-sheet-title {
+    font-size: 18px;
+    color: #505050;
+}
+.action-sheet .button {
+    font: 18px 'PT Sans', sans-serif;
+    color: #0AA571;
+}
+.button.button-dark.button-clear {
+    font-size: 16px;
+    min-height: 36px;
+    line-height: 36px;
+}
+.button-white {
+    color: #fff;
+}
+/* Ionic Popup
+===============================================*/
+.popup-body {
+    padding: 10px;
+    overflow: hidden;
+}
+/* Spinner
+===============================================*/
+.spinner svg {
+  width: 28px;
+  height: 28px;
+}
+/* Left Menu Screen
+===============================================*/
+.ion-ios-undo-outline{
+    color: #CE1B31;
+}
+.menuLogout {
+    color: #CE1B31;
+}
+/* Menu Icons and Chevron Icons */
+.bar-menu {
+    background-color: #28a54c;
+    width: 100%;
+    padding: 0;
+}
+.bar-menu .HeaderTitle {
+    text-align: left;
+    font-size: 17px;
+    padding-left: 15px;
+    padding-top: 12px;
+    color: #fff;
+    font-weight: bolder;
+}
+.bar.bar-menu .title {
+    color: #ff8000;
+    font-weight: bolder;
+}
+.ion-chevron-right:before {
+    color: #CEEFD4;
+    font-size: 14px;
+}
+.ion-ios-arrow-right:before {
+    color: #CEEFD4;
+    font-size: 21px;
+}
+.bar.bar-subheader.CustomSubHeader {
+  padding-top: 1px;
+}
+.CustomSubHeader {
+    background-color: #CFD29F;
+}
+.customHeaderIcon:before {
+    color: #fff;
+    font-size: 32px;
+}
+.customHeaderIconSmall:before {
+    font-size: 20px;
+}
+.extraMarginRight {
+    margin-right: 10px;
+}
+.bar .button.back-button {
+    color: white;
+}
+button.customHeaderSize {
+    font-size: 20px;
+}
+.subTitle {
+    font: 16px 'PT Sans', sans-serif;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.button.button-positive.button-clear {
+    color: #31C0E6;
+}
+
+/* Accounts & Transactions Screens
+===============================================*/
+.row {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.col {
+    padding: 0;
+}
+.colBorder {
+    border-right: 1px solid #799196;
+}
+.AccountScreenPadding {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.right {
+    text-align: right;
+}
+.center {
+    text-align: center;
+}
+.balancesRow {
+    font-weight: bold;
+    font: 13px 'PT Sans Narrow', sans-serif;
+}
+.balancesRow span {
+    display: block;
+    font-weight: normal;
+    font-size: 15px;
+}
+.CustomFooter {
+    background-color: #fff;
+}
+.customFooterIcon:before {
+    color: #fff;
+    text-shadow: 0 -1px 0 #bfbfbf; 
+}
+.iconPhoto i:before {
+    font-weight: bold;
+    font-size: 35px;
+    color: #31C0E6;
+}
+.photoView {
+    background-color: #000;
+}
+.PhotoFooter {
+    background-color: #172F39;
+    border-top-width: 0;
+}
+.iconBackArrow i:before {
+    font-weight: bold;
+    font-size: 35px;
+}
+.netWorthRow span {
+    margin-top: 8px;
+    display: block;
+    font-weight: normal;
+    font: 18px 'PT Sans Narrow', sans-serif;
+}
+.customItemSize {
+    font-size: 20px;
+}
+.customItemPadding.item-complex.item-icon-left .item-content {
+    padding-left: 44px;
+}
+.customAccDesc {
+    font-size: 20px;
+    text-align: left;
+    height: 37px;
+    font-weight: bold;
+}
+.customAccDesc span small > i {
+    padding-right: 3px;
+}
+.customAccDesc span small {
+    position: absolute;
+    font: 13px 'Helvetica Neue', sans-serif;
+    top: 43px;
+    left: 16px;
+    color: #A0A0A0;
+    font-weight: normal;
+}
+.item-complex.item-icon-right .item-content{
+    padding-right: 22px;
+}
+.customTransDesc {
+    font-size: 15px;
+    font-family: cursive;
+    font-weight: initial;
+}
+.customTransDesc span small {
+    position: absolute;
+    font: 12px 'Helvetica Neue', sans-serif;
+    top: 40px;
+    left: 16px;
+    color: #A0A0A0;
+    font-weight: normal;
+}
+.customTransDesc span small > i {
+    padding-right: 3px;
+}
+.customAccAmt {
+    height: 37px;
+    font-weight: bold;
+    padding-right: 20px;
+    font-size: 18px;
+}
+.customAccAmt span {
+    position: relative;
+    top: 8px;
+}
+.customAccAmt span small {
+    position: absolute;
+    font: 16px 'PT Sans Narrow', sans-serif;
+    top: 20px;
+    right: 0;
+    color: #A0A0A0;
+    font-weight: bold;
+}
+.customTransAmt {
+    height: 37px;
+    font-weight: bold;
+    padding-right: 2px;
+    font-size: 15px;
+    font-family: serif;
+}
+.customTransAmt span {
+    position: relative;
+    top: 1px;
+}
+.customTransAmt span small {
+    position: absolute;
+    font: 14px 'PT Sans Narrow', sans-serif;
+    top: 20px;
+    right: 0;
+    color: #A0A0A0;
+    font-weight: bold;
+}
+.textRed {
+    color: #CE1B31;
+}
+.Expense {
+    color: #CE1B31;
+}
+.textBlack {
+    color: #000;
+}
+.textGreen {
+    color: #1AAC57;
+}
+.Income {
+    color: #1AAC57;
+}
+.item-right-edit {
+    width: 60px;
+}
+.formLabelBold {
+    font-weight: bold;
+}
+.transactionIsCleared .item-content {
+    background-color: #eee;
+    -webkit-transition: all linear 0.5s;
+    -o-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+}
+.item-icon-right .item-content {
+    -webkit-transition: all linear 0.5s;
+    -o-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+}
+.item-toggle-option .toggle {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    z-index: 3;
+}
+.toggleTransactionCleared {
+	text-align: center;
+	width: 12px;
+	height: auto;
+	position: absolute;
+    right: 8px;
+	margin: auto 0;
+    margin-left: auto;
+    margin-right: auto;
+	border: none;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+    background-color: transparent;
+}
+.toggleTransactionCleared:after {
+	content: '\f00c';
+	line-height: 43px;
+	font-size: 17px;
+	color: #ebebeb;
+	text-shadow: 0 -1px 0 #bfbfbf;
+    font-family: FontAwesome;
+}
+.toggleTransactionCleared:checked:after {
+	color: #00A2E8;
+	bottom: 1px;
+	position: relative;
+}
+.search-wrapper-light {
+    border-bottom: 2px solid rgba(255,255,255,0.5);
+    background: none;
+    border-radius: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.search-wrapper-light input, .search-wrapper-light input::-webkit-input-placeholder {
+    color: #ffffff;
+}
+.button.button-stable {
+    background-color: #b2b2b2;
+    color: #fff;
+}
+.item-input textarea {
+    width: 100%;
+    font: 16px 'PT Sans', sans-serif;
+}
+.item-input-inset .item-input-wrapper input {
+    padding-left: 4px;
+    height: 29px;
+    background: transparent;
+    line-height: 18px;
+    font: 17px 'PT Sans', sans-serif;
+}
+.button-register {
+    background: #ADB3B5 !important;
+    color: white !important;
+    z-index: 12 !important;
+    position: absolute !important;
+    top: 100px !important;
+    right: 41%;
+    width: 65px;
+    height: 65px;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transition: 0.2s linear !important;
+    transition: 0.2s linear !important;
+    -webkit-transition-property: -webkit-transform, all !important;
+    transition-property: transform, all !important;
+}
+.button-register:hover {
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background: #0076A8 !important;
+}
+.button-register .icon:before {
+    font-size: 34px;
+}
+.button-float {
+    background: #59A732 !important;
+    color: white !important;
+    z-index: 12 !important;
+    position: absolute !important;
+    bottom: 50px !important;
+    right: 1%;
+    width: 55px;
+    height: 55px;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transition: 0.2s linear !important;
+    transition: 0.2s linear !important;
+    -webkit-transition-property: -webkit-transform, all !important;
+    transition-property: transform, all !important;
+}
+.button-float:hover {
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background: #0076A8 !important;
+}
+.button-float .icon:before {
+    font-size: 34px;
+}
+.button-post {
+    background: #59A732 !important;
+    color: white !important;
+    z-index: 12 !important;
+    position: absolute !important;
+    top: 88px !important;
+    right: 1%;
+    width: 55px;
+    height: 55px;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transition: 0.2s linear !important;
+    transition: 0.2s linear !important;
+    -webkit-transition-property: -webkit-transform, all !important;
+    transition-property: transform, all !important;
+}
+.button-post:hover {
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background: #0076A8 !important;
+}
+.button-post .icon:before {
+    font-size: 34px;
+}
+.mlpurple {
+    color: purple;
+}
+
+/* About Screen
+===============================================*/
+.slider { height: 100%; text-align: center }
+.scroll { height: 100%; }
+
+/* Form Styles
+===============================================*/
+.zeziLabel {
+    padding: 0;
+}
+.placeholder-icon:first-child {
+    padding-right: 0;
+}
+.placeholder-icon {
+    color: #919191;
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+.icon-bg {
+    background:#eeeeee;
+}
+.item-input .icon {
+    min-width: 65px;
+}
+.zeziLabel input, label {
+    margin-left: 10px;
+    font-size: 20px;
+    margin-top: 5px;
+}
+.cleanlabel {
+    margin-left: 0;
+    margin-top: 0;
+    font-size: 17px;
+}
+.zeziLabel button {
+    margin-left: 5px;
+}
+.zeziLabel div {
+    padding: 5px;
+    width: 85%;
+    border: 0;
+}
+.zeziLabel div div {
+    padding: 5px;
+    width: 25%;
+    border: 0;
+}
+.zeziLabel div label {
+    float: right;
+}
+.zeziDatePicker {
+  font-size: 20px;
+  min-height: 36px;
+  line-height: 36px;
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+  color: #444;
+}
+.zeziSelectBox {
+    padding: 0;
+}
+.zeziSelectBox input {
+    margin-top: 5px;
+}
+.zeziSelectBox input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.cloned-text-input), textarea[readonly]:not(.cloned-text-input), select[readonly] {
+  background-color: #fff;
+  cursor: not-allowed;
+}
+.ml-login-input input {
+    font-size: 10px;
+    height: 5px;
+}
+.item-floating-label .input-label {
+    font: 14px 'Calibri', sans-serif;
+    color: green;
+    padding: 0;
+}
+.item-floating-label .input-label.has-input {
+    top: 4px;
+    text-align: left;
+}
+.zeziTip {
+    font-size: 14px;
+}
+.ng-hide-add, 
+.ng-hide-remove {
+    /* ensure visibility during the transition */
+    display: block !important; /* yes, important */
+}
+.item-complex.item-icon-left.form-group .item-content {
+    padding: 0 49px 0 55px;
+}
+.form-group .item-input {
+    padding: 3px 0 3px 16px;
+}
+.form-group img {
+    margin-left: 5px;
+    margin-top: -10px;
+    border: 0;
+}
+.form-group i {
+    background:#eeeeee;
+    color: #919191;
+    width: 63px;
+}
+.form-group i:before {
+    font-size: 24px;
+    margin: 0 auto;
+}
+.form-group i.icon {
+    left: 0;
+}
+.form-group a.item-content {
+    height: 50px;
+}
+.form-group input[type="text"], input[type="email"], input[type="password"] {
+    margin-top: 0;
+    padding-left: 35px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+}
+.form-group .item-floating-label {
+    border: 0;
+}
+.form-group .item-floating-label input[type="text"], input[type="email"], input[type="password"] {
+    padding-left: 0;
+}
+.floating-padding {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.list-inset .item {
+    padding: 3px;
+}
+.customMarginTop input[type="text"] {
+    margin-top: -8px;
+}
+i.customChevronForm {
+    width: 40px;
+    background-color: transparent;
+}
+i.customChevronForm:before {
+    color: #CEEFD4;
+    font-size: 14px;
+}
+.item-select select {
+    padding: 8px 48px 10px 16px;
+}
+.item-icon-left.mlindent {
+    padding-left: 40px;
+}
+i.mlpaddingright {
+    margin-right: 8px;
+}
+.mlSmallerFont
+{
+    font-size: 18px;
+}
+.iconPadding {
+    margin-right: 10px;
+}
+.circleIconGreen {
+    background: #28a54c;
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    width: 25px;
+}
+.circleIconGreen:before {
+    font-size: 16px;
+    font-weight: bold;
+    height: 15px;
+}
+.item-icon-left .circleIconGreen {
+    height: 25px;
+    margin-top: 15px;
+}
+.circleIconRed {
+    background: #CE1B31;
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    width: 25px;
+}
+.circleIconRed:before {
+    font-size: 16px;
+    font-weight: bold;
+    height: 15px;
+}
+.item-icon-left .circleIconRed {
+    height: 25px;
+    margin-top: 15px;
+}
+.pickCategoryIndent {
+    padding-left: 40px;
+}
+#pickCategoryIcons ul li {
+    list-style-type: none;
+    display: inline;
+}
+#pickCategoryIcons ul li > i {
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-right: 5px;
+}
+
+/* Calendar / TimePicker
+===============================================*/
+.pickadate-cell .pickadate-enabled {
+    font-size: 14px;
+}
+.pickadate a:visited, .pickadate a {
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.mlDatePadding {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 15px;
+}
+.pickadate-centered-heading {
+    font-weight: bold;
+}
+.pickadate a:visited, .pickadate a {
+    color: #31C0E6;
+}
+.pickadate-cell li {
+    padding: 1.5% 0 1.5% 0;
+}
+.button.button-positive {
+    border-color: #31C0E6;
+    background-color: #31C0E6;
+    color: #fff;
+}
+
+/* Numeric Pad
+===============================================*/
+#resultInput {
+    display: block;
+    width: 100%;
+    height: 50px;
+    margin-right: 0 auto;
+    padding-right: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #D3EAF0;
+    text-align: right;
+}
+#basic {
+    margin: 0 auto;
+    padding: 0;
+    border-collapse: collapse;
+    border: 2px solid #000;
+    width: 100%;
+    max-width: 400px;
+}
+    #basic td {
+        background-color: #000;
+        padding: 0;
+        width: 18%;
+        height: 18%;
+        border: 1px solid #000;
+    }
+    #basic button {
+        display: block;
+        font-size: 20px;
+        width: 100%;
+        min-height: 60px;
+        padding: 0;
+        border: none;
+        text-align: center;
+        color: #000;
+        background-color: #d0d1d4;
+    }
+        #basic button.functionKey {
+            background-color: #F98E12;
+            color: #fff;
+        }
+        #basic button.functionKey:hover {
+            background-color: #ea7d05;
+        }
+        #basic button.disabledKey {
+            background-color: #000;
+        }
+        #basic button:hover {
+            color: #000;
+            cursor: pointer;
+            background-color: #babbbe;
+        }
+
+/* Pick a Payee Search Screen
+===============================================*/
+/* Slide Animation */
+.cssSlideUp {
+    transition: .5s linear all;
+    height: 40px;
+    overflow: hidden;
+    background-color: #d9534f;
+    text-align: center;
+    padding-top: 8px;
+    color: #fff;
+}
+.cssSlideUp.ng-hide {
+    height:0;
+}
+
+/* Security Screen - TouchID
+===============================================*/
+/* Slide Animation */
+.cssTouchIDUp {
+    transition: .5s linear all;
+    height: 103px;
+    overflow: hidden;
+    background-color: #d9534f;
+    text-align: center;
+    color: #fff;
+    margin-top: 1px;
+}
+.cssTouchIDUp.ng-hide {
+    height:0;
+}
+
+/* Popover
+===============================================*/
+.platform-ios .popover {
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.38);
+    border-radius: 5px;
+    height: 225px;
+}
+.popover a.item {
+    border-top: 0;
+    font: 16px 'PT Sans', sans-serif;
+    padding: 8px;
+    border-color: #fff;
+}
+
+.am-collapse{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards;opacity:1}.am-collapse.am-collapse-add,.am-collapse.ng-hide-remove,.am-collapse.ng-move{-webkit-animation-name:expand;animation-name:expand}.am-collapse.am-collapse-remove,.am-collapse.ng-hide{-webkit-animation-name:collapse;animation-name:collapse}.am-collapse.ng-enter{visibility:hidden;-webkit-animation-name:expand;animation-name:expand;-webkit-animation-play-state:paused;animation-play-state:paused}.am-collapse.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-collapse.ng-leave{-webkit-animation-name:collapse;animation-name:collapse;-webkit-animation-play-state:paused;animation-play-state:paused}.am-collapse.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes expand{from{max-height:0}to{max-height:500px}}@keyframes expand{from{max-height:0}to{max-height:500px}}@-webkit-keyframes collapse{from{max-height:500px}to{max-height:0}}@keyframes collapse{from{max-height:500px}to{max-height:0}}.panel-collapse.am-collapse.in-remove{-webkit-animation-name:collapse;animation-name:collapse;display:block}.panel-collapse.am-collapse.in-add{-webkit-animation-name:expand;animation-name:expand}.am-fade-and-scale{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-fade-and-scale.ng-enter,.am-fade-and-scale.am-fade-and-scale-add,.am-fade-and-scale.ng-hide-remove,.am-fade-and-scale.ng-move{-webkit-animation-name:fadeAndScaleIn;animation-name:fadeAndScaleIn}.am-fade-and-scale.ng-leave,.am-fade-and-scale.am-fade-and-scale-remove,.am-fade-and-scale.ng-hide{-webkit-animation-name:fadeAndScaleOut;animation-name:fadeAndScaleOut}.am-fade-and-scale.ng-enter{visibility:hidden;-webkit-animation-name:fadeAndScaleIn;animation-name:fadeAndScaleIn;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-scale.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-scale.ng-leave{-webkit-animation-name:fadeAndScaleOut;animation-name:fadeAndScaleOut;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-scale.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes fadeAndScaleIn{from{opacity:0;-webkit-transform:scale(0.7);transform:scale(0.7)}to{opacity:1}}@keyframes fadeAndScaleIn{from{opacity:0;-webkit-transform:scale(0.7);transform:scale(0.7)}to{opacity:1}}@-webkit-keyframes fadeAndScaleOut{from{opacity:1}to{opacity:0;-webkit-transform:scale(0.7);transform:scale(0.7)}}@keyframes fadeAndScaleOut{from{opacity:1}to{opacity:0;-webkit-transform:scale(0.7);transform:scale(0.7)}}.am-fade-and-slide-top{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-fade-and-slide-top.am-fade-and-slide-top-add,.am-fade-and-slide-top.ng-hide-remove,.am-fade-and-slide-top.ng-move{-webkit-animation-name:fadeAndSlideFromTop;animation-name:fadeAndSlideFromTop}.am-fade-and-slide-top.am-fade-and-slide-top-remove,.am-fade-and-slide-top.ng-hide{-webkit-animation-name:fadeAndSlideToTop;animation-name:fadeAndSlideToTop}.am-fade-and-slide-top.ng-enter{visibility:hidden;-webkit-animation-name:fadeAndSlideFromTop;animation-name:fadeAndSlideFromTop;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-top.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-top.ng-leave{-webkit-animation-name:fadeAndSlideToTop;animation-name:fadeAndSlideToTop;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-top.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-right{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-fade-and-slide-right.am-fade-and-slide-right-add,.am-fade-and-slide-right.ng-hide-remove,.am-fade-and-slide-right.ng-move{-webkit-animation-name:fadeAndSlideFromRight;animation-name:fadeAndSlideFromRight}.am-fade-and-slide-right.am-fade-and-slide-right-remove,.am-fade-and-slide-right.ng-hide{-webkit-animation-name:fadeAndSlideToRight;animation-name:fadeAndSlideToRight}.am-fade-and-slide-right.ng-enter{visibility:hidden;-webkit-animation-name:fadeAndSlideFromRight;animation-name:fadeAndSlideFromRight;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-right.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-right.ng-leave{-webkit-animation-name:fadeAndSlideToRight;animation-name:fadeAndSlideToRight;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-right.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-bottom{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-fade-and-slide-bottom.am-fade-and-slide-bottom-add,.am-fade-and-slide-bottom.ng-hide-remove,.am-fade-and-slide-bottom.ng-move{-webkit-animation-name:fadeAndSlideFromBottom;animation-name:fadeAndSlideFromBottom}.am-fade-and-slide-bottom.am-fade-and-slide-bottom-remove,.am-fade-and-slide-bottom.ng-hide{-webkit-animation-name:fadeAndSlideToBottom;animation-name:fadeAndSlideToBottom}.am-fade-and-slide-bottom.ng-enter{visibility:hidden;-webkit-animation-name:fadeAndSlideFromBottom;animation-name:fadeAndSlideFromBottom;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-bottom.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-bottom.ng-leave{-webkit-animation-name:fadeAndSlideToBottom;animation-name:fadeAndSlideToBottom;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-bottom.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-left{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-fade-and-slide-left.am-fade-and-slide-left-add,.am-fade-and-slide-left.ng-hide-remove,.am-fade-and-slide-left.ng-move{-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards;-webkit-animation-name:fadeAndSlideFromLeft;animation-name:fadeAndSlideFromLeft}.am-fade-and-slide-left.am-fade-and-slide-left-remove,.am-fade-and-slide-left.ng-hide{-webkit-animation-name:fadeAndSlideToLeft;animation-name:fadeAndSlideToLeft}.am-fade-and-slide-left.ng-enter{visibility:hidden;-webkit-animation-name:fadeAndSlideFromLeft;animation-name:fadeAndSlideFromLeft;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-left.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade-and-slide-left.ng-leave{-webkit-animation-name:fadeAndSlideToLeft;animation-name:fadeAndSlideToLeft;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade-and-slide-left.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes fadeAndSlideFromTop{from{opacity:0;-webkit-transform:translateY(-20%);transform:translateY(-20%)}to{opacity:1}}@keyframes fadeAndSlideFromTop{from{opacity:0;-webkit-transform:translateY(-20%);transform:translateY(-20%)}to{opacity:1}}@-webkit-keyframes fadeAndSlideToTop{from{opacity:1}to{opacity:0;-webkit-transform:translateY(-20%);transform:translateY(-20%)}}@keyframes fadeAndSlideToTop{from{opacity:1}to{opacity:0;-webkit-transform:translateY(-20%);transform:translateY(-20%)}}@-webkit-keyframes fadeAndSlideFromRight{from{opacity:0;-webkit-transform:translateX(20%);transform:translateX(20%)}to{opacity:1}}@keyframes fadeAndSlideFromRight{from{opacity:0;-webkit-transform:translateX(20%);transform:translateX(20%)}to{opacity:1}}@-webkit-keyframes fadeAndSlideToRight{from{opacity:1}to{opacity:0;-webkit-transform:translateX(20%);transform:translateX(20%)}}@keyframes fadeAndSlideToRight{from{opacity:1}to{opacity:0;-webkit-transform:translateX(20%);transform:translateX(20%)}}@-webkit-keyframes fadeAndSlideFromBottom{from{opacity:0;-webkit-transform:translateY(20%);transform:translateY(20%)}to{opacity:1}}@keyframes fadeAndSlideFromBottom{from{opacity:0;-webkit-transform:translateY(20%);transform:translateY(20%)}to{opacity:1}}@-webkit-keyframes fadeAndSlideToBottom{from{opacity:1}to{opacity:0;-webkit-transform:translateY(20%);transform:translateY(20%)}}@keyframes fadeAndSlideToBottom{from{opacity:1}to{opacity:0;-webkit-transform:translateY(20%);transform:translateY(20%)}}@-webkit-keyframes fadeAndSlideFromLeft{from{opacity:0;-webkit-transform:translateX(-20%);transform:translateX(-20%)}to{opacity:1}}@keyframes fadeAndSlideFromLeft{from{opacity:0;-webkit-transform:translateX(-20%);transform:translateX(-20%)}to{opacity:1}}
+@-webkit-keyframes fadeAndSlideToLeft{from{opacity:1}to{opacity:0;-webkit-transform:translateX(-20%);transform:translateX(-20%)}}@keyframes fadeAndSlideToLeft{from{opacity:1}to{opacity:0;-webkit-transform:translateX(-20%);transform:translateX(-20%)}}.am-fade{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:linear;animation-timing-function:linear;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards;opacity:1}.am-fade.am-fade-add,.am-fade.ng-hide-remove,.am-fade.ng-move{-webkit-animation-name:fadeIn;animation-name:fadeIn}.am-fade.am-fade-remove,.am-fade.ng-hide{-webkit-animation-name:fadeOut;animation-name:fadeOut}.am-fade.ng-enter{visibility:hidden;-webkit-animation-name:fadeIn;animation-name:fadeIn;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-fade.ng-leave{-webkit-animation-name:fadeOut;animation-name:fadeOut;-webkit-animation-play-state:paused;animation-play-state:paused}.am-fade.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@-webkit-keyframes fadeOut{from{opacity:1}to{opacity:0}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}.tab-pane.am-fade.active-remove{display:none!important}.tab-pane.am-fade.active-add{-webkit-animation-name:fadeIn;animation-name:fadeIn}.modal-backdrop.am-fade,.aside-backdrop.am-fade{background:rgba(0,0,0,.5);-webkit-animation-duration:.15s;animation-duration:.15s}.modal-backdrop.am-fade.ng-leave,.aside-backdrop.am-fade.ng-leave{-webkit-animation-delay:.3s;animation-delay:.3s}.am-flip-x{-webkit-animation-duration:.4s;animation-duration:.4s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-flip-x.am-flip-x-add,.am-flip-x.ng-hide-remove,.am-flip-x.ng-move{-webkit-animation-name:flipInXBounce;animation-name:flipInXBounce}.am-flip-x.am-flip-x-remove,.am-flip-x.ng-hide{-webkit-animation-name:flipOutX;animation-name:flipOutX}.am-flip-x.ng-enter{visibility:hidden;-webkit-animation-name:flipInXBounce;animation-name:flipInXBounce;-webkit-animation-play-state:paused;animation-play-state:paused}.am-flip-x.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-flip-x.ng-leave{-webkit-animation-name:flipOutX;animation-name:flipOutX;-webkit-animation-play-state:paused;animation-play-state:paused}.am-flip-x.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-flip-x-linear{-webkit-animation-duration:.4s;animation-duration:.4s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-flip-x-linear.am-flip-x-add,.am-flip-x-linear.ng-hide-remove,.am-flip-x-linear.ng-move{-webkit-animation-name:flipInX;animation-name:flipInX}.am-flip-x-linear.am-flip-x-remove,.am-flip-x-linear.ng-hide{-webkit-animation-name:flipOutX;animation-name:flipOutX}.am-flip-x-linear.ng-enter{visibility:hidden;-webkit-animation-name:flipInX;animation-name:flipInX;-webkit-animation-play-state:paused;animation-play-state:paused}.am-flip-x-linear.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-flip-x-linear.ng-leave{-webkit-animation-name:flipOutX;animation-name:flipOutX;-webkit-animation-play-state:paused;animation-play-state:paused}.am-flip-x-linear.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes flipInX{from{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}to{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}}@keyframes flipInX{from{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}to{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}}@-webkit-keyframes flipInXBounce{from{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}40%{-webkit-transform:perspective(400px) rotateX(-10deg);transform:perspective(400px) rotateX(-10deg)}70%{-webkit-transform:perspective(400px) rotateX(10deg);transform:perspective(400px) rotateX(10deg)}to{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}}@keyframes flipInXBounce{from{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}40%{-webkit-transform:perspective(400px) rotateX(-10deg);transform:perspective(400px) rotateX(-10deg)}70%{-webkit-transform:perspective(400px) rotateX(10deg);transform:perspective(400px) rotateX(10deg)}to{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}}@-webkit-keyframes flipOutX{from{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}to{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}}@keyframes flipOutX{from{opacity:1;-webkit-transform:perspective(400px) rotateX(0deg);transform:perspective(400px) rotateX(0deg)}to{opacity:0;-webkit-transform:perspective(400px) rotateX(90deg);transform:perspective(400px) rotateX(90deg)}}.am-slide-top{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-slide-top.am-slide-top-add,.am-slide-top.ng-hide-remove,.am-slide-top.ng-move{-webkit-animation-name:slideFromTop;animation-name:slideFromTop}.am-slide-top.am-slide-top-remove,.am-slide-top.ng-hide{-webkit-animation-name:slideToTop;animation-name:slideToTop}.am-slide-top.ng-enter{visibility:hidden;-webkit-animation-name:slideFromTop;animation-name:slideFromTop;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-top.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-slide-top.ng-leave{-webkit-animation-name:slideToTop;animation-name:slideToTop;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-top.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-slide-right{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-slide-right.am-slide-right-add,.am-slide-right.ng-hide-remove,.am-slide-right.ng-move{-webkit-animation-name:slideFromRight;animation-name:slideFromRight}.am-slide-right.am-slide-right-remove,.am-slide-right.ng-hide{-webkit-animation-name:slideToRight;animation-name:slideToRight}.am-slide-right.ng-enter{visibility:hidden;-webkit-animation-name:slideFromRight;animation-name:slideFromRight;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-right.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-slide-right.ng-leave{-webkit-animation-name:slideToRight;animation-name:slideToRight;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-right.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-slide-bottom{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-slide-bottom.am-slide-bottom-add,.am-slide-bottom.ng-hide-remove,.am-slide-bottom.ng-move{-webkit-animation-name:slideFromBottom;animation-name:slideFromBottom}.am-slide-bottom.am-slide-bottom-remove,.am-slide-bottom.ng-hide{-webkit-animation-name:slideToBottom;animation-name:slideToBottom}.am-slide-bottom.ng-enter{visibility:hidden;-webkit-animation-name:slideFromBottom;animation-name:slideFromBottom;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-bottom.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-slide-bottom.ng-leave{-webkit-animation-name:slideToBottom;animation-name:slideToBottom;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-bottom.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}.am-slide-left{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards}.am-slide-left.am-slide-left-add,.am-slide-left.ng-hide-remove,.am-slide-left.ng-move{-webkit-animation-name:slideFromLeft;animation-name:slideFromLeft}.am-slide-left.am-slide-left-remove,.am-slide-left.ng-hide{-webkit-animation-name:slideToLeft;animation-name:slideToLeft}.am-slide-left.ng-enter{visibility:hidden;-webkit-animation-name:slideFromLeft;animation-name:slideFromLeft;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-left.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}.am-slide-left.ng-leave{-webkit-animation-name:slideToLeft;animation-name:slideToLeft;-webkit-animation-play-state:paused;animation-play-state:paused}.am-slide-left.ng-leave.ng-leave-active{-webkit-animation-play-state:running;animation-play-state:running}@-webkit-keyframes slideFromTop{from{-webkit-transform:translateY(-100%);transform:translateY(-100%)}
+}@keyframes slideFromTop{from{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@-webkit-keyframes slideToTop{to{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@keyframes slideToTop{to{-webkit-transform:translateY(-100%);transform:translateY(-100%)}}@-webkit-keyframes slideFromRight{from{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes slideFromRight{from{-webkit-transform:translateX(100%);transform:translateX(100%)}}@-webkit-keyframes slideToRight{to{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes slideToRight{to{-webkit-transform:translateX(100%);transform:translateX(100%)}}@-webkit-keyframes slideFromBottom{from{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes slideFromBottom{from{-webkit-transform:translateY(100%);transform:translateY(100%)}}@-webkit-keyframes slideToBottom{to{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes slideToBottom{to{-webkit-transform:translateY(100%);transform:translateY(100%)}}@-webkit-keyframes slideFromLeft{from{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@keyframes slideFromLeft{from{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@-webkit-keyframes slideToLeft{to{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}@keyframes slideToLeft{to{-webkit-transform:translateX(-100%);transform:translateX(-100%)}}
+
+
+/* New Login Form based on 
+===============================================*/
+.mlLinksBlue {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+}
+.introHeading h1 {
+    color: #fff;
+}
+.loginScreen {
+    background-color: #172F39;
+}
+.logo {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50px;
+    width: 75px;
+    height: 75px;
+    background: #28a54c;
+    text-align: center;
+    margin-top: 50px;
+}
+a.logo {
+    text-decoration: none;
+}
+.logo span {
+    position: absolute;
+    font-size: 40px;
+    color: #fff;
+    margin-top: 26px;
+    margin-left: -7px;
+}
+.tagline {
+    text-align: center;
+    color: #FFF;
+    font-size: 16px;
+    margin-bottom: 40px;
+}
+#ml-login {
+    position:relative;
+    margin: 25px auto;
+    width: 330px;
+    height: auto;
+}
+#ml-login h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color:rgba(255,255,255,.8);
+}
+#ml-login input {
+    padding: 5px;
+    border-radius:7px;
+    border: 10px;
+    border-color: #D8BABA;
+    background: rgba(99, 253, 2, 0.26);
+    display: block;
+    margin: 3px;
+    width: 290px;
+    font-size: 15px;
+    height: 35px;
+    font-style: italic;
+    font-family: sans-serif;
+    color: rgba(0, 0, 0, 0.77);
+}
+#ml-login input:focus {
+    outline-color: rgba(0, 0, 0, 0.44);
+    background: rgba(236, 231, 231, 0.3);
+    color: #e74c3c;
+}
+#ml-login .item-floating-label.input-label {
+    font: 14px 'Calibri', sans-serif;
+    color: blue;
+    padding: 0;
+}
+#ml-login .item-floating-label.input-label.has-input {
+    top: 4px;
+    text-align: left;
+}
+#ml-login button {
+    background: green !important;
+    color: white !important;
+    z-index: 12 !important;
+    position: absolute !important;
+    bottom: 15px !important;
+    right: 44%;
+    width: 45px;
+    height: 45px;
+    border-radius: 70% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transition: 0.2s linear !important;
+    transition: 0.2s linear !important;
+    -webkit-transition-property: -webkit-transform, all !important;
+    transition-property: transform, all !important;
+}
+#ml-login button:hover {
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background: #0076A8 !important;
+}
+#ml-login button.submit_forgot {
+    float:right;
+    height: 50px;
+    width: 60px;
+    border: 0;
+    background: #e74c3c;
+    border-radius:7px;
+    padding: 10px;
+    color:black;
+    font-size:22px;
+}
+#ml-login button.submit_register {
+    float:right;
+    height: 230px;
+    width: 60px;
+    border: 0;
+    background: #e74c3c;
+    border-radius:7px;
+    padding: 10px;
+    color:black;
+    font-size:22px;
+}
+#ml-login a {
+    color: green !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transition: 0.2s linear !important;
+    transition: 0.2s linear !important;
+    -webkit-transition-property: -webkit-transform, all !important;
+    transition-property: transform, all !important;
+}
+#ml-login a:hover {
+    color: blue !important;
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+}
+#ml-login .item-floating-label.inputUserIcon {
+    position: absolute;
+    top: 229px;
+    right: 80px;
+    color: green;
+}
+#ml-login .inputUserIcon_forgot {
+    position: absolute;
+    top: 16px;
+    right: 80px;
+    color: black;
+}
+#ml-login .inputUserIcon_register1 {
+    position: absolute;
+    top: 17px;
+    right: 80px;
+    color: black;
+}
+#ml-login .inputUserIcon_register2 {
+    position: absolute;
+    top: 76px;
+    right: 80px;
+    color: black;
+}
+#ml-login .inputUserIcon_register3 {
+    position: absolute;
+    top: 136px;
+    right: 80px;
+    color: black;
+}
+#ml-login .inputUserIcon_register4 {
+    position: absolute;
+    top: 196px;
+    right: 80px;
+    color: black;
+}
+#ml-login .inputPassIcon {
+    position:absolute;
+    top: 287px;
+    right: 80px;
+    color:black;
+}
+#ml-login input::-webkit-input-placeholder {
+    color: black;
+}
+#ml-login input:focus::-webkit-input-placeholder {
+    color: #e74c3c;
+}
+/**
+ * This CSS uses adjacent selectors instead of general sibling (~) selectors
+ * for ion radio that are broken in iOS 9 UIWebView.
+ *
+ * To apply the patch, include this CSS after your ionic.css include.
+ */
+  .item-radio input:checked + .radio-content .item-content {
+    /* style the item content when its checked */
+    background: #f7f7f7; 
+    
+  }
+    
+  .item-radio input:checked + .radio-content .radio-icon {
+    /* show the checkmark icon when its checked */
+    visibility: visible;
+    
+  }
