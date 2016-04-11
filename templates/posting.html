@@ -1,0 +1,91 @@
+<ion-view title={{TransactionTitle}}>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear customHeaderSize" ng-click="saveTransaction()">Save</button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <div ng-hide="hideValidationMessage" class="cssSlideUp ng-hide">
+            <div class="validationDiv">
+                <p>
+                    {{ validationMessage }}
+                </p>
+            </div>
+        </div>
+        <div class="ion-list">
+            <div class="item item-divider mlSmallerFont CustomSubHeader">Transaction Details</div>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ng-click="pickTransactionType()">
+                <i class="icon fa fa-university placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Transaction Type</span>
+                    <input type="text" placeholder="Transaction Type" ng-model="currentItem.typedisplay" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <div ng-hide="!isTransfer" class="ng-hide">
+                <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactionaccountfrom">
+                    <i class="icon fa fa-reply placeholder-icon"></i>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">From Account</span>
+                        <input type="text" placeholder="From Account" ng-model="currentItem.accountFrom" readonly>
+                    </label>
+                    <i class="icon ion-chevron-right customChevronForm"></i>
+                </ion-item>
+                <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactionaccountto">
+                    <i class="icon fa fa-share placeholder-icon"></i>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">To Account</span>
+                        <input type="text" placeholder="To Account" ng-model="currentItem.accountTo" readonly>
+                    </label>
+                    <i class="icon ion-chevron-right customChevronForm"></i>
+                </ion-item>
+            </div>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ng-click="getPayee()">
+                <i class="icon fa fa-user placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Payee</span>
+                    <input type="text" placeholder="Payee" ng-model="currentItem.payee" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactioncategory">
+                <i class="icon fa fa-thumb-tack placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Category</span>
+                    <input type="text" placeholder="Category" ng-model="currentItem.category" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactionamount">
+                <i class="icon fa fa-money placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Amount</span>
+                    <input type="text" placeholder="Amount" ng-model="currentItem.amount" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactiondate">
+                <i class="icon fa fa-calendar placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Transaction Date</span>
+                    <input type="text" placeholder="Transaction Date" ng-model="DisplayDate" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactionnote">
+                <i class="icon fa fa-file-text placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Notes</span>
+                    <input type="text" placeholder="Notes" ng-model="currentItem.note" readonly>
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+            <ion-item class="item-icon-left item-icon-right form-group floating-padding" ui-sref="tabsController.picktransactionphoto">
+                <i class="icon fa fa-camera placeholder-icon"></i>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Photo</span>
+                    <img ng-src="data:image/jpeg;base64,{{ currentItem.photo }}" width="12%" />
+                </label>
+                <i class="icon ion-chevron-right customChevronForm"></i>
+            </ion-item>
+        </div>
+    </ion-content>
+</ion-view>

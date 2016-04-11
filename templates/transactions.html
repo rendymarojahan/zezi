@@ -1,0 +1,54 @@
+<ion-view title={{AccountTitle}}>
+    <ion-nav-buttons side="right">
+        <button class="button-icon fa fa-search customHeaderIcon customHeaderIconSmall extraMarginRight" ng-click="showFilterBar()"></button>
+    </ion-nav-buttons>
+    <div class="bar bar-subheader CustomSubHeader">
+        <div class="row center">
+            <div class="col balancesRow colBorder"><span>Total / Cleared</span><span><strong>{{ totalCount }} / {{ clearedCount }}</strong></span></div>
+            <div class="col balancesRow colBorder"><span>Current Balance</span><span><strong>{{ currentBalance | currency:"Rp ":0 }}</strong></span></div>
+            <div class="col balancesRow"><span>Cleared Balance</span><span><strong>{{ clearedBalance | currency:"Rp ":0 }}</strong></span></div>
+        </div>
+    </div>
+    <ion-content class="has-header has-subheader">
+        <ion-list can-swipe="listCanSwipe">
+            <div collection-repeat="transaction in transactions | reverselist | groupByDayMonthYear" divider-collection-repeat>
+                <ion-item class="item-icon-right item item-complex item-right-editable {{ transaction.ClearedClass }}" ng-click="handleSwipeAndTap($event, transaction)">
+                    <div class="row">
+                        <div class="col-50 customTransDesc customItemSize">
+                            <span ng-class="{'mlpurple': transaction.istransfer == true }">
+                                {{ transaction.category }}
+                                <small>
+                                    <i class="fa fa-at"></i>{{ transaction.payee }}&nbsp;
+                                    <i class="fa fa-thumb-tack"></i>{{ transaction.addedby }}&nbsp;
+                                    <i ng-class="{'fa fa-file-text-o': transaction.note.length > 0}"></i>
+                                    <i ng-class="{'fa fa-repeat': transaction.isrecurring == true }"></i>
+                                    <i ng-class="{'fa fa-camera': transaction.isphoto == true}"></i>
+                                    <i ng-class="{'fa fa-exchange': transaction.istransfer == true }"></i>
+                                </small>
+                            </span>
+                        </div>
+                        <div class="col-50 right customTransAmt {{ transaction.type }}">
+                            <span>
+                                {{ transaction.amount | currency:"Rp ":0 }}
+                                <small>
+                                    {{ transaction.runningbal | currency:"Rp ":0 }}
+                                </small>
+                            </span>
+                            <input class="toggleTransactionCleared" type="checkbox" ng-model="transaction.iscleared" ng-change="clearTransaction(transaction)">
+                        </div>
+                    </div>
+                    <ion-option-button class="button-stable" ng-click="moreOptions()">
+                        &nbsp;More&nbsp;
+                    </ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="deleteTransaction(transaction)">
+                        Delete
+                    </ion-option-button>
+                    <ion-reorder-button class="ion-navicon" on-reorder="moveItem(transaction, $fromIndex, $toIndex)"></ion-reorder-button>
+                </ion-item>
+            </div>
+        </ion-list>
+    </ion-content>
+    <button class="button button-float" ng-click="createTransaction()">
+        <i class="icon ion-ios-pricetags-outline"></i>
+    </button>
+</ion-view>

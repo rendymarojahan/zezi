@@ -1,0 +1,35 @@
+<ion-view style="" title="Accounts">
+    <ion-content class="has-header" overflow-scroll="true" padding="true">
+        <form style="" class="list"></form>
+        <ion-list can-swipe="listCanSwipe">
+            <ion-item ng-repeat="account in accounts track by account.$id" ng-click="handleSwipeOptions($event, account)" class="item-icon-right">
+                <div class="row AccountScreenPadding">
+                    <div class="col-50 customAccDesc customItemSize">
+                        <span>
+                            {{ account.accountname }}
+                            <small>
+                                <i class="fa fa-thumb-tack"></i>{{ account.accounttype }}
+                            </small>
+                        </span>
+                    </div>
+                    <div class="col-50 right customAccAmt  {{ account.BalanceClass }}">
+                        <span>
+                            {{ account.balancecleared | currency:"Rp ":0 }}
+                            <small>
+                                {{ account.balancetoday | currency:"Rp ":0 }}
+                            </small>
+                        </span>
+                    </div>
+                </div>
+                <ion-option-button class="button-energized" ng-click="editAccount(account)">
+                    &nbsp;&nbsp;Edit&nbsp;&nbsp;
+                </ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="deleteAccount(account)">
+                    Delete
+                </ion-option-button>
+                <i class="icon ion-chevron-right"></i>
+            </ion-item>
+        </ion-list>
+        <a style="" class="button button-stable button-outline button-block  icon-left ion-card button-full" ng-click="createAccount()">Create Account</a>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,10 @@
+<ion-view view-title="Select Beginning Date">
+    <ion-nav-buttons side="right">
+        <button class="button button-clear customHeaderSize" ng-click="dateChanged(myDate)">Save</button>
+    </ion-nav-buttons>
+    <ion-content scroll="false">
+        <div class="mlDatePadding">
+            <div pickadate ng-model="$parent.myDate"></div>
+        </div>
+    </ion-content>
+</ion-view>

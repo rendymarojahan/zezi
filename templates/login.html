@@ -1,0 +1,37 @@
+<ion-view style="" view-title="Login">
+    <ion-content class="" overflow-scroll="false" padding="true">
+        <div style="width: 283px; height: 61px;" class="spacer"></div>
+        <div style="text-align: center;">
+            <img src="img/zezi-logo.png" height="auto" width="30%">
+        </div>
+        <form style="" id="ml-login" ng-submit="doLogIn(user)">
+        	
+            <div class="introHeading">
+                <h2 style="color: #000;text-align: center;"><strong>Zezi</strong></h2>
+                <p style="text-align: center;">Make your moments to control your money</p>
+            </div>
+            
+                <label style="" name="username" class="item-floating-label">
+                    <span class="input-label">Email</span>
+                    <input placeholder="Email" class="user" type="email" ng-model="user.email">
+                </label>
+                <label style="" name="password" class="item-floating-label">
+                    <span class="input-label">Password</span>
+                    <input placeholder="Password" class="pass" type="password" ng-model="user.password">
+                </label>
+            <button style="" class="button button-stable button-icon  icon ion-ios-unlocked-outline button-full" ng-click="doLogIn(user)"></button>
+            <div class="padding">
+                <div class="row">
+                    <div class="col">
+                        <a style="" class="button button-balanced button-clear button-block button-small" ui-sref="forgotPassword">Forgot Password?</a>
+                    </div>
+                    <div class="col">
+                        <p class="text-right">
+                            <a style="" class="button button-balanced button-clear button-block button-small" ui-sref="Register">Create an Account</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

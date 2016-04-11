@@ -1,0 +1,27 @@
+<ion-view view-title={{PayeeTitle}}>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear customHeaderSize" ng-click="savePayee()">Save</button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <div class="item item-input-inset">
+            <label class="item-input-wrapper cleanlabel">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" id="search" placeholder="Search" ng-change="search()" ng-model="data.search" autocapitalize="words" focus-me />
+            </label>
+        </div>
+        <div ng-hide="hideValidationMessage" class="cssSlideUp ng-hide">
+            <div class="validationDiv">
+                <p>
+                    {{ validationMessage }}
+                </p>
+            </div>
+        </div>
+        <ion-list can-swipe="listCanSwipe">
+            <ion-item ng-repeat="payee in data.payees" ng-click="selectPayee(payee)" class="customItemSize mlSmallerFont item-icon-left item-icon-right">
+                <i class="icon ion-ios-person-outline"></i>
+                {{ payee.payeename }}
+                <i class="icon ion-chevron-right"></i>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
