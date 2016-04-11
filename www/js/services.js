@@ -159,7 +159,7 @@ angular.module('app.services', [])
         var thisGroupId = myCache.get('thisGroupId');
         return {
             ref: function () {
-                ref = fb.child("groups").child(thisGroupId).child("groupa_ccounts");
+                ref = fb.child("groups").child(thisGroupId).child("group_accounts");
                 return ref;
             },
             getAccounts: function () {

@@ -60,6 +60,17 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.posting', {
+    url: '/posting',
+    chace: true,
+    views: {
+      'tab1': {
+        templateUrl: 'templates/posting.html',
+        controller: 'postingCtrl'
+      }
+    }
+  })
+
   .state('tabsController.notification', {
     url: '/notification',
     chace: true,

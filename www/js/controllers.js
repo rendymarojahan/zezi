@@ -41,7 +41,7 @@ angular.module('app.controllers', [])
     };
 })
   
-.controller('peopleCtrl', function($scope, AccountsFactory, $ionicFilterBar, $ionicListDelegate) {
+.controller('peopleCtrl', function($scope, $state, MembersFactory, AccountsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices) {
 
     $scope.transactions = [];
     $scope.uid = '';
@@ -84,9 +84,268 @@ angular.module('app.controllers', [])
         PickTransactionServices.accountToId = '';
         PickTransactionServices.photoSelected = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
         PickTransactionServices.noteSelected = '';
-        $state.go('tabsController.posting', { accountId: $stateParams.accountId, transactionId: '' });
+        $state.go('tabsController.posting');
     }
 
+})
+
+.controller('postingCtrl', function ($scope, $state, $stateParams, $ionicHistory, AccountsFactory, PickTransactionServices, PayeesService, myCache, CurrentUserService) {
+
+    $scope.hideValidationMessage = true;
+    $scope.loadedClass = 'hidden';
+    $scope.transactions = [];
+    $scope.AccountTitle = '';
+    $scope.inEditMode = false;
+    $scope.isTransfer = false;
+    $scope.ItemFrom = {};
+    $scope.ItemTo = {};
+    $scope.ItemOriginal = {};
+    $scope.DisplayDate = '';
+    $scope.currentItem = {
+        'accountFrom': '',
+        'accountFromId': '',
+        'accountTo': '',
+        'accountToId': '',
+        'amount': '',
+        'category': '',
+        'categoryid': '',
+        'date': '',
+        'iscleared': false,
+        'isrecurring': false,
+        'istransfer': false,
+        'isphoto': false,
+        'notes': '',
+        'payee': '',
+        'photo': '',
+        'runningbal': '',
+        'type': '',
+        'typedisplay': ''
+    };
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.hideValidationMessage = true;
+        $scope.currentItem.typedisplay = PickTransactionServices.typeDisplaySelected;
+        $scope.currentItem.type = PickTransactionServices.typeInternalSelected;
+        $scope.currentItem.payee = PickTransactionServices.payeeSelected;
+        $scope.currentItem.payeeid = PickTransactionServices.payeeid;
+        $scope.currentItem.category = PickTransactionServices.categorySelected;
+        $scope.currentItem.categoryid = PickTransactionServices.categoryid;
+        $scope.currentItem.amount = PickTransactionServices.amountSelected;
+        $scope.currentItem.accountFrom = PickTransactionServices.accountFromSelected;
+        $scope.currentItem.accountFromId = PickTransactionServices.accountFromId;
+        $scope.currentItem.accountTo = PickTransactionServices.accountToSelected;
+        $scope.currentItem.accountToId = PickTransactionServices.accountToId;
+        $scope.currentItem.photo = PickTransactionServices.photoSelected;
+        if ($scope.currentItem.photo === '') {
+            $scope.currentItem.photo = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        }
+        $scope.currentItem.note = PickTransactionServices.noteSelected;
+        $scope.isTransfer = ($scope.currentItem.typedisplay === "Transfer") ? true : false;
+        // Handle transaction date
+        if (typeof PickTransactionServices.dateSelected !== 'undefined' && PickTransactionServices.dateSelected !== '') {
+            $scope.DisplayDate = PickTransactionServices.dateSelected;
+        }
+        // Handle transaction type
+        if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId === $scope.currentItem.accountToId) {
+            PickTransactionServices.typeInternalSelected = 'Income';
+        } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
+            PickTransactionServices.typeInternalSelected = 'Expense';
+        }
+    });
+
+    
+
+    // PICK TRANSACTION TYPE
+    // Don't let users change the transaction type. If needed, a user can delete the transaction and add a new one
+    $scope.pickTransactionType = function () {
+        if ($scope.currentItem.istransfer) {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Transaction type on transfers cannot be changed."
+            return;
+        } else {
+            $state.go('tabsController.picktransactiontype');
+        }
+    }
+
+    // GET PAYEE
+    // Make sure the transaction type (Expense, Income, Transfer) has been selected first
+    $scope.getPayee = function () {
+        if (typeof $scope.currentItem.typedisplay === 'undefined' || $scope.currentItem.typedisplay === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select Transaction Type"
+            return;
+        } else {
+            $state.go('tabsController.picktransactionpayee');
+        }
+    }
+
+    // SAVE
+    $scope.saveTransaction = function () {
+
+        // Validate form data
+        if (typeof $scope.currentItem.typedisplay === 'undefined' || $scope.currentItem.typedisplay === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select Transaction Type"
+            return;
+        }
+        if (typeof $scope.currentItem.category === 'undefined' || $scope.currentItem.category === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select a Category"
+            return;
+        }
+        if (typeof $scope.currentItem.payee === 'undefined' || $scope.currentItem.payee === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select a Payee"
+            return;
+        }
+        if (typeof $scope.currentItem.amount === 'undefined' || $scope.currentItem.amount === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please enter an amount for this transaction"
+            return;
+        }
+
+        // Format date       
+        var dtTran = moment(PickTransactionServices.dateSelected, 'MMMM D, YYYY hh:mm a').valueOf();
+        $scope.currentItem.date = dtTran;
+        if (typeof $scope.currentItem.date === 'undefined' || $scope.currentItem.date === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select a date for this transaction"
+            return;
+        }
+
+        //
+        // Handle transaction type for Transfers
+        //
+        if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId === $scope.currentItem.accountToId) {
+            $scope.currentItem.type = 'Income';
+            $scope.currentItem.istransfer = true;
+        } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
+            $scope.currentItem.type = 'Expense';
+            $scope.currentItem.istransfer = true;
+        } else {
+            $scope.currentItem.accountFrom = '';
+            $scope.currentItem.accountFromId = '';
+            $scope.currentItem.accountTo = '';
+            $scope.currentItem.accountToId = '';
+            $scope.currentItem.type = $scope.currentItem.typedisplay;
+            $scope.currentItem.istransfer = false;
+        }
+
+        // Handle default blank photo
+        if ($scope.currentItem.photo === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==') {
+            $scope.currentItem.photo = '';
+            $scope.currentItem.isphoto = false;
+        } else {
+            $scope.currentItem.isphoto = true;
+        }
+
+        if ($scope.inEditMode) {
+            //
+            // Update Existing Transaction
+            //
+            var onComplete = function (error) {
+                if (error) {
+                    //console.log('Synchronization failed');
+                }
+            };
+            AccountsFactory.saveTransaction($scope.currentItem);
+
+
+            ////
+            //// Update transaction under category
+            ////
+            //var categoryTransactionRef = AccountsFactory.getTransactionByCategoryRef($scope.currentItem.categoryid, $stateParams.transactionId);
+            //var categoryTransaction = {
+            //    payee: $scope.currentItem.payee,
+            //    amount: $scope.currentItem.amount,
+            //    date: $scope.currentItem.date,
+            //    type: $scope.currentItem.type,
+            //    iscleared: $scope.currentItem.iscleared
+            //};
+            //categoryTransactionRef.update(categoryTransaction, onComplete);
+            ////
+            //// Update transaction under payee
+            ////
+            //var payeeTransactionRef = AccountsFactory.getTransactionByPayeeRef($scope.currentItem.payeeid, $stateParams.transactionId);
+            //var payeeTransaction = {
+            //    payee: $scope.currentItem.payee,
+            //    amount: $scope.currentItem.amount,
+            //    date: $scope.currentItem.date,
+            //    type: $scope.currentItem.type,
+            //    iscleared: $scope.currentItem.iscleared
+            //};
+            //payeeTransactionRef.update(payeeTransaction, onComplete);
+
+
+            //
+            // Update payee-category relationship
+            //
+            var payee = {};
+            var payeeRef = PayeesService.getPayeeRef($scope.currentItem.payeeid);
+            if ($scope.currentItem.type === "Income") {
+                payee = {
+                    lastamountincome: $scope.currentItem.amount,
+                    lastcategoryincome: $scope.currentItem.category,
+                    lastcategoryidincome: $scope.currentItem.categoryid
+                };
+            } else if ($scope.currentItem.type === "Expense") {
+                payee = {
+                    lastamount: $scope.currentItem.amount,
+                    lastcategory: $scope.currentItem.category,
+                    lastcategoryid: $scope.currentItem.categoryid
+                };
+            }
+            payeeRef.update(payee);
+
+            //
+            // Update transfer relationship
+            //
+            var accountId = '';
+            var otherAccountId = '';
+            var OtherTransaction = {};
+            if ($scope.ItemOriginal.istransfer) {
+                if ($stateParams.accountId === $scope.currentItem.accountToId) {
+                    // Transfer is coming into the current account --> income
+                    $scope.currentItem.type = 'Income';
+                    accountId = $scope.currentItem.accountToId;
+                    otherAccountId = $scope.currentItem.accountFromId;
+                    OtherTransaction.type = 'Expense';
+                    OtherTransaction.amount = $scope.currentItem.amount;
+                } else {
+                    // Transfer is moving into the other account --> expense
+                    $scope.currentItem.type = 'Expense';
+                    accountId = $scope.currentItem.accountFromId;
+                    otherAccountId = $scope.currentItem.accountToId;
+                    OtherTransaction.type = 'Income';
+                    OtherTransaction.amount = $scope.currentItem.amount;
+                }
+
+                console.log(OtherTransaction);
+
+                var transferRef = AccountsFactory.getTransactionRef(otherAccountId, $scope.ItemOriginal.linkedtransactionid);
+                transferRef.update(OtherTransaction);
+            }
+
+            $scope.inEditMode = false;
+            //
+        } else {
+            //
+            // Create New Transaction
+            //
+            if (isNaN($scope.currentItem.notes)) {
+                $scope.currentItem.notes = "";
+            }
+            if (isNaN($scope.currentItem.photo)) {
+                $scope.currentItem.photo = "";
+            }
+            // Set current house member
+            $scope.currentItem.addedby = myCache.get('thisUserName');
+            //
+            AccountsFactory.createTransaction($stateParams.accountId, $scope.currentItem);
+        }
+        $scope.currentItem = {};
+        $ionicHistory.goBack();
+    }
 })
    
 .controller('notificationCtrl', function($scope) {
@@ -1796,6 +2055,7 @@ angular.module('app.controllers', [])
                     /* Save user data for later use */
                     myCache.put('thisGroupId', thisuser.group_id);
                     myCache.put('thisUserName', thisuser.firstname);
+                    myCache.put('thisMemberId', thisuser.$id);
                     CurrentUserService.updateUser(thisuser);
 
                     if (thisuser.group_id === '') {
