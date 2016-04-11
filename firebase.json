@@ -1,0 +1,9 @@
+{
+  "firebase": "zezi",
+  "public": "www",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
