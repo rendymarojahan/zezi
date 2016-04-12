@@ -338,7 +338,8 @@ button.customHeaderSize {
 }
 .item-input textarea {
     width: 100%;
-    font: 16px 'PT Sans', sans-serif;
+    font: 12px 'PT Sans', sans-serif;
+    min-height: 145px;
 }
 .item-input-inset .item-input-wrapper input {
     padding-left: 4px;
@@ -428,6 +429,80 @@ button.customHeaderSize {
 .button-post .icon:before {
     font-size: 34px;
 }
+
+/* About Posting
+===============================================*/
+.item-avatar, .item-avatar .item-content, .item-avatar-left, .item-avatar-left .item-content {
+    padding-left: 72px;
+    min-height: 72px;
+}
+
+.posting, .posting h1, .posting h2, .posting h3, .posting h4, .posting h5, .posting h6, .posting p, .posting-content, .posting-content h1, .posting-content h2, .posting-content h3, .posting-content h4, .posting-content h5, .posting-content h6, .posting-content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.posting {
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: #fff;
+    color: #444;
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin: 4px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 16px;
+}
+
+.item h2 {
+    margin: 0 0 2px 0;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.item p {
+    color: #666;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+.card, .list-inset {
+    overflow: hidden;
+    margin: 0px 20px;
+    border-radius: 0px;
+    background-color: #fff;
+}
+.list {
+    position: relative;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 0;
+    margin-bottom: 0px;
+}
+
+.card .item, .list-inset .item, .padding > .list .item, .padding-horizontal > .list .item {
+    margin-right: 0;
+    margin-left: 0;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.range .icon {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0;
+    -moz-box-flex: 0;
+    -moz-flex: 0;
+    -ms-flex: 0;
+    flex: 0;
+    display: block;
+    min-width: 50px;
+    text-align: center;
+    font-size: 28px;
+    color: rgba(201, 206, 200, 0.97);
+    padding-right: 0;
+}
+
+
 .mlpurple {
     color: purple;
 }

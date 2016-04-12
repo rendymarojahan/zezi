@@ -71,6 +71,26 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.pickposttransactiontype', {
+        url: "/pickposttransactiontype",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactiontype.html",
+                controller: "pickPostTransactionTypeCtrl"
+            }
+        }
+    })
+
+  .state('tabsController.pickposttransactionpayee', {
+        url: "/picktransactionpayee",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionpayee.html",
+                controller: "pickPostTransactionPayeeCtrl"
+            }
+        }
+    })
+
   .state('tabsController.notification', {
     url: '/notification',
     chace: true,

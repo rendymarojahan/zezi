@@ -151,19 +151,22 @@ angular.module('app.controllers', [])
         } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
             PickTransactionServices.typeInternalSelected = 'Expense';
         }
+        if ($scope.currentItem.payee !== ''){
+        	$scope.location = function (){ return "at " + $scope.currentItem.payee;};
+    	}
     });
 
     
 
     // PICK TRANSACTION TYPE
     // Don't let users change the transaction type. If needed, a user can delete the transaction and add a new one
-    $scope.pickTransactionType = function () {
+    $scope.pickPostTransactionType = function () {
         if ($scope.currentItem.istransfer) {
             $scope.hideValidationMessage = false;
             $scope.validationMessage = "Transaction type on transfers cannot be changed."
             return;
         } else {
-            $state.go('tabsController.picktransactiontype');
+            $state.go('tabsController.pickposttransactiontype');
         }
     }
 
@@ -175,7 +178,7 @@ angular.module('app.controllers', [])
             $scope.validationMessage = "Please select Transaction Type"
             return;
         } else {
-            $state.go('tabsController.picktransactionpayee');
+            $state.go('tabsController.pickposttransactionpayee');
         }
     }
 
@@ -346,6 +349,119 @@ angular.module('app.controllers', [])
         $scope.currentItem = {};
         $ionicHistory.goBack();
     }
+})
+
+.controller('pickPostTransactionPayeeCtrl', function ($scope, $ionicHistory, PayeesFactory, PayeesService, PickTransactionServices) {
+
+    $scope.inEditMode = false;
+    $scope.hideValidationMessage = true;
+    $scope.PayeeTitle = '';
+    $scope.currentItem = {};
+    $scope.data = { "payees": [], "search": '' };
+    $scope.search = function () {
+        PayeesFactory.searchPayees($scope.data.search).then(
+            function (matches) {
+                $scope.data.payees = matches;
+            }
+        )
+    }
+    
+    // EDIT / CREATE PAYEE
+    if (typeof PickTransactionServices.payeeSelected !== 'undefined' && PickTransactionServices.payeeSelected !== '') {
+        // Edit Payee
+        $scope.inEditMode = true;
+        $scope.PayeeTitle = "Edit Payee";
+        PayeesService.getPayee(PickTransactionServices.payeeid).then(function (payee) {
+            $scope.currentItem = payee;
+        });
+        $scope.data.search = PickTransactionServices.payeeSelected;
+    } else {
+        $scope.PayeeTitle = "Select Payee";
+        $scope.inEditMode = false;
+    }
+
+    // SAVE PAYEE
+    $scope.savePayee = function () {
+
+        // Validate form data
+        if (typeof $scope.data.search === 'undefined' || $scope.data.search === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please enter payee name"
+            return;
+        }
+        $scope.currentItem.payeename = $scope.data.search;
+        $scope.currentItem.payeesort = $scope.data.search.toUpperCase();
+        if ($scope.inEditMode) {
+            // Update
+            var onComplete = function (error) {
+                if (error) {
+                    //console.log('Synchronization failed');
+                }
+            };
+            //
+            // Update this payee
+            //
+            var payeeRef = PayeesService.getPayeeRef(PickTransactionServices.payeeid);
+            payeeRef.update($scope.currentItem, onComplete);
+
+
+            ////
+            //// Update all transactions under this payee
+            ////
+            //$scope.transactionsbypayee = PayeesService.getTransactionsByPayee(PickTransactionServices.payeeid);
+            //$scope.transactionsbypayee.$loaded().then(function () {
+            //    angular.forEach($scope.transactionsbypayee, function (transaction) {
+            //        transaction.payee = $scope.currentItem.payeename;
+            //        $scope.transactionsbypayee.$save(transaction).then(function (ref) {
+                        
+            //        });
+            //    })
+            //})
+
+
+            //
+            // TODO: Update all transactions with new payee name
+            // Find a way to update all necessary transactions with new payee name 
+            //
+            // Rehydrate payee and go back
+            //
+            $scope.inEditMode = false;
+            PickTransactionServices.updatePayee($scope.currentItem, PickTransactionServices.payeeid);
+            $ionicHistory.goBack();
+            //
+        } else {
+            //
+            // Create New Payee
+            //
+            var payeesRef = PayeesService.getPayeesRef();
+            var newpayeeRef = payeesRef.push($scope.currentItem, function (error) {
+                if (error) {
+                    console.log("Data could not be saved." + error);
+                } else {
+                    var payeeid = '';
+                    payeeid = newpayeeRef.key();
+                    PickTransactionServices.updatePayee($scope.currentItem, payeeid, PickTransactionServices.typeInternalSelected);
+                    $ionicHistory.goBack();
+                }
+            });
+        }
+    }
+    $scope.selectPayee = function (payee) {
+        PickTransactionServices.updatePayee(payee, payee.$id, PickTransactionServices.typeInternalSelected);
+        $ionicHistory.goBack();
+    }
+})
+
+.controller('pickPostTransactionTypeCtrl', function ($scope, $ionicHistory, PickTransactionServices) {
+    $scope.TransactionTypeList = [
+        { text: 'Income', value: 'Income' },
+        { text: 'Expense', value: 'Expense' },
+        { text: 'Transfer', value: 'Transfer' }];
+    $scope.currentItem = { typedisplay: PickTransactionServices.typeDisplaySelected };
+    $scope.itemchanged = function (item) {
+        PickTransactionServices.updateType(item.value, item.value);
+        $ionicHistory.goBack();
+    };
 })
    
 .controller('notificationCtrl', function($scope) {
