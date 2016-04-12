@@ -151,8 +151,22 @@ angular.module('app.controllers', [])
         } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
             PickTransactionServices.typeInternalSelected = 'Expense';
         }
+        // Handle Two Ways Binding
+        if ($scope.currentItem.typedisplay === "Transfer"){
+        	$scope.type = function (){ return "transfer ";};
+    	} else if ($scope.currentItem.typedisplay === "Income"){
+        	$scope.type = function (){ return "get ";};
+        } else if ($scope.currentItem.typedisplay === "Expense"){
+        	$scope.type = function (){ return "spend ";};
+        }
+        if ($scope.currentItem.category !== ''){
+        	$scope.category = function (){ return " for " + $scope.currentItem.category;};
+    	}
         if ($scope.currentItem.payee !== ''){
-        	$scope.location = function (){ return "at " + $scope.currentItem.payee;};
+        	$scope.location = function (){ return " at " + $scope.currentItem.payee;};
+    	}
+    	if ($scope.currentItem.amount !== ''){
+        	$scope.amount = function (){ return " " + $scope.currentItem.amount;};
     	}
     });
 
@@ -348,6 +362,61 @@ angular.module('app.controllers', [])
         }
         $scope.currentItem = {};
         $ionicHistory.goBack();
+    }
+})
+
+.controller('pickPostTransactionAmountCtrl', function ($scope, $ionicHistory, PickTransactionServices) {
+
+    $scope.clearValue = true;
+    $scope.displayValue = 0;
+    if (typeof PickTransactionServices.amountSelected !== 'undenifed') {
+        $scope.displayValue = PickTransactionServices.amountSelected;
+    }
+    $scope.digitClicked = function (digit) {
+        if (digit === 'C') {
+            $scope.displayValue = '';
+            $scope.clearValue = true;
+        } else if (digit === '.') {
+            $scope.displayValue = $scope.displayValue + digit;
+        } else if (digit === 'B') {
+            $scope.displayValue = $scope.displayValue.substring(0, $scope.displayValue.length - 1);
+            $scope.clearValue = false;
+        } else if (digit === 'D') {
+            PickTransactionServices.updateAmount($scope.displayValue);
+            $ionicHistory.goBack();
+        } else {
+            if ($scope.clearValue) {
+                $scope.displayValue = digit;
+                $scope.clearValue = false;
+            } else {
+                $scope.displayValue = $scope.displayValue + digit;
+            }
+        }
+    };
+})
+
+.controller('pickPostTransactionCategoryCtrl', function ($scope, $state, $ionicHistory, CategoriesFactory, PickTransactionServices, PickCategoryTypeService, PickParentCategoryService) {
+    //
+    // To fetch categories, we need to know the transaction type first (Expense/Income)
+    //
+    if (PickTransactionServices.typeInternalSelected === '') {
+        $scope.TransactionCategoryList = '';
+    } else {
+        $scope.categoriesDividerTitle = PickTransactionServices.typeInternalSelected;
+        $scope.TransactionCategoryList = CategoriesFactory.getCategoriesByTypeAndGroup(PickTransactionServices.typeInternalSelected);
+        $scope.TransactionCategoryList.$loaded().then(function () {
+        });
+    };
+    $scope.currentItem = { categoryname: PickTransactionServices.categorySelected };
+    $scope.categorychanged = function (item) {
+        PickTransactionServices.updateCategory(item.categoryname, item.$id);
+        $ionicHistory.goBack();
+    };
+    // CREATE CATEGORY
+    $scope.createCategory = function () {
+        PickCategoryTypeService.typeSelected = '';
+        PickParentCategoryService.parentcategorySelected = '';
+        $state.go('tabsController.category');
     }
 })
 

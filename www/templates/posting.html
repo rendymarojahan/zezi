@@ -13,8 +13,8 @@
         <div class="ion-list">
             <div class="item item-avatar posting">
                 <img src="img/zezi.png">
-                <h2>Rendy Marojahan {{location()}}</h2>
-                <p>November 05, 1955</p>
+                <h2>Rendy Marojahan {{type()}}{{amount() | currency:"Rp ":0}}</h2>
+                <p>{{category()}}{{location()}}</p>
             </div>
             <div class="list list-inset">
                 <label class="item item-input">
@@ -29,9 +29,9 @@
                     <i class="icon ion-ios-undo placeholder-icon" ui-sref="tabsController.picktransactionaccountto"></i>
                 </div>
                 <i class="icon ion-card placeholder-icon" ui-sref="tabsController.picktransactionaccountfrom"></i>
-                <i class="icon ion-network placeholder-icon" ui-sref="tabsController.picktransactioncategory"></i>
+                <i class="icon ion-network placeholder-icon" ui-sref="tabsController.pickposttransactioncategory"></i>
                 <i class="icon ion-ios-location placeholder-icon" ng-click="getPayee()"></i>
-                <i class="icon ion-cash placeholder-icon" ui-sref="tabsController.picktransactionamount"></i>
+                <i class="icon ion-cash placeholder-icon" ui-sref="tabsController.pickposttransactionamount"></i>
             </div>
         </div>
     </ion-content>
