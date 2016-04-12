@@ -449,6 +449,7 @@ angular.module('app.services', [])
         var transPayee = this;
         var transDate = this;
         var transAmount = this;
+        var transAccount = this;
         var transAccountFrom = this;
         var transAccountTo = this;
         var transPhoto = this;
@@ -484,6 +485,10 @@ angular.module('app.services', [])
         }
         transAmount.updateAmount = function (value) {
             this.amountSelected = value;
+        }
+        transAccount.updateAccount = function (value, id) {
+            this.accountSelected = value;
+            this.accountId = id;
         }
         transAccountFrom.updateAccountFrom = function (value, id) {
             this.accountFromSelected = value;

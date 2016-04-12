@@ -13,22 +13,20 @@
         <div class="ion-list">
             <div class="item item-avatar posting">
                 <img src="img/zezi.png">
-                <h2>Rendy Marojahan {{type()}}{{amount() | currency:"Rp ":0}}</h2>
+                <h2>{{fullname()}} {{type()}}{{amount() | currency:"Rp ":0}}</h2>
                 <p>{{category()}}{{location()}}</p>
             </div>
             <div class="list list-inset">
                 <label class="item item-input">
-                    <textarea placeholder="Describe your moment"></textarea>
+                    <textarea placeholder="Describe your moment" ng-model="currentItem.note" readonly ui-sref="tabsController.pickposttransactionnote"></textarea>
                 </label>
             </div>
             <div class="item range">
                 <i class="icon ion-ios-camera placeholder-icon" ui-sref="tabsController.picktransactionphoto"></i>
                 <i class="icon ion-ios-paper placeholder-icon" ng-click="pickPostTransactionType()"></i>
-                <div ng-hide="!isTransfer" class="ng-hide">
-                    <i class="icon ion-ios-redo placeholder-icon" ui-sref="tabsController.picktransactionaccountfrom"></i>
-                    <i class="icon ion-ios-undo placeholder-icon" ui-sref="tabsController.picktransactionaccountto"></i>
-                </div>
-                <i class="icon ion-card placeholder-icon" ui-sref="tabsController.picktransactionaccountfrom"></i>
+                <i ng-hide="!isTransfer" class="icon ion-ios-redo placeholder-icon" ui-sref="tabsController.pickposttransactionaccountfrom"></i>
+                <i ng-hide="!isTransfer" class="icon ion-ios-undo placeholder-icon" ui-sref="tabsController.pickposttransactionaccountto"></i>
+                <i ng-hide="isTransfer" class="icon ion-card placeholder-icon" ui-sref="tabsController.pickposttransactionaccount"></i>
                 <i class="icon ion-network placeholder-icon" ui-sref="tabsController.pickposttransactioncategory"></i>
                 <i class="icon ion-ios-location placeholder-icon" ng-click="getPayee()"></i>
                 <i class="icon ion-cash placeholder-icon" ui-sref="tabsController.pickposttransactionamount"></i>

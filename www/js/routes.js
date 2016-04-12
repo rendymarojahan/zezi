@@ -81,6 +81,35 @@ angular.module('app.routes', [])
         }
   })
 
+  .state('tabsController.pickposttransactionaccount', {
+        url: "/pickposttransactionaccount",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionaccount.html",
+                controller: "pickPostTransactionAccountCtrl"
+            }
+        }
+  })
+
+  .state('tabsController.pickposttransactionaccountfrom', {
+        url: "/pickposttransactionaccountfrom",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionaccountfrom.html",
+                controller: "pickPostTransactionAccountFromCtrl"
+            }
+        }
+  })
+    .state('tabsController.pickposttransactionaccountto', {
+        url: "/pickposttransactionaccountto",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionaccountto.html",
+                controller: "pickPostTransactionAccountToCtrl"
+            }
+        }
+  })
+
   .state('tabsController.pickposttransactioncategory', {
         url: "/pickposttransactioncategory",
         views: {
@@ -107,6 +136,16 @@ angular.module('app.routes', [])
             'tab1': {
                 templateUrl: "templates/pickposttransactionamount.html",
                 controller: "pickPostTransactionAmountCtrl"
+            }
+        }
+  })
+
+  .state('tabsController.pickposttransactionnote', {
+        url: "/pickposttransactionnote",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionnote.html",
+                controller: "pickPostTransactionNoteCtrl"
             }
         }
   })

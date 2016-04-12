@@ -122,6 +122,12 @@ angular.module('app.controllers', [])
         'typedisplay': ''
     };
 
+    $scope.firstname = CurrentUserService.firstname;
+    $scope.surename = CurrentUserService.surename;
+    $scope.fullname = function (){
+    	return $scope.firstname +" "+ $scope.surename;
+    };
+
     $scope.$on('$ionicView.beforeEnter', function () {
         $scope.hideValidationMessage = true;
         $scope.currentItem.typedisplay = PickTransactionServices.typeDisplaySelected;
@@ -395,6 +401,52 @@ angular.module('app.controllers', [])
     };
 })
 
+.controller('pickPostTransactionAccountCtrl', function ($scope, $ionicHistory, AccountsFactory, PickTransactionServices) {
+    //
+    // Get accounts
+    //
+    $scope.TransactionAccountList = AccountsFactory.getAccounts();
+    $scope.TransactionAccountList.$loaded().then(function () {});
+    $scope.currentItem = { accountFrom: PickTransactionServices.accountSelected };
+    $scope.itemchanged = function (account) {
+        PickTransactionServices.updateAccount(account.accountname, account.$id);
+        PickTransactionServices.categorySelected = '';
+        PickTransactionServices.categoryid = '';
+        $ionicHistory.goBack();
+    };
+})
+
+.controller('pickPostTransactionAccountFromCtrl', function ($scope, $ionicHistory, AccountsFactory, PickTransactionServices) {
+    //
+    // Get accounts
+    //
+    $scope.TransactionAccountList = AccountsFactory.getAccounts();
+    $scope.TransactionAccountList.$loaded().then(function () {});
+    $scope.currentItem = { accountFrom: PickTransactionServices.accountFromSelected };
+    $scope.itemchanged = function (account) {
+        PickTransactionServices.updateAccountFrom(account.accountname, account.$id);
+        PickTransactionServices.categorySelected = '';
+        PickTransactionServices.categoryid = '';
+        $ionicHistory.goBack();
+    };
+})
+
+// PICK TRANSACTION ACCOUNT-TO CONTROLLER
+.controller('pickPostTransactionAccountToCtrl', function ($scope, $ionicHistory, AccountsFactory, PickTransactionServices) {
+    //
+    // Get accounts
+    //
+    $scope.TransactionAccountList = AccountsFactory.getAccounts();
+    $scope.TransactionAccountList.$loaded().then(function () { });
+    $scope.currentItem = { accountFrom: PickTransactionServices.accountToSelected };
+    $scope.itemchanged = function (account) {
+        PickTransactionServices.updateAccountTo(account.accountname, account.$id);
+        PickTransactionServices.categorySelected = '';
+        PickTransactionServices.categoryid = '';
+        $ionicHistory.goBack();
+    };
+})
+
 .controller('pickPostTransactionCategoryCtrl', function ($scope, $state, $ionicHistory, CategoriesFactory, PickTransactionServices, PickCategoryTypeService, PickParentCategoryService) {
     //
     // To fetch categories, we need to know the transaction type first (Expense/Income)
@@ -439,13 +491,13 @@ angular.module('app.controllers', [])
     if (typeof PickTransactionServices.payeeSelected !== 'undefined' && PickTransactionServices.payeeSelected !== '') {
         // Edit Payee
         $scope.inEditMode = true;
-        $scope.PayeeTitle = "Edit Payee";
+        $scope.PayeeTitle = "Check In";
         PayeesService.getPayee(PickTransactionServices.payeeid).then(function (payee) {
             $scope.currentItem = payee;
         });
         $scope.data.search = PickTransactionServices.payeeSelected;
     } else {
-        $scope.PayeeTitle = "Select Payee";
+        $scope.PayeeTitle = "Check In";
         $scope.inEditMode = false;
     }
 
@@ -531,6 +583,18 @@ angular.module('app.controllers', [])
         PickTransactionServices.updateType(item.value, item.value);
         $ionicHistory.goBack();
     };
+})
+
+.controller('pickPostTransactionNoteCtrl', function ($scope, $ionicHistory, PickTransactionServices) {
+
+    if (typeof PickTransactionServices.noteSelected !== 'undefined' && PickTransactionServices.noteSelected !== '') {
+        $scope.note = PickTransactionServices.noteSelected;
+    }
+    $scope.saveNote = function () {
+        PickTransactionServices.updateNote($scope.note);
+        $ionicHistory.goBack();
+    };
+
 })
    
 .controller('notificationCtrl', function($scope) {
