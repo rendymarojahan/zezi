@@ -79,17 +79,37 @@ angular.module('app.routes', [])
                 controller: "pickPostTransactionTypeCtrl"
             }
         }
-    })
+  })
+
+  .state('tabsController.pickposttransactioncategory', {
+        url: "/pickposttransactioncategory",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactioncategory.html",
+                controller: "pickPostTransactionCategoryCtrl"
+            }
+        }
+  })
 
   .state('tabsController.pickposttransactionpayee', {
-        url: "/picktransactionpayee",
+        url: "/pickposttransactionpayee",
         views: {
             'tab1': {
                 templateUrl: "templates/pickposttransactionpayee.html",
                 controller: "pickPostTransactionPayeeCtrl"
             }
         }
-    })
+  })
+
+  .state('tabsController.pickposttransactionamount', {
+        url: "/pickposttransactionamount",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickposttransactionamount.html",
+                controller: "pickPostTransactionAmountCtrl"
+            }
+        }
+  })
 
   .state('tabsController.notification', {
     url: '/notification',
