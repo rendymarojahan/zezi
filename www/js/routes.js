@@ -150,6 +150,35 @@ angular.module('app.routes', [])
         }
   })
 
+  .state('tabsController.postcategory', {
+        url: "/postcategory/:categoryid/:type",
+        views: {
+            'tab1': {
+                templateUrl: "templates/postcategory.html",
+                controller: 'postCategoryCtrl'
+            }
+        }
+  })
+
+  .state('tabsController.pickpostcategorytype', {
+        url: "/pickpostcategorytype",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickpostcategorytype.html",
+                controller: "pickPostCategoryTypeCtrl"
+            }
+        }
+  })
+  .state('tabsController.pickpostparentcategory', {
+        url: "/pickpostparentcategory",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickpostparentcategory.html",
+                controller: "pickPostParentCategoryCtrl"
+            }
+        }
+  }) 
+
   .state('tabsController.notification', {
     url: '/notification',
     chace: true,

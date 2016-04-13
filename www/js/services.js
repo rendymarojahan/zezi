@@ -213,7 +213,6 @@ angular.module('app.services', [])
             },
             createTransaction: function (currentAccountId, currentItem) {
                 //
-                var accountId = '';
                 var otherAccountId = '';
                 var OtherTransaction = {};
                 //
@@ -233,12 +232,12 @@ angular.module('app.services', [])
                         OtherTransaction.type = 'Income';
                     }
                 } else {
-                    accountId = currentAccountId;
+                    currentAccountId = currentItem.accountFromId;
                 }
                 //
                 // Save transaction
                 //
-                var ref = fb.child("groups").child(thisGroupId).child("group_transactions").child(accountId);
+                var ref = fb.child("groups").child(thisGroupId).child("group_transactions").child(currentAccountId);
                 var newChildRef = ref.push(currentItem);
                 //
                 // Update preferences - Last Date Used

@@ -226,10 +226,14 @@ angular.module('app.controllers', [])
             $scope.validationMessage = "Please enter an amount for this transaction"
             return;
         }
+        if (typeof $scope.currentItem.accountFrom === $scope.currentItem.accountTo) {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Transfer Account Cannot Same"
+            return;
+        }
 
-        // Format date       
-        var dtTran = moment(PickTransactionServices.dateSelected, 'MMMM D, YYYY hh:mm a').valueOf();
-        $scope.currentItem.date = dtTran;
+        // Format date
+        $scope.currentItem.date = Date.now();
         if (typeof $scope.currentItem.date === 'undefined' || $scope.currentItem.date === '') {
             $scope.hideValidationMessage = false;
             $scope.validationMessage = "Please select a date for this transaction"
@@ -363,6 +367,7 @@ angular.module('app.controllers', [])
             }
             // Set current house member
             $scope.currentItem.addedby = myCache.get('thisUserName');
+            $scope.currentItem.userid = myCache.get('thisMemberId');
             //
             AccountsFactory.createTransaction($stateParams.accountId, $scope.currentItem);
         }
@@ -437,14 +442,15 @@ angular.module('app.controllers', [])
     // Get accounts
     //
     $scope.TransactionAccountList = AccountsFactory.getAccounts();
-    $scope.TransactionAccountList.$loaded().then(function () { });
-    $scope.currentItem = { accountFrom: PickTransactionServices.accountToSelected };
+    $scope.TransactionAccountList.$loaded().then(function () {});
+    $scope.currentItem = { accountTo: PickTransactionServices.accountToSelected };
     $scope.itemchanged = function (account) {
         PickTransactionServices.updateAccountTo(account.accountname, account.$id);
         PickTransactionServices.categorySelected = '';
         PickTransactionServices.categoryid = '';
         $ionicHistory.goBack();
     };
+    
 })
 
 .controller('pickPostTransactionCategoryCtrl', function ($scope, $state, $ionicHistory, CategoriesFactory, PickTransactionServices, PickCategoryTypeService, PickParentCategoryService) {
@@ -468,7 +474,7 @@ angular.module('app.controllers', [])
     $scope.createCategory = function () {
         PickCategoryTypeService.typeSelected = '';
         PickParentCategoryService.parentcategorySelected = '';
-        $state.go('tabsController.category');
+        $state.go('tabsController.postcategory');
     }
 })
 
@@ -595,6 +601,116 @@ angular.module('app.controllers', [])
         $ionicHistory.goBack();
     };
 
+})
+
+.controller('pickPostParentCategoryCtrl', function ($scope, $state, $ionicHistory, CategoriesFactory, PickParentCategoryService, PickCategoryTypeService) {
+    if (PickCategoryTypeService.typeSelected === '') {
+        $scope.ParentCategoryList = '';
+    } else {
+        $scope.ParentCategoryList = CategoriesFactory.getParentCategories(PickCategoryTypeService.typeSelected);
+        $scope.ParentCategoryList.$loaded().then(function () {
+            $scope.items = [];
+            angular.forEach($scope.ParentCategoryList, function (category) {
+                if (category.categoryparent === "") {
+                    $scope.items.push(category);
+                }
+            })
+        })
+    };
+    $scope.currentItem = { categoryname: PickParentCategoryService.parentcategorySelected };
+    $scope.categorychanged = function (item) {
+        PickParentCategoryService.updateParentCategory(item.categoryname);
+        $ionicHistory.goBack();
+    };
+})
+
+// PICK CATEGORYTYPE CONTROLLER
+.controller('pickPostCategoryTypeCtrl', function ($scope, $state, $ionicHistory, PickCategoryTypeService) {
+    $scope.CategoryTypeList = [
+          { text: 'Income', value: 'Income' },
+          { text: 'Expense', value: 'Expense' }];
+    $scope.currentItem = { categorytype: PickCategoryTypeService.typeSelected };
+    $scope.itemchanged = function (item) {
+        PickCategoryTypeService.updateType(item.value);
+        $ionicHistory.goBack();
+    };
+})
+
+// CATEGORY CONTROLLER
+.controller('postCategoryCtrl', function ($scope, $state, $ionicHistory, $stateParams, CategoriesFactory, PickParentCategoryService, PickCategoryTypeService) {
+
+    $scope.hideValidationMessage = true;
+    $scope.inEditMode = false;
+    $scope.allowParent = false;
+    $scope.currentItem = {
+        'categoryname': '',
+        'categorytype': '',
+        'categoryparent': '',
+        'categorysort': ''
+    };
+    $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.hideValidationMessage = true;
+        $scope.currentItem.categoryparent = PickParentCategoryService.parentcategorySelected;
+        $scope.currentItem.categorytype = PickCategoryTypeService.typeSelected;
+    });
+
+    // EDIT / CREATE CATEGORY
+    if ($stateParams.categoryid === '') {
+        // create
+        $scope.CategoryTitle = "Create Category";
+    } else {
+        // edit
+        $scope.inEditMode = true;
+        CategoriesFactory.getCategory($stateParams.categoryid, $stateParams.type).then(function (category) {
+            $scope.currentItem = category;
+            PickCategoryTypeService.typeSelected = $scope.currentItem.categorytype;
+            PickParentCategoryService.parentcategorySelected = $scope.currentItem.categoryparent;
+        });
+        $scope.CategoryTitle = "Edit Category";
+    }
+
+    // SAVE
+    $scope.saveCategory = function () {
+
+        // Validate form data
+        if (typeof $scope.currentItem.categoryname === 'undefined' || $scope.currentItem.categoryname === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please type a category name"
+            return;
+        }
+        if (typeof $scope.currentItem.categorytype === 'undefined' || $scope.currentItem.categorytype === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select a category type"
+            return;
+        }
+
+        if ($scope.currentItem.categoryparent === '') {
+            $scope.currentItem.categorysort = $scope.currentItem.categoryname.toUpperCase();
+        } else {
+            $scope.currentItem.categorysort = $scope.currentItem.categoryparent.toUpperCase() + ":" + $scope.currentItem.categoryname.toUpperCase();
+        }
+        if ($scope.inEditMode) {
+            // Update
+            var onComplete = function (error) {
+                if (error) {
+                    //console.log('Synchronization failed');
+                }
+            };
+            var categoryRef = CategoriesFactory.getCategoryRef($stateParams.categoryid, $stateParams.type);
+            categoryRef.update($scope.currentItem, onComplete);
+            $scope.inEditMode = false;
+        } else {
+            // Create
+            var sync = CategoriesFactory.getCategories($scope.currentItem.categorytype);
+            sync.$add($scope.currentItem).then(function (newChildRef) {
+                $scope.currentItem = {
+                    accountid: newChildRef.key()
+                };
+            });
+        }
+        $scope.currentItem = {};
+        $ionicHistory.goBack();
+    }
 })
    
 .controller('notificationCtrl', function($scope) {

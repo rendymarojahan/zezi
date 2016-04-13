@@ -1,9 +1,9 @@
-<ion-view view-title="Select Account From">
+<ion-view view-title="Select Account To">
     <ion-content>
         <ion-radio-fix ng-repeat="account in TransactionAccountList"
                        ng-value="account.accountname"
                        ng-change="itemchanged(account)"
-                       ng-model="currentItem.accountFrom"
+                       ng-model="currentItem.accountTo"
                        class="customItemSize">
             {{ account.accountname }}
         </ion-radio-fix>
