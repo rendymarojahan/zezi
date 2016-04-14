@@ -7,16 +7,16 @@
     </button>
     <ion-content class="has-header" overflow-scroll="true" padding="true">
         <ion-list can-swipe="listCanSwipe">
-            <div collection-repeat="transaction in transactions | reverselist | groupByDayMonthYear" divider-collection-repeat>
+            <div collection-repeat="public in publics" divider-collection-repeat>
                 <div class="list card">
                     <div class="item item-avatar">
                         <img src="img/zezi-logo.png">
-                        <h2>{{ transaction.addedby }}</h2>
-                        <p>{{ transaction.date }}</p>
+                        <h2>{{ public.name }}</h2>
+                        <p>{{ public.date }}</p>
                     </div>
                     <div class="item item-body">
                         <img class="full-image" src="img/zezi.png">
-                        <p>{{ transaction.note }}</p>
+                        <p>{{ public.note }}</p>
                         <p>
                             <a href="#" class="subdued">1 Like</a>
                             <a href="#" class="subdued">5 Comments</a>

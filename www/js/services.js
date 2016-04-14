@@ -147,6 +147,26 @@ angular.module('app.services', [])
         };
 })
 
+.factory('PublicsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService) {
+        var ref = {};
+        var publicRef = {};
+        var thisPublicId = CurrentUserService.public_id;
+        var thisUserId = myCache.get('thisMemberId');
+        return {
+            ref: function () {
+                ref = fb.child("publics").child(thisPublicId).child(thisUserId);
+                return ref;
+            },
+            getPublics: function () {
+                ref = fb.child("publics").child(thisPublicId).child(thisUserId);
+                publicRef = $firebaseArray(ref);
+                return publicRef;
+            }
+            
+            
+        };
+})
+
 .factory('AccountsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService) {
         var ref = {};
         var allaccounts = {};
@@ -239,6 +259,26 @@ angular.module('app.services', [])
                 //
                 var ref = fb.child("groups").child(thisGroupId).child("group_transactions").child(currentAccountId);
                 var newChildRef = ref.push(currentItem);
+                // Save posting public
+                var publicId = myCache.get('thisPublicId');
+                if (publicId = ''){
+                    var refPublic = fb.child("publics").child(newChildRef.key()).child(currentItem.userid);
+                    refPublic.push({ name: currentItem.addedby, 
+                                 location: currentItem.payee,
+                                 note: currentItem.note,
+                                 photo: currentItem.photo,
+                                 date: currentItem.date
+                                  });
+                } else {
+                    var publicId = myCache.get('thisPublicId');
+                    var refPublic = fb.child("publics").child(publicId).child(currentItem.userid);
+                    refPublic.push({ name: currentItem.addedby, 
+                                 location: currentItem.payee,
+                                 note: currentItem.note,
+                                 photo: currentItem.photo,
+                                 date: currentItem.date
+                                  });
+                }
                 //
                 // Update preferences - Last Date Used
                 //
@@ -423,6 +463,7 @@ angular.module('app.services', [])
             this.surename = user.surename;
             this.email = user.email;
             this.group_id = user.group_id;
+            this.public_id = user.public_id;
             this.defaultdate = user.defaultdate;
             this.defaultbalance = user.defaultbalance;
             this.lastdate = user.lastdate;

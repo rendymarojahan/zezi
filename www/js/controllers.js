@@ -41,20 +41,20 @@ angular.module('app.controllers', [])
     };
 })
   
-.controller('peopleCtrl', function($scope, $state, MembersFactory, AccountsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices) {
+.controller('peopleCtrl', function($scope, $state, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices) {
 
-    $scope.transactions = [];
+    $scope.publics = [];
     $scope.uid = '';
-    $scope.transactions = AccountsFactory.getGroupTransaction();
+    $scope.publics = PublicsFactory.getPublics();
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
         filterBarInstance = $ionicFilterBar.show({
-            items: $scope.transactions,
+            items: $scope.publics,
             update: function (filteredItems, filterText) {
                 $scope.people = filteredItems;
             },
-            filterProperties: 'payee'
+            filterProperties: 'name'
         });
     };
 
@@ -130,6 +130,7 @@ angular.module('app.controllers', [])
 
     $scope.$on('$ionicView.beforeEnter', function () {
         $scope.hideValidationMessage = true;
+        $scope.publicId = myCache.get('thisPublicId');
         $scope.currentItem.typedisplay = PickTransactionServices.typeDisplaySelected;
         $scope.currentItem.type = PickTransactionServices.typeInternalSelected;
         $scope.currentItem.payee = PickTransactionServices.payeeSelected;
@@ -2420,6 +2421,7 @@ angular.module('app.controllers', [])
                     myCache.put('thisGroupId', thisuser.group_id);
                     myCache.put('thisUserName', thisuser.firstname);
                     myCache.put('thisMemberId', authData.uid);
+                    myCache.put('thisPublicId', thisuser.public_id);
                     CurrentUserService.updateUser(thisuser);
 
                     if (thisuser.group_id === '') {
