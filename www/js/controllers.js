@@ -137,6 +137,8 @@ angular.module('app.controllers', [])
         $scope.currentItem.category = PickTransactionServices.categorySelected;
         $scope.currentItem.categoryid = PickTransactionServices.categoryid;
         $scope.currentItem.amount = PickTransactionServices.amountSelected;
+        $scope.currentItem.account = PickTransactionServices.accountSelected;
+        $scope.currentItem.accountId = PickTransactionServices.accountId;
         $scope.currentItem.accountFrom = PickTransactionServices.accountFromSelected;
         $scope.currentItem.accountFromId = PickTransactionServices.accountFromId;
         $scope.currentItem.accountTo = PickTransactionServices.accountToSelected;
@@ -152,9 +154,9 @@ angular.module('app.controllers', [])
             $scope.DisplayDate = PickTransactionServices.dateSelected;
         }
         // Handle transaction type
-        if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId === $scope.currentItem.accountToId) {
+        if ($scope.currentItem.typedisplay === "Transfer" && $scope.currentItem.accountFromId === $scope.currentItem.accountToId) {
             PickTransactionServices.typeInternalSelected = 'Income';
-        } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
+        } else if ($scope.currentItem.typedisplay === "Transfer" && $scope.currentItem.accountFromId !== $scope.currentItem.accountToId) {
             PickTransactionServices.typeInternalSelected = 'Expense';
         }
         // Handle Two Ways Binding
@@ -243,10 +245,7 @@ angular.module('app.controllers', [])
         //
         // Handle transaction type for Transfers
         //
-        if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId === $scope.currentItem.accountToId) {
-            $scope.currentItem.type = 'Income';
-            $scope.currentItem.istransfer = true;
-        } else if ($scope.currentItem.typedisplay === "Transfer" && $stateParams.accountId !== $scope.currentItem.accountToId) {
+        if ($scope.currentItem.typedisplay === "Transfer") {
             $scope.currentItem.type = 'Expense';
             $scope.currentItem.istransfer = true;
         } else {
@@ -369,7 +368,7 @@ angular.module('app.controllers', [])
             $scope.currentItem.addedby = myCache.get('thisUserName');
             $scope.currentItem.userid = myCache.get('thisMemberId');
             //
-            AccountsFactory.createTransaction($stateParams.accountId, $scope.currentItem);
+            AccountsFactory.createTransaction($scope.currentItem.accountId, $scope.currentItem);
         }
         $scope.currentItem = {};
         $ionicHistory.goBack();
@@ -2420,7 +2419,7 @@ angular.module('app.controllers', [])
                     /* Save user data for later use */
                     myCache.put('thisGroupId', thisuser.group_id);
                     myCache.put('thisUserName', thisuser.firstname);
-                    myCache.put('thisMemberId', thisuser.$id);
+                    myCache.put('thisMemberId', authData.uid);
                     CurrentUserService.updateUser(thisuser);
 
                     if (thisuser.group_id === '') {

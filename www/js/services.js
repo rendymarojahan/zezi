@@ -232,7 +232,7 @@ angular.module('app.services', [])
                         OtherTransaction.type = 'Income';
                     }
                 } else {
-                    currentAccountId = currentItem.accountFromId;
+                    currentAccountId = currentItem.accountId;
                 }
                 //
                 // Save transaction
