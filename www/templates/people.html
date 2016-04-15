@@ -5,14 +5,13 @@
     <button class="button button-post" ng-click="createPosting()">
         <i class="icon ion-ios-pricetags-outline"></i>
     </button>
-    <ion-content class="has-header" overflow-scroll="true" padding="true">
-        <ion-list can-swipe="listCanSwipe">
-            <div collection-repeat="public in publics" divider-collection-repeat>
+    <ion-content class="has-header" overflow-scroll="false" padding="true">
+            <div collection-repeat="public in publics">
                 <div class="list card">
                     <div class="item item-avatar">
                         <img src="img/zezi-logo.png">
                         <h2>{{ public.name }}</h2>
-                        <p>{{ public.date }}</p>
+                        <p>{{ public.location }}</p>
                     </div>
                     <div class="item item-body">
                         <img class="full-image" src="img/zezi.png">
@@ -23,7 +22,7 @@
                         </p>
                     </div>
                 </div>
+                <div style="width: 283px; height: 8px;" class="spacer"></div>
             </div>
-        </div>
     </ion-content>
 </ion-view>
