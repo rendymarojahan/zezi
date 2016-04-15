@@ -1,18 +1,11 @@
 <ion-view style="" title="Register">
-    <ion-nav-buttons side="right">
-        <button class="button button-clear customHeaderIcon customHeaderIconSmall" ng-click="createMember(user)">Save</button>
-    </ion-nav-buttons>
-
     <ion-content class="has-header" overflow-scroll="false" padding="true">
-   
         <div style="background-color: rgb(255, 255, 255); border: 1px solid rgb(238, 238, 238); border-radius: 3px; text-align: center;">
-            <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" height="auto" width="100%" ng-model="user.picture">
-            <img ng-show="imgURI === undefined" ng-src="img/register.jpg" ng-model="user.picture">
+            <img ng-show="currentItem.photo !== undefined" ng-src="{{currentItem.photo}}" height="auto" width="100%" ng-model="user.picture">
+            <img ng-show="currentItem.photo === undefined" ng-src="img/register.jpg" ng-model="user.picture">
             <button ng-click="doAction()" class="button button-register">
-                <i class="icon ion-ios-person-outline"></i>
-
+                <i class="icon ion-ios-camera-outline"></i>
             </button>
-            
         </div>
         <form style="" class="list">
             <ion-item style="" class="item-divider">Basic Information</ion-item>
@@ -36,5 +29,8 @@
             </label>
             <div style="width: 283px; height: 46px;" class="spacer"></div>
         </form>
+        <button class="button button-float" ng-click="createMember(user)">
+        <i class="icon ion-ios-person-outline"></i>
+        </button>
     </ion-content>
 </ion-view>

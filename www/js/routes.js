@@ -40,7 +40,13 @@ angular.module('app.routes', [])
           url: '/groupcreate',
           templateUrl: 'templates/groupCreate.html',
           controller: 'groupCreateCtrl'
-      })
+  })
+
+  .state('groupjoin', {
+          url: '/groupjoin',
+          templateUrl: 'templates/groupJoin.html',
+          controller: 'groupJoinCtrl'
+  })
 
   .state('tabsController', {
     url: '/zezi',

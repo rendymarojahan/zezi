@@ -741,7 +741,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('registerCtrl', function($scope, $state, $ionicLoading, MembersFactory, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup) {
+.controller('registerCtrl', function($scope, $state, $ionicLoading, MembersFactory, PickTransactionServices, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup) {
 
 	$scope.user = {};
     $scope.goToLogIn = function () {
@@ -759,45 +759,47 @@ angular.module('app.controllers', [])
 			buttonClicked: function(index) {
 				switch (index) {
                 case 0:
-                    var options = { 
-            			quality : 75, 
-            			destinationType : Camera.DestinationType.DATA_URL, 
-            			sourceType : Camera.PictureSourceType.CAMERA, 
-            			allowEdit : true,
-            			encodingType: Camera.EncodingType.JPEG,
-            			targetWidth: 300,
-            			targetHeight: 300,
-            			popoverOptions: CameraPopoverOptions,
-            			saveToPhotoAlbum: false
-        			};
- 
-        			$cordovaCamera.getPicture(options).then(function(imageData) {
-        				addImage.$add({image: imageData});
-            			$scope.imgURI = "data:image/jpeg;base64," + imageData;
-        				}, function(err) {
-            				// An error occured. Show a message to the user
-        				});
+                    $scope.currentItem = { photo: PickTransactionServices.photoSelected };
+        				if (PickTransactionServices.photoSelected === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' || PickTransactionServices.photoSelected === '') {
+            				var options = {
+			                quality: 75,
+			                destinationType: Camera.DestinationType.DATA_URL,
+			                sourceType: Camera.PictureSourceType.CAMERA,
+			                allowEdit: false,
+			                encodingType: Camera.EncodingType.JPEG,
+			                popoverOptions: CameraPopoverOptions,
+			                targetWidth: 800,
+			                targetHeight: 800,
+			                saveToPhotoAlbum: false
+            				};
+				            $cordovaCamera.getPicture(options).then(function (imageData) {
+				                $scope.currentItem.photo = imageData;
+				            }, function (error) {
+				                console.error(error);
+				            })
+        				}
 
                 break;
                 case 1:
-                	var options = { 
-            			quality : 75, 
-            			destinationType : Camera.DestinationType.DATA_URL, 
-            			sourceType : Camera.PictureSourceType.PHOTOLIBRARY, 
-            			allowEdit : true,
-            			encodingType: Camera.EncodingType.JPEG,
-            			targetWidth: 300,
-            			targetHeight: 300,
-            			popoverOptions: CameraPopoverOptions,
-            			saveToPhotoAlbum: false
-        			};
- 
-        			$cordovaCamera.getPicture(options).then(function(imageData) {
-        				addImage.$add({image: imageData});
-            			$scope.imgURI = "data:image/jpeg;base64," + imageData;
-        				}, function(err) {
-            				// An error occured. Show a message to the user
-        				});
+                	$scope.currentItem = { photo: PickTransactionServices.photoSelected };
+        				if (PickTransactionServices.photoSelected === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' || PickTransactionServices.photoSelected === '') {
+            				var options = {
+			                quality: 75,
+			                destinationType: Camera.DestinationType.DATA_URL,
+			                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+			                allowEdit: false,
+			                encodingType: Camera.EncodingType.JPEG,
+			                popoverOptions: CameraPopoverOptions,
+			                targetWidth: 800,
+			                targetHeight: 800,
+			                saveToPhotoAlbum: false
+            				};
+				            $cordovaCamera.getPicture(options).then(function (imageData) {
+				                $scope.currentItem.photo = imageData;
+				            }, function (error) {
+				                console.error(error);
+				            })
+        				}
         			
                 break;
             	}
@@ -884,7 +886,7 @@ angular.module('app.controllers', [])
                             email: user.email,
                             phone: user.phone,
                             birthday: user.birthday,
-                            houseid: 0,
+                            group_id: '',
                             datecreated: Date.now(),
                             dateupdated: Date.now()
                         }
@@ -936,6 +938,31 @@ angular.module('app.controllers', [])
         //
         GroupFactory.createGroup(group);
         $state.go('tabsController.accounts');
+    };
+})
+
+.controller('groupJoinCtrl', function ($scope, $state, GroupFactory) {
+
+    $scope.hideValidationMessage = true;
+    $scope.group = {
+        groupid: ''
+    };
+
+    $scope.joinGroup = function (group) {
+        var group_code = group.groupid;
+
+        /* VALIDATE DATA */
+        if (!group_code) {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please enter the group code you want to join"
+            return;
+        }
+        GroupFactory.getGroupByCode(group_code).then(function (value) {
+            if (value) {
+                GroupFactory.joinGroup(value);
+                $state.go('tabsController.accounts');
+            }
+        });
     };
 })
    

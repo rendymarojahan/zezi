@@ -27,7 +27,7 @@ angular.module('app.services', [])
         };
 })
 
-.factory('GroupFactory', function ($state, $q, myCache, $ionicHistory) {
+.factory('GroupFactory', function ($state, $q, myCache) {
         //
         // https://github.com/oriongunning/myExpenses
         //
@@ -39,17 +39,17 @@ angular.module('app.services', [])
             },
             getGroupByCode: function (code) {
                 var deferred = $q.defer();
-                ref.orderByChild("group_code").startAt(code)
+                ref.orderByChild("join_code").startAt(code)
                     .endAt(code)
                     .once('value', function (snap) {
                         if (snap.val()) {
-                            var group, group_id;
+                            var group, groupid;
                             angular.forEach(snap.val(), function (value, key) {
                                 group = value;
-                                group_id = key;
+                                groupid = key;
                             });
-                            if (group.group_code === code) {
-                                deferred.resolve(group_id);
+                            if (group.join_code === code) {
+                                deferred.resolve(groupid);
                             }
                         }
                     }, function (errorObject) {
@@ -66,7 +66,7 @@ angular.module('app.services', [])
             },
             joinGroup: function (id) {
                 var temp = {
-                    group_id: id
+                    groupid: id
                 }
                 var memberRef = fb.child("members").child(authData.uid);
                 memberRef.update(temp);
@@ -90,7 +90,7 @@ angular.module('app.services', [])
                 /* Save group_id for later use */
                 myCache.put('thisGroupId', newChildRef.key());
 
-                /* UPDATE USER WITH HOUSE ID AND SET PRIORITY */
+                /* UPDATE USER WITH GROUP ID AND SET PRIORITY */
                 var temp = {
                     group_id: newChildRef.key(),
                     group_name: group.name,
