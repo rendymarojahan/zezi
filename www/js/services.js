@@ -43,13 +43,13 @@ angular.module('app.services', [])
                     .endAt(code)
                     .once('value', function (snap) {
                         if (snap.val()) {
-                            var group, groupid;
+                            var group, group_id;
                             angular.forEach(snap.val(), function (value, key) {
                                 group = value;
-                                groupid = key;
+                                group_id = key;
                             });
                             if (group.join_code === code) {
-                                deferred.resolve(groupid);
+                                deferred.resolve(group_id);
                             }
                         }
                     }, function (errorObject) {
@@ -66,7 +66,7 @@ angular.module('app.services', [])
             },
             joinGroup: function (id) {
                 var temp = {
-                    groupid: id
+                    group_id: id
                 }
                 var memberRef = fb.child("members").child(authData.uid);
                 memberRef.update(temp);
@@ -80,7 +80,8 @@ angular.module('app.services', [])
                     admin: authData.password.email,
                     created: Date.now(),
                     updated: Date.now(),
-                    group_code: RandomHouseCode() + 1
+                    join_code: RandomHouseCode() + group.name,
+                    groupid: ''
                 };
 
                 /* SAVE GROUP */
@@ -100,11 +101,7 @@ angular.module('app.services', [])
                 memberRef.update(temp);
                 memberRef.setPriority(newChildRef.key());
 
-                /* SAVE DEFAULT ACCOUNT TYPES */
-                var refTypes = fb.child("groups").child(newChildRef.key()).child("group_account_types");
-                refTypes.push({ name: 'Savings', icon: 'ion-ios-briefcase' });
-                refTypes.push({ name: 'Credit Card', icon: 'ion-closed-captioning' });
-                refTypes.push({ name: 'Debit Card', icon: 'ion-card' });
+                
             }
         };
 })
@@ -261,7 +258,7 @@ angular.module('app.services', [])
                 var newChildRef = ref.push(currentItem);
                 // Save posting public
                 var publicId = myCache.get('thisPublicId');
-                if (publicId = ''){
+                if (publicId = 'undefined'){
                     var refPublic = fb.child("publics").child(newChildRef.key()).child(currentItem.userid);
                     refPublic.push({ name: currentItem.addedby, 
                                  location: currentItem.payee,

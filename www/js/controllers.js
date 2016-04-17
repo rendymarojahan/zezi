@@ -41,11 +41,23 @@ angular.module('app.controllers', [])
     };
 })
   
-.controller('peopleCtrl', function($scope, $state, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices) {
+.controller('peopleCtrl', function($scope, $state, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService) {
 
     $scope.publics = [];
     $scope.uid = '';
-    $scope.publics = PublicsFactory.getPublics();
+    $scope.name = 'Welcome';
+    $scope.location = 'zezi';
+    $scope.note = 'thanks for sign in, this is your personal finanance social media. share your moment and control your money';
+
+    if (typeof CurrentUserService.public_id !== 'undefined') {
+            $scope.publics = PublicsFactory.getPublics();
+    } else {
+            $scope.publics = [{
+		        name: $scope.name,
+		        location: $scope.location,
+		        note: $scope.note
+    		}];
+        }
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
@@ -744,6 +756,14 @@ angular.module('app.controllers', [])
 .controller('registerCtrl', function($scope, $state, $ionicLoading, MembersFactory, PickTransactionServices, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup) {
 
 	$scope.user = {};
+	$scope.currentItem = {'photo': ''};
+	$scope.$on('$ionicView.beforeEnter', function () {
+        $scope.hideValidationMessage = true;
+        $scope.currentItem.photo = PickTransactionServices.photoSelected;
+        if ($scope.currentItem.photo === '') {
+            $scope.currentItem.photo = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        }
+    });
     $scope.goToLogIn = function () {
         $state.go('login');
     };
@@ -879,6 +899,36 @@ angular.module('app.controllers', [])
                         $ionicPopup.alert({title: 'Register Failed', template: 'Error. Login failed!'});
                     } else {
 
+                    	if ($scope.currentItem.photo === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==') {
+            					$scope.currentItem.photo = '';
+        				}
+        				var photo = $scope.currentItem.photo;
+        				if (typeof photo === 'undefined') {
+        					photo = '';
+        				}
+
+        				/* PREPARE DATA FOR TEMP*/
+                    	var temp = {
+                            temp: ''
+                        }
+                        /*SAVE TEMP*/
+                        var tempref = fb.child("temps");
+                        var newTempRef = tempref.push(temp);
+
+
+                    	/* PREPARE DATA FOR PUBLICS*/
+                    	var post = {
+                            name: user.firstname,
+                            location: 'zezi',
+                            note: 'Welcome to zezi, your personal financial application. Share your moment to control your money',
+                            photo: photo,
+                            date: Date.now()
+                        }
+                        /*SAVE FIRST POSTING*/
+                        var ref = fb.child("publics").child(newTempRef.key()).child(authData.uid);
+                        var newChildRef = ref.push(post);
+
+
                         /* PREPARE DATA FOR FIREBASE*/
                         $scope.temp = {
                             firstname: user.firstname,
@@ -887,9 +937,12 @@ angular.module('app.controllers', [])
                             phone: user.phone,
                             birthday: user.birthday,
                             group_id: '',
+                            photo: photo,
                             datecreated: Date.now(),
-                            dateupdated: Date.now()
+                            dateupdated: Date.now(),
+                            public_id: newTempRef.key()
                         }
+
 
                         /* SAVE MEMBER DATA */
                         var membersref = MembersFactory.ref();
@@ -897,6 +950,15 @@ angular.module('app.controllers', [])
                         newUser.update($scope.temp, function (ref) {
                     		addImage = newUser.child("images");
                         });
+
+                        /* SAVE DEFAULT ACCOUNT TYPES */
+                		var refTypes = fb.child("members").child(authData.uid).child("group_account_types");
+                		refTypes.push({ name: 'Savings', icon: 'ion-ios-briefcase' });
+                		refTypes.push({ name: 'Credit Card', icon: 'ion-closed-captioning' });
+                		refTypes.push({ name: 'Debit Card', icon: 'ion-card' });
+
+                		/* REMOVE TEMP*/
+                		var remTempRef = tempref.remove();
 
                         $ionicLoading.hide();
                         $state.go('groupchoice');
