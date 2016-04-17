@@ -563,6 +563,6 @@ angular.module('app.routes', [])
     controller: 'recurringCtrl'
   })
 
-  $urlRouterProvider.otherwise('/tabsController');
+  $urlRouterProvider.otherwise('/tabsController.people');
 
 });

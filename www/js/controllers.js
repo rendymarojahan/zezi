@@ -857,7 +857,7 @@ angular.module('app.controllers', [])
 				switch (index) {
                 case 0:
                     $scope.currentItem = { photo: PickTransactionServices.photoSelected };
-        				if (PickTransactionServices.photoSelected === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' || PickTransactionServices.photoSelected === '') {
+        				
             				var options = {
 			                quality: 75,
 			                destinationType: Camera.DestinationType.DATA_URL,
@@ -870,16 +870,14 @@ angular.module('app.controllers', [])
 			                saveToPhotoAlbum: false
             				};
 				            $cordovaCamera.getPicture(options).then(function (imageData) {
-				                $scope.currentItem.photo = imageData;
+				                PickTransactionServices.photoSelected = imageData;
 				            }, function (error) {
 				                console.error(error);
 				            })
-        				}
 
                 break;
                 case 1:
                 	$scope.currentItem = { photo: PickTransactionServices.photoSelected };
-        				if (PickTransactionServices.photoSelected === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' || PickTransactionServices.photoSelected === '') {
             				var options = {
 			                quality: 75,
 			                destinationType: Camera.DestinationType.DATA_URL,
@@ -892,11 +890,10 @@ angular.module('app.controllers', [])
 			                saveToPhotoAlbum: false
             				};
 				            $cordovaCamera.getPicture(options).then(function (imageData) {
-				                $scope.currentItem.photo = imageData;
+				                PickTransactionServices.photoSelected = imageData;
 				            }, function (error) {
 				                console.error(error);
 				            })
-        				}
         			
                 break;
             	}
@@ -1967,8 +1964,7 @@ angular.module('app.controllers', [])
         }
 
         /* Authenticate User */
-        var ref = new Firebase("https://zezi.firebaseio.com");
-        ref.authWithPassword({
+        fb.authWithPassword({
             "email": user.email,
             "password": user.password
         }, function (error, authData) {
