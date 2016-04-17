@@ -45,19 +45,9 @@ angular.module('app.controllers', [])
 
     $scope.publics = [];
     $scope.uid = '';
-    $scope.name = 'Welcome';
-    $scope.location = 'zezi';
-    $scope.note = 'thanks for sign in, this is your personal finanance social media. share your moment and control your money';
+    $scope.publics = PublicsFactory.getPublics();
 
-    if (typeof CurrentUserService.public_id !== 'undefined') {
-            $scope.publics = PublicsFactory.getPublics();
-    } else {
-            $scope.publics = [{
-		        name: $scope.name,
-		        location: $scope.location,
-		        note: $scope.note
-    		}];
-        }
+    
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
@@ -418,7 +408,7 @@ angular.module('app.controllers', [])
     };
 })
 
-.controller('pickPostTransactionAccountCtrl', function ($scope, $ionicHistory, AccountsFactory, PickTransactionServices) {
+.controller('pickPostTransactionAccountCtrl', function ($scope, $state, $ionicHistory, AccountsFactory, PickTransactionServices, SelectAccountServices) {
     //
     // Get accounts
     //
@@ -431,6 +421,93 @@ angular.module('app.controllers', [])
         PickTransactionServices.categoryid = '';
         $ionicHistory.goBack();
     };
+
+    $scope.createAccount = function () {
+        SelectAccountServices.nameSelected = '';
+        SelectAccountServices.amountSelected = '';
+        SelectAccountServices.typeSelected = '';
+        SelectAccountServices.dateSelected = '';
+        $state.go('tabsController.postaccount', { accountId: '-1', isNew: 'True' });
+    }
+})
+
+.controller('postAccountCtrl', function ($scope, $state, $stateParams, AccountsFactory, SelectAccountServices) {
+
+    $scope.hideValidationMessage = true;
+    $scope.AccountTitle = '';
+    $scope.inEditMode = false;
+    $scope.DisplayDate = '';
+    $scope.currentItem = {
+        'accountname': '',
+        'accounttype': '',
+        'autoclear': 'false',
+        'balancecleared': '0',
+        'balancetoday': '0',
+        'dateopen': ''
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.hideValidationMessage = true;
+        $scope.currentItem.accounttype = SelectAccountServices.typeSelected;
+        // Handle transaction date
+        if (typeof SelectAccountServices.dateSelected !== 'undefined' && SelectAccountServices.dateSelected !== '') {
+            $scope.DisplayDate = SelectAccountServices.dateSelected;
+        }
+    });
+
+    // EDIT / CREATE ACCOUNT
+    if ($stateParams.isNew === 'True') {
+        $scope.AccountTitle = "Create Account";
+    } else {
+        // Edit account
+        $scope.inEditMode = true;
+        var account = AccountsFactory.getAccount($stateParams.accountId);
+        $scope.currentItem = account;
+        $scope.DisplayDate = moment(account.dateopen).format('MMMM D, YYYY');
+        SelectAccountServices.dateSelected = $scope.DisplayDate;
+        SelectAccountServices.typeSelected = $scope.currentItem.accounttype;
+        $scope.AccountTitle = "Edit Account";
+    }
+
+    // SAVE
+    $scope.saveAccount = function () {
+
+        // Validate form data
+        if (typeof $scope.currentItem.accountname === 'undefined' || $scope.currentItem.accountname === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please enter a name for this account"
+            return;
+        }
+        if (typeof $scope.currentItem.accounttype === 'undefined' || $scope.currentItem.accounttype === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select an account type"
+            return;
+        }
+
+        // Format date
+        $scope.currentItem.dateopen = Date.now();
+
+        if (typeof $scope.currentItem.dateopen === 'undefined' || $scope.currentItem.dateopen === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please select a date for this account"
+            return;
+        }
+
+        if ($scope.inEditMode) {
+            //
+            // Update Existing Account
+            //
+            AccountsFactory.saveAccount($scope.currentItem);
+            $scope.inEditMode = false;
+        } else {
+            //
+            // Create New Transaction
+            //
+            AccountsFactory.createNewAccount($scope.currentItem);
+        }
+        $scope.currentItem = {};
+        $state.go('tabsController.pickposttransactionaccount');
+    }
 })
 
 .controller('pickPostTransactionAccountFromCtrl', function ($scope, $ionicHistory, AccountsFactory, PickTransactionServices) {
@@ -952,7 +1029,7 @@ angular.module('app.controllers', [])
                         });
 
                         /* SAVE DEFAULT ACCOUNT TYPES */
-                		var refTypes = fb.child("members").child(authData.uid).child("group_account_types");
+                		var refTypes = fb.child("members").child(authData.uid).child("member_account_types");
                 		refTypes.push({ name: 'Savings', icon: 'ion-ios-briefcase' });
                 		refTypes.push({ name: 'Credit Card', icon: 'ion-closed-captioning' });
                 		refTypes.push({ name: 'Debit Card', icon: 'ion-card' });
@@ -1817,8 +1894,29 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('familyMemberCtrl', function($scope) {
+.controller('familyMemberCtrl', function($scope, $state, $ionicListDelegate, $ionicActionSheet, MembersFactory, SelectAccountServices, myCache) {
 
+	$scope.members = [];
+	$scope.groups = myCache.get('thisGroupId');
+
+    // SWIPE
+    $scope.listCanSwipe = true;
+    $scope.handleSwipeOptions = function ($event, account) {
+        $event.stopPropagation();
+        var options = $event.currentTarget.querySelector('.item-options');
+        if (!options.classList.contains('invisible')) {
+            $ionicListDelegate.closeOptionButtons();
+        } else {
+            $state.go('tabsController.transactions', { accountId: account.$id, accountName: account.accountname });
+        }
+    };
+
+    // LIST
+    MembersFactory.getMemberByCode($scope.groups).then(
+            function (matches) {
+                $scope.members = matches;
+            }
+    )
 })
    
 .controller('incomeCtrl', function($scope) {
@@ -1881,10 +1979,16 @@ angular.module('app.controllers', [])
             } else {
                 
                 MembersFactory.getMember(authData).then(function (thisuser) {
+
+                	$scope.firstname = thisuser.firstname;
+    				$scope.surename = thisuser.surename;
+    				$scope.fullname = function (){
+    					return $scope.firstname +" "+ $scope.surename;
+    				};
                     
                     /* Save user data for later use */
                     myCache.put('thisGroupId', thisuser.group_id);
-                    myCache.put('thisUserName', thisuser.firstname);
+                    myCache.put('thisUserName', $scope.fullname());
                     myCache.put('thisMemberId', authData.uid);
                     myCache.put('thisPublicId', thisuser.public_id);
                     CurrentUserService.updateUser(thisuser);

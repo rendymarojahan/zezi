@@ -1,4 +1,7 @@
 <ion-view view-title="Select Account From">
+	<ion-nav-buttons side="right">
+        <button class="button-icon ion-plus customHeaderIcon customHeaderIconSmall" ng-click="createAccount()"></button>
+    </ion-nav-buttons>
     <ion-content>
         <ion-radio-fix ng-repeat="account in TransactionAccountList"
                        ng-value="account.accountname"

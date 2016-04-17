@@ -87,6 +87,26 @@ angular.module('app.routes', [])
         }
   })
 
+  .state('tabsController.postaccount', {
+        url: "/accounts/account/:accountId/:isNew",
+        views: {
+            'tab1': {
+                templateUrl: "templates/postAccount.html",
+                controller: 'postAccountCtrl'
+            }
+        }
+  })
+
+  .state('tabsController.pickpostaccounttype', {
+        url: "/pickaccounttype",
+        views: {
+            'tab1': {
+                templateUrl: "templates/pickaccounttype.html",
+                controller: "selectAccountTypeCtrl"
+            }
+        }
+  })
+
   .state('tabsController.pickposttransactionaccount', {
         url: "/pickposttransactionaccount",
         views: {
@@ -253,32 +273,32 @@ angular.module('app.routes', [])
   
   .state('tabsController.newBudget', {
     url: '/newBudget',
-	views: {
+	  views: {
       'tab4': {
-    	templateUrl: 'templates/newBudget.html',
-    	controller: 'newBudgetCtrl'
+    	  templateUrl: 'templates/newBudget.html',
+    	  controller: 'newBudgetCtrl'
+	    }
 	  }
-	}
   })
 
   .state('tabsController.newIncomeCategory', {
     url: '/newIncomeCategory',
-	views: {
+	  views: {
       'tab4': {
-    	templateUrl: 'templates/newIncomeCategory.html',
-    	controller: 'newIncomeCategoryCtrl'
+    	  templateUrl: 'templates/newIncomeCategory.html',
+    	  controller: 'newIncomeCategoryCtrl'
+	    }
 	  }
-	}
   })
   
   .state('tabsController.newRecurring', {
     url: '/newRecurring',
-	views: {
+	  views: {
       'tab4': {
-    	templateUrl: 'templates/newRecurring.html',
-    	controller: 'newRecurringCtrl'
+    	  templateUrl: 'templates/newRecurring.html',
+    	  controller: 'newRecurringCtrl'
+	    }
 	  }
-	}
   })
   
   .state('tabsController.categories', {
@@ -303,12 +323,12 @@ angular.module('app.routes', [])
   
   .state('tabsController.newExpense', {
     url: '/newExpense',
-	views: {
+	  views: {
       'tab4': {
-    	templateUrl: 'templates/newExpenseCategory.html',
-    	controller: 'newExpenseCategoryCtrl'
+    	  templateUrl: 'templates/newExpenseCategory.html',
+    	  controller: 'newExpenseCategoryCtrl'
+	    }
 	  }
-	}
   })
   
   .state('tabsController.accounts', {
