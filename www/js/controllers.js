@@ -5,13 +5,7 @@ angular.module('app.controllers', [])
     $scope.showMenuIcon = true;
     $scope.appversion = '1';
     
-    document.addEventListener("deviceready", function () {
-
-    $cordovaAppVersion.getVersionNumber().then(function (version) {
-            $scope.appversion = version;
-        });
-    }, false);
-
+    
     // Triggered on a the logOut button click
     $scope.showLogOutMenu = function () {
 
@@ -33,6 +27,7 @@ angular.module('app.controllers', [])
                 //Called when the destructive button is clicked.
                 //Return true to close the action sheet, or false to keep it opened.
                 $ionicHistory.clearCache();
+                $ionicHistory.clearHistory()
                 $rootScope.authData = '';
                 fb.unauth();
                 $state.go('login');

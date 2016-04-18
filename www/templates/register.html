@@ -1,7 +1,7 @@
 <ion-view style="" title="Register">
     <ion-content class="has-header" overflow-scroll="false" padding="true">
         <div style="background-color: rgb(255, 255, 255); border: 1px solid rgb(238, 238, 238); border-radius: 3px; text-align: center;">
-            <img ng-show="currentItem.photo !== undefined" ng-src="{{currentItem.photo}}" height="auto" width="100%" ng-model="user.picture">
+            <img ng-show="currentItem.photo !== undefined" ng-src="data:image/jpeg;base64,{{currentItem.photo}}" height="auto" width="100%" ng-model="user.picture">
             <img ng-show="currentItem.photo === undefined" ng-src="img/register.jpg" ng-model="user.picture">
             <button ng-click="doAction()" class="button button-register">
                 <i class="icon ion-ios-camera-outline"></i>

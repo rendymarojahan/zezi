@@ -164,7 +164,7 @@ angular.module('app.services', [])
 .factory('PublicsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService) {
         var ref = {};
         var publicRef = {};
-        var thisPublicId = CurrentUserService.public_id;
+        var thisPublicId = myCache.get('thisPublicId');
         var thisUserId = myCache.get('thisMemberId');
         return {
             ref: function () {
