@@ -15,16 +15,9 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 cordova.plugins.Keyboard.disableScroll(true);
-            }
-        }, 300);
-        setTimeout(function () {
-            $cordovaStatusbar.overlaysWebView(true);
-            $cordovaStatusbar.style(2);
-        }, 300);
-        setTimeout(function () {
-            $cordovaSplashscreen.hide()
-        }, 750);
-        setTimeout(function () {
+                }
+    }, 300);
+    setTimeout(function () {
             if (typeof $localStorage.enableTouchID === 'undefined' || $localStorage.enableTouchID === '' || $localStorage.enableTouchID === false) {
                 //should already be on login page
                 $state.go("login");
@@ -41,11 +34,11 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
                     $state.go("login");
                 });
             }
-        }, 750);
-        $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
+    }, 750);
+    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
             if (error === "AUTH_REQUIRED") {
                 $state.go("login");
             }
-        });
+    });
   });
 })

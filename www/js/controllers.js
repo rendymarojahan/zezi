@@ -870,7 +870,7 @@ angular.module('app.controllers', [])
 			                saveToPhotoAlbum: false
             				};
 				            $cordovaCamera.getPicture(options).then(function (imageData) {
-				                PickTransactionServices.photoSelected = imageData;
+				                $scope.currentItem.photo = imageData;
 				            }, function (error) {
 				                console.error(error);
 				            })
@@ -890,7 +890,7 @@ angular.module('app.controllers', [])
 			                saveToPhotoAlbum: false
             				};
 				            $cordovaCamera.getPicture(options).then(function (imageData) {
-				                PickTransactionServices.photoSelected = imageData;
+				                $scope.currentItem.photo = imageData;
 				            }, function (error) {
 				                console.error(error);
 				            })
