@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 
-.controller('AppCtrl', function ($scope, $state, $timeout, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaAppVersion, myCache) {
+.controller('AppCtrl', function ($scope, $state, $timeout, $cacheFactory, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaAppVersion, myCache) {
 
     $scope.showMenuIcon = true;
     $scope.appversion = '1';
@@ -31,10 +31,16 @@ angular.module('app.controllers', [])
 					$ionicHistory.clearCache();
                 	$ionicHistory.clearHistory();
                 	fb.unauth();
-                	myCache.removeAll();
+                	myCache.removeAll(tabsController);
+                	myCache.put('thisGroupId', '');
+                    myCache.put('thisUserName', '');
+                    myCache.put('thisMemberId', '');
+                    myCache.put('thisPublicId', '');
+                    $state.go('login');
                 	
         		}, 500);
-        		$state.go('login');
+        		
+        		
                 //Called when the destructive button is clicked.
                 //Return true to close the action sheet, or false to keep it opened.
                 
@@ -1950,7 +1956,9 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('loginCtrl', function($scope, $rootScope, $ionicHistory, $ionicLoading, $ionicPopup, $state, MembersFactory, myCache, CurrentUserService) {
+.controller('loginCtrl', function($scope, $rootScope, $ionicHistory, $cacheFactory, $ionicLoading, $ionicPopup, $state, MembersFactory, myCache, CurrentUserService) {
+
+	
 
 	$scope.user = {};
     $scope.doLogIn = function (user) {
