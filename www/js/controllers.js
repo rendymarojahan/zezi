@@ -24,21 +24,19 @@ angular.module('app.controllers', [])
                 return true;
             },
             destructiveButtonClicked: function () {
-            	$timeout(function () {
             		
                 	$rootScope = $rootScope.$new(true); 
 					$scope = $scope.$new(true);
 					$ionicHistory.clearCache();
                 	$ionicHistory.clearHistory();
                 	fb.unauth();
-                	myCache.removeAll(tabsController);
-                	myCache.put('thisGroupId', '');
-                    myCache.put('thisUserName', '');
-                    myCache.put('thisMemberId', '');
-                    myCache.put('thisPublicId', '');
+                	$scope.clear = '';
+                	myCache.removeAll();
+                	myCache.put('thisGroupId', $scope.clear);
+                    myCache.put('thisUserName', $scope.clear);
+                    myCache.put('thisMemberId', $scope.clear);
+                    myCache.put('thisPublicId', $scope.clear);
                     $state.go('login');
-                	
-        		}, 500);
         		
         		
                 //Called when the destructive button is clicked.
@@ -822,7 +820,168 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('familyCtrl', function($scope) {
+.controller('familyCtrl', function($scope, $state, $stateParams, MembersFactory, $ionicListDelegate, $ionicActionSheet, $ionicPopover, AccountsFactory, PickTransactionServices, $ionicFilterBar) {
+
+	$scope.familys = {};
+    MembersFactory.getMemberById($stateParams.memberId).then(function (thisuser) {
+    	$scope.firstname = thisuser.firstname;
+		$scope.surename = thisuser.surename;
+		$scope.fullname = function (){
+			return $scope.firstname +" "+ $scope.surename;
+		};
+		
+    });
+
+    $scope.transactions = [];
+    $scope.inEditMode = false;
+    $scope.editIndex = 0;
+
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.family") {
+            refresh($scope.transactions, $scope, AccountsFactory, $stateParams.memberId);
+        }
+    });
+
+    // SHOW FILTERS - ACTION SHEET
+    $scope.moreOptions = function () {
+        $ionicActionSheet.show({
+            buttons: [
+              { text: 'Copy' },
+              { text: 'Email' },
+              { text: 'Print' }
+            ],
+            titleText: '<strong>OPTIONS</strong>',
+            cancelText: 'Cancel',
+            cancel: function () {
+                $ionicListDelegate.closeOptionButtons();
+            },
+            buttonClicked: function (index) {
+                $ionicListDelegate.closeOptionButtons();
+                return true;
+            }
+        });
+    };
+
+    // GET TRANSACTIONS
+    $scope.groups = [];
+    $scope.transactions = AccountsFactory.getMemberTransaction($stateParams.memberId);
+    $scope.transactions.$loaded().then(function (x) {
+        refresh($scope.transactions, $scope, AccountsFactory, $stateParams.memberId);
+    }).catch(function (error) {
+        console.error("Error:", error);
+    });
+
+    
+    // SEARCH TRANSACTIONS
+    var filterBarInstance;
+    $scope.showFilterBar = function () {
+        filterBarInstance = $ionicFilterBar.show({
+            items: $scope.transactions,
+            update: function (filteredItems, filterText) {
+                $scope.transactions = filteredItems;
+            },
+            filterProperties: 'payee'
+        });
+    };
+
+    function refresh(transactions, $scope, AccountsFactory, accountId) {
+    //
+    var currentDate = '';
+    var todaysDate = new Date();
+    var previousDay = '';
+    var previousYear = '';
+    var groupValue = '';
+    var todayFlag = false;
+    var group = {};
+    var format = 'MMMM DD, YYYY';
+    var total = 0;
+    var cleared = 0;
+    var runningBal = 0;
+    var income = 0;
+    var expense = 0;
+    var clearedBal = 0;
+    var index;
+    //
+    for (index = 0; index < transactions.length; ++index) {
+        //
+        var transaction = transactions[index];
+        //
+        // Add grouping functionality
+        //
+        currentDate = new Date(transaction.date);
+        if (!previousDay || currentDate.getDate() !== previousDay || currentDate.getFullYear() !== previousYear) {
+            var dividerId = moment(transaction.date).format(format);
+            if (dividerId !== groupValue) {
+                groupValue = dividerId;
+                var tday = moment(todaysDate).format(format);
+                //console.log("tday: " + tday + ", " + dividerId);
+                if (tday === dividerId) {
+                    todayFlag = true;
+                } else {
+                    todayFlag = false;
+                }
+                group = {
+                    label: groupValue,
+                    transactions: [],
+                    isToday: todayFlag
+                };
+                $scope.groups.push(group);
+                //console.log(group);
+            }
+        }
+        group.transactions.push(transaction);
+        previousDay = currentDate.getDate();
+        previousYear = currentDate.getFullYear();
+        //
+        // Handle Running Balance
+        //
+        total++;
+        transaction.ClearedClass = '';
+        if (transaction.iscleared === true) {
+            transaction.ClearedClass = 'transactionIsCleared';
+            cleared++;
+            if (transaction.type === "Income") {
+                if (!isNaN(transaction.amount)) {
+                    clearedBal = clearedBal + parseFloat(transaction.amount);
+                }
+            } else if (transaction.type === "Expense") {
+                if (!isNaN(transaction.amount)) {
+                    clearedBal = clearedBal - parseFloat(transaction.amount);
+                }
+            }
+            transaction.clearedBal = clearedBal.toFixed(2);
+        }
+        if (transaction.type === "Income") {
+            if (!isNaN(transaction.amount)) {
+                runningBal = runningBal + parseFloat(transaction.amount);
+                transaction.runningbal = runningBal.toFixed(2);
+                income = income + parseFloat(transaction.amount);
+            }
+        } else if (transaction.type === "Expense") {
+            if (!isNaN(transaction.amount)) {
+                runningBal = runningBal - parseFloat(transaction.amount);
+                transaction.runningbal = runningBal.toFixed(2);
+                expense = expense + parseFloat(transaction.amount);
+            }
+        }
+    }
+    $scope.totalCount = total;
+    $scope.clearedCount = cleared;
+    $scope.pendingCount = total - cleared;
+    $scope.currentBalance = runningBal.toFixed(2);
+    $scope.clearedBalance = clearedBal.toFixed(2);
+    $scope.income = income.toFixed(2);
+    $scope.expense = expense.toFixed(2);
+
+    if (runningBal > 0) {
+        $scope.BalanceClass = 'balanced';
+    } else if (runningBal < 0){
+        $scope.BalanceClass = 'assertive';
+    } else {
+        $scope.BalanceClass = 'dark';
+    }
+    }
+    
 
 })
    
@@ -1899,21 +2058,16 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('familyMemberCtrl', function($scope, $state, $ionicListDelegate, $ionicActionSheet, MembersFactory, SelectAccountServices, myCache) {
+.controller('familyMemberCtrl', function($scope, $state, $ionicListDelegate, $ionicActionSheet, MembersFactory, SelectAccountServices, CurrentUserService, myCache) {
 
 	$scope.members = [];
 	$scope.groups = myCache.get('thisGroupId');
+	$scope.AccountTitle = CurrentUserService.group_name;
 
     // SWIPE
     $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, account) {
-        $event.stopPropagation();
-        var options = $event.currentTarget.querySelector('.item-options');
-        if (!options.classList.contains('invisible')) {
-            $ionicListDelegate.closeOptionButtons();
-        } else {
-            $state.go('tabsController.transactions', { accountId: account.$id, accountName: account.accountname });
-        }
+    $scope.handleSwipeOptions = function ($event, member) {
+        $state.go('tabsController.family', { memberId: member.$id, memberName: member.firstname });
     };
 
     // LIST

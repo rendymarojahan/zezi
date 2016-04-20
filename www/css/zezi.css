@@ -429,6 +429,50 @@ button.customHeaderSize {
 .button-post .icon:before {
     font-size: 34px;
 }
+.family {
+    font: 14px 'PT Sans Narrow', sans-serif;
+    color: #A0A0A0;
+    font-weight: bold;
+}
+.family button {
+    border-color: white;
+    background-color: white;
+    color: #444;
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0 12px;
+    min-width: 52px;
+    min-height: 47px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    vertical-align: top;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    line-height: 42px;
+    cursor: pointer;
+}
+.family button:hover {
+    -webkit-transform: translate3d(0, -1px, 0) !important;
+    transform: translate3d(0, -1px, 0) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    font-size: 22px !important;
+}
+.family item{
+    border-color: rgba(221, 221, 221, 0);
+    background-color: #fff;
+    color: #444;
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin: -1px;
+    padding: 16px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 16px;
+}
 
 /* About Posting
 ===============================================*/

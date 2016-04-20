@@ -40,6 +40,14 @@ angular.module('app.services', [])
                 }, 100);
                 return deferred.promise;
             },
+            getMemberById: function (memberid) {
+                var deferred = $q.defer();
+                var idRef = ref.child(memberid);
+                idRef.once("value", function (snap) {
+                    deferred.resolve(snap.val());
+                });
+                return deferred.promise;
+            },
         };
 })
 
@@ -188,6 +196,7 @@ angular.module('app.services', [])
         var alltransactions = {};
         var transactionRef = {};
         var grouptransaction = {};
+        var membertransaction = {};
         //var transactionsbycategoryRef = {};
         //var transactionsbypayeeRef = {};
         var thisGroupId = myCache.get('thisGroupId');
@@ -219,6 +228,11 @@ angular.module('app.services', [])
                 ref = fb.child("members").child(thisMemberId).child("member_transactions");
                 grouptransaction = $firebaseArray(ref);
                 return grouptransaction;
+            },
+            getMemberTransaction: function (memberid) {
+                ref = fb.child("members").child(memberid).child("member_transactions").child("-KFXEOQMOQXQpKVTKhgG");
+                membertransaction = $firebaseArray(ref);
+                return membertransaction;
             },
             getTransactionsByDate: function (accountid) {
                 ref = fb.child("members").child(thisMemberId).child("member_transactions").child(accountid).orderByChild('date');
@@ -491,6 +505,7 @@ angular.module('app.services', [])
             this.defaultdate = user.defaultdate;
             this.defaultbalance = user.defaultbalance;
             this.lastdate = user.lastdate;
+            this.group_name = user.group_name;
         }
 })
 

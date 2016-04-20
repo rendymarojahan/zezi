@@ -1,4 +1,4 @@
-<ion-view style="" title="Family Member">
+<ion-view style="" title="{{ AccountTitle }}">
     <ion-content class="has-header" padding="true">
         <ion-list can-swipe="listCanSwipe">
             <ion-item ng-repeat="member in members track by member.$id" ng-click="handleSwipeOptions($event, member)" class="item-thumbnail-left">

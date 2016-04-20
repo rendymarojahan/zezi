@@ -252,7 +252,8 @@ angular.module('app.routes', [])
   })
 
   .state('tabsController.family', {
-    url: '/family',
+    url: "/family/:memberId/:memberName",
+    cache: true,
     views: {
       'tab5': {
         templateUrl: 'templates/family.html',
