@@ -873,6 +873,15 @@ angular.module('app.controllers', [])
 
     
     // SEARCH TRANSACTIONS
+    $scope.date = moment(Date.now()).format('MMMM DD, YYYY');
+    $scope.today = function () {
+	    AccountsFactory.getMemberTransactionsByDate($stateParams.memberId, $scope.date).then(
+	            function (matches) {
+	                $scope.transactions = matches;
+	                refresh($scope.transactions, $scope, AccountsFactory, $stateParams.memberId);
+	            }
+	    )
+	}
     var filterBarInstance;
     $scope.showFilterBar = function () {
         filterBarInstance = $ionicFilterBar.show({

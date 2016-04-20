@@ -189,8 +189,9 @@ angular.module('app.services', [])
         };
 })
 
-.factory('AccountsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService) {
+.factory('AccountsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService, $timeout) {
         var ref = {};
+        var members = {};
         var allaccounts = {};
         var allaccounttypes = {};
         var alltransactions = {};
@@ -233,6 +234,20 @@ angular.module('app.services', [])
                 ref = fb.child("members").child(memberid).child("member_transactions").child("-KFXEOQMOQXQpKVTKhgG");
                 membertransaction = $firebaseArray(ref);
                 return membertransaction;
+            },
+            getMemberTransactionsByDate: function (memberid, dateid) {
+                ref = fb.child("members").child(memberid).child("member_transactions").child("-KFXEOQMOQXQpKVTKhgG").orderByChild('date');
+                members = $firebaseArray(ref);
+                var deferred = $q.defer();
+                var matches = members.filter(function (member) {
+                if (moment(member.date).format('MMMM DD, YYYY').toLowerCase().indexOf(dateid.toLowerCase()) !== -1) {
+                    return true;
+                    }
+                });
+                $timeout(function () {
+                deferred.resolve(matches);
+                }, 100);
+                return deferred.promise;
             },
             getTransactionsByDate: function (accountid) {
                 ref = fb.child("members").child(thisMemberId).child("member_transactions").child(accountid).orderByChild('date');
