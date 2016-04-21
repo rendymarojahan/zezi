@@ -53,6 +53,12 @@ angular.module('app.controllers', [])
     $scope.uid = '';
     $scope.publics = PublicsFactory.getPublics();
 
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.people") {
+            refresh($scope.publics, $scope, MembersFactory, PublicsFactory);
+        }
+    });
+
     
 
     var filterBarInstance;
@@ -62,7 +68,7 @@ angular.module('app.controllers', [])
             update: function (filteredItems, filterText) {
                 $scope.people = filteredItems;
             },
-            filterProperties: 'name'
+            filterProperties: 'payee'
         });
     };
 
@@ -93,6 +99,27 @@ angular.module('app.controllers', [])
         PickTransactionServices.photoSelected = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
         PickTransactionServices.noteSelected = '';
         $state.go('tabsController.posting');
+    }
+
+    function refresh(publics, $scope, MembersFactory, PublicsFactory) {
+    //
+    var currentDate = '';
+    var todaysDate = new Date();
+    var previousDay = '';
+    var previousYear = '';
+    var groupValue = '';
+    var todayFlag = false;
+    var group = {};
+    var format = 'MMMM DD, YYYY';
+    var total = 0;
+    var cleared = 0;
+    var runningBal = 0;
+    var income = 0;
+    var expense = 0;
+    var clearedBal = 0;
+    var index;
+    //
+    
     }
 
 })
@@ -582,10 +609,10 @@ angular.module('app.controllers', [])
     $scope.data = { "payees": [], "search": '' };
     $scope.search = function () {
         PayeesFactory.searchPayees($scope.data.search).then(
-            function (matches) {
-                $scope.data.payees = matches;
-            }
-        )
+    		function (matches) {
+    		    $scope.data.payees = matches;
+    		}
+    	)
     }
     
     // EDIT / CREATE PAYEE

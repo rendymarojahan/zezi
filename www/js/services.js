@@ -231,12 +231,12 @@ angular.module('app.services', [])
                 return grouptransaction;
             },
             getMemberTransaction: function (memberid) {
-                ref = fb.child("members").child(memberid).child("member_transactions").child("-KFXEOQMOQXQpKVTKhgG");
+                ref = fb.child("members").child(memberid).child("member_transactions");
                 membertransaction = $firebaseArray(ref);
                 return membertransaction;
             },
             getMemberTransactionsByDate: function (memberid, dateid) {
-                ref = fb.child("members").child(memberid).child("member_transactions").child("-KFXEOQMOQXQpKVTKhgG").orderByChild('date');
+                ref = fb.child("members").child(memberid).child("member_transactions").orderByChild('date');
                 members = $firebaseArray(ref);
                 var deferred = $q.defer();
                 var matches = members.filter(function (member) {
@@ -301,7 +301,7 @@ angular.module('app.services', [])
                 //
                 // Save transaction
                 //
-                var ref = fb.child("members").child(thisMemberId).child("member_transactions").child(currentAccountId);
+                var ref = fb.child("members").child(thisMemberId).child("member_transactions");
                 var newChildRef = ref.push(currentItem);
                 // Save posting public
                 var publicId = myCache.get('thisPublicId');
@@ -373,7 +373,7 @@ angular.module('app.services', [])
                 // Save payee-category relationship
                 //
                 var payee = {};
-                var payeeRef = fb.child("members").child(thisMemberId).child("memberpayees").child(currentItem.payeeid);
+                var payeeRef = fb.child("groups").child(thisGroupId).child("memberpayees").child(currentItem.payeeid);
                 if (currentItem.type === "Income") {
                     payee = {
                         lastamountincome: currentItem.amount,
@@ -426,13 +426,13 @@ angular.module('app.services', [])
         var thisMemberId = myCache.get('thisMemberId');
         return {
             getPayees: function () {
-                ref = fb.child("members").child(thisMemberId).child("memberpayees").orderByChild('payeesort');
+                ref = fb.child("groups").child(thisGroupId).child("memberpayees").orderByChild('payeesort');
                 allpayees = $firebaseArray(ref);
                 return allpayees;
             },
             getPayee: function (payeeid) {
                 var deferred = $q.defer();
-                ref = fb.child("members").child(thisMemberId).child("memberpayees").child(payeeid);
+                ref = fb.child("groups").child(thisGroupId).child("memberpayees").child(payeeid);
                 ref.once("value", function (snap) {
                     deferred.resolve(snap.val());
                 });
@@ -449,11 +449,11 @@ angular.module('app.services', [])
             //    return transactionsByCategoryRef;
             //},
             getPayeesRef: function () {
-                payeesRef = fb.child("members").child(thisMemberId).child("memberpayees");
+                payeesRef = fb.child("groups").child(thisGroupId).child("memberpayees");
                 return payeesRef;
             },
             getPayeeRef: function (payeeid) {
-                payeeRef = fb.child("members").child(thisMemberId).child("memberpayees").child(payeeid);
+                payeeRef = fb.child("groups").child(thisGroupId).child("memberpayees").child(payeeid);
                 return payeeRef;
             },
             savePayee: function (payee) {
@@ -465,28 +465,25 @@ angular.module('app.services', [])
 })
 
 .factory('PayeesFactory', function ($firebaseArray, $q, $timeout, myCache) {
-        var ref = {};
+       var ref = {};
         var payees = {};
         var thisGroupId = myCache.get('thisGroupId');
-        var thisMemberId = myCache.get('thisMemberId');
-        ref = fb.child("members").child(thisMemberId).child("memberpayees").orderByChild('payeename');
+        ref = fb.child("groups").child(thisGroupId).child("memberpayees").orderByChild('payeename');
         payees = $firebaseArray(ref);
-        var searchPayees = function (searchFilter) {
-            //console.log(searchFilter);
-            var deferred = $q.defer();
-            var matches = payees.filter(function (payee) {
-                if (payee.payeename.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1) {
-                    return true;
-                }
-            });
-            $timeout(function () {
-                deferred.resolve(matches);
-            }, 100);
-            return deferred.promise;
-        };
         return {
-            searchPayees: searchPayees
-        }
+            searchPayees: function (searchFilter) {
+                var deferred = $q.defer();
+                var matches = payees.filter(function (payee) {
+                    if (payee.payeename.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1) {
+                        return true;
+                    }
+                });
+                $timeout(function () {
+                    deferred.resolve(matches);
+                }, 100);
+                return deferred.promise;
+            },
+        };
 })
 
 .service("CategoryTypeService", function () {
