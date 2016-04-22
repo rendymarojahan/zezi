@@ -62,7 +62,7 @@ angular.module('app.controllers', [])
 
     $scope.publics = [];
 
-    $scope.$on('$ionicView.leave', function () {
+    $scope.$on('$ionicView.beforeLeave', function () {
         $scope.hideValidationMessage = true;
         $stateParams.memberPublicId = '';
         $stateParams.memberId = '';
