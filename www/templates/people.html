@@ -6,16 +6,16 @@
         <i class="icon ion-ios-pricetags-outline"></i>
     </button>
     <ion-content class="has-header" overflow-scroll="false" padding="true">
-            <div collection-repeat="public in publics">
+            <div collection-repeat="public in publics | orderBy:'-date'">
                 <div class="list card">
                     <div class="item item-avatar">
                         <img src="img/zezi-logo.png">
                         <h2>{{ public.name }}</h2>
-                        <p>{{ public.location }}</p>
+                        <p>{{ public.date | date : "h:mm a" }} . {{ public.location }}</p>
                     </div>
                     <div class="item item-body">
-                        <img class="full-image" src="img/zezi.png">
                         <p>{{ public.note }}</p>
+                        <img class="full-image" src="img/zezi.png">
                         <p>
                             <a href="#" class="subdued"><i class="icon ion-thumbsup"></i>{{ public.likes }}</a>
                             <a href="#" class="subdued"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</a>

@@ -56,7 +56,7 @@ angular.module('app.routes', [])
   })
 
   .state('tabsController.people', {
-    url: '/people',
+    url: '/people/:memberPublicId/:memberId',
     chace: true,
     views: {
       'tab1': {
@@ -252,7 +252,7 @@ angular.module('app.routes', [])
   })
 
   .state('tabsController.family', {
-    url: "/family/:memberId/:memberName",
+    url: "/family/:memberPublicId/:memberId/:memberName",
     cache: true,
     views: {
       'tab5': {

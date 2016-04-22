@@ -172,6 +172,7 @@ angular.module('app.services', [])
 .factory('PublicsFactory', function ($firebaseArray, $q, myCache, MembersFactory, CurrentUserService) {
         var ref = {};
         var publicRef = {};
+        var familyRef = {};
         var thisPublicId = myCache.get('thisPublicId');
         var thisUserId = myCache.get('thisMemberId');
         return {
@@ -180,10 +181,15 @@ angular.module('app.services', [])
                 return ref;
             },
             getPublics: function () {
-                ref = fb.child("publics").child(thisPublicId).child(thisUserId);
+                ref = fb.child("publics").child(thisPublicId).child(thisUserId).orderByKey();
                 publicRef = $firebaseArray(ref);
                 return publicRef;
-            }
+            },
+            getMemberPublics: function (memberPublicId, memberid) {
+                ref = fb.child("publics").child(memberPublicId).child(memberid).orderByKey();
+                familyRef = $firebaseArray(ref);
+                return familyRef;
+            },
             
             
         };

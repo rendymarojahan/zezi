@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 
-.controller('AppCtrl', function ($scope, $state, $timeout, $cacheFactory, $rootScope, $ionicActionSheet, $ionicHistory, $cordovaAppVersion, myCache) {
+.controller('AppCtrl', function ($scope, $state, $timeout, $cacheFactory, $rootScope, AccountsFactory, PublicsFactory, CurrentUserService, $ionicActionSheet, $ionicHistory, $cordovaAppVersion, myCache) {
 
     $scope.showMenuIcon = true;
     $scope.appversion = '1';
@@ -24,19 +24,22 @@ angular.module('app.controllers', [])
                 return true;
             },
             destructiveButtonClicked: function () {
-            		
-                	$rootScope = $rootScope.$new(true); 
-					$scope = $scope.$new(true);
+
+            		$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+				        if (toState.name === "login") {
+				            refresh($rootScope, $scope.transactions, $scope.publics, $scope, AccountsFactory, PublicsFactory, CurrentUserService);
+				        }
+				    });
+
 					$ionicHistory.clearCache();
                 	$ionicHistory.clearHistory();
                 	fb.unauth();
-                	$scope.clear = '';
                 	myCache.removeAll();
-                	myCache.put('thisGroupId', $scope.clear);
-                    myCache.put('thisUserName', $scope.clear);
-                    myCache.put('thisMemberId', $scope.clear);
-                    myCache.put('thisPublicId', $scope.clear);
                     $state.go('login');
+
+                    function refresh(transactions, publics,$rootScope, $scope, AccountsFactory, myCache) {
+				    
+				    }
         		
         		
                 //Called when the destructive button is clicked.
@@ -47,16 +50,21 @@ angular.module('app.controllers', [])
     };
 })
   
-.controller('peopleCtrl', function($scope, $state, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService) {
+.controller('peopleCtrl', function($scope, $state, $stateParams, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService) {
 
     $scope.publics = [];
-    $scope.uid = '';
-    $scope.publics = PublicsFactory.getPublics();
 
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         if (fromState.name === "tabsController.people") {
             refresh($scope.publics, $scope, MembersFactory, PublicsFactory);
         }
+    });
+
+    $scope.publics = PublicsFactory.getMemberPublics($stateParams.memberPublicId, $stateParams.memberId);
+    $scope.publics.$loaded().then(function (x) {
+        refresh($scope.publics, $scope, MembersFactory, PublicsFactory, $stateParams.memberPublicId, $stateParams.memberId);;
+    }).catch(function (error) {
+        console.error("Error:", error);
     });
 
     
@@ -102,23 +110,6 @@ angular.module('app.controllers', [])
     }
 
     function refresh(publics, $scope, MembersFactory, PublicsFactory) {
-    //
-    var currentDate = '';
-    var todaysDate = new Date();
-    var previousDay = '';
-    var previousYear = '';
-    var groupValue = '';
-    var todayFlag = false;
-    var group = {};
-    var format = 'MMMM DD, YYYY';
-    var total = 0;
-    var cleared = 0;
-    var runningBal = 0;
-    var income = 0;
-    var expense = 0;
-    var clearedBal = 0;
-    var index;
-    //
     
     }
 
@@ -847,7 +838,7 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('familyCtrl', function($scope, $state, $stateParams, MembersFactory, $ionicListDelegate, $ionicActionSheet, $ionicPopover, AccountsFactory, PickTransactionServices, $ionicFilterBar) {
+.controller('familyCtrl', function($scope, $state, $stateParams, $filter, PublicsFactory, MembersFactory, $ionicListDelegate, $ionicActionSheet, $ionicPopover, AccountsFactory, PickTransactionServices, $ionicFilterBar) {
 
 	$scope.familys = {};
     MembersFactory.getMemberById($stateParams.memberId).then(function (thisuser) {
@@ -859,15 +850,24 @@ angular.module('app.controllers', [])
 		
     });
 
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.family") {
+            refresh($scope.transactions, $scope.publics, $scope, AccountsFactory, PublicsFactory, $stateParams.memberId);
+        }
+    });
+
     $scope.transactions = [];
     $scope.inEditMode = false;
     $scope.editIndex = 0;
-
-    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-        if (fromState.name === "tabsController.family") {
-            refresh($scope.transactions, $scope, AccountsFactory, $stateParams.memberId);
-        }
+    $scope.publics = [];
+    $scope.publics = PublicsFactory.getMemberPublics($stateParams.memberPublicId, $stateParams.memberId);
+    $scope.publics.$loaded().then(function (x) {
+        refresh($scope.publics, $scope, PublicsFactory, $stateParams.memberId, $stateParams.memberPublicId);
+    }).catch(function (error) {
+        console.error("Error:", error);
     });
+
+    
 
     // SHOW FILTERS - ACTION SHEET
     $scope.moreOptions = function () {
@@ -898,17 +898,6 @@ angular.module('app.controllers', [])
         console.error("Error:", error);
     });
 
-    
-    // SEARCH TRANSACTIONS
-    $scope.date = moment(Date.now()).format('MMMM DD, YYYY');
-    $scope.today = function () {
-	    AccountsFactory.getMemberTransactionsByDate($stateParams.memberId, $scope.date).then(
-	            function (matches) {
-	                $scope.transactions = matches;
-	                refresh($scope.transactions, $scope, AccountsFactory, $stateParams.memberId);
-	            }
-	    )
-	}
     var filterBarInstance;
     $scope.showFilterBar = function () {
         filterBarInstance = $ionicFilterBar.show({
@@ -919,6 +908,12 @@ angular.module('app.controllers', [])
             filterProperties: 'payee'
         });
     };
+
+    // SEARCH TRANSACTIONS
+    $scope.date = Date.now();
+    $scope.today = function () {
+    	$scope.transactions = $filter('date')($scope.date, 'MMMM DD, YYYY');
+	}
 
     function refresh(transactions, $scope, AccountsFactory, accountId) {
     //
@@ -941,35 +936,6 @@ angular.module('app.controllers', [])
     for (index = 0; index < transactions.length; ++index) {
         //
         var transaction = transactions[index];
-        //
-        // Add grouping functionality
-        //
-        currentDate = new Date(transaction.date);
-        if (!previousDay || currentDate.getDate() !== previousDay || currentDate.getFullYear() !== previousYear) {
-            var dividerId = moment(transaction.date).format(format);
-            if (dividerId !== groupValue) {
-                groupValue = dividerId;
-                var tday = moment(todaysDate).format(format);
-                //console.log("tday: " + tday + ", " + dividerId);
-                if (tday === dividerId) {
-                    todayFlag = true;
-                } else {
-                    todayFlag = false;
-                }
-                group = {
-                    label: groupValue,
-                    transactions: [],
-                    isToday: todayFlag
-                };
-                $scope.groups.push(group);
-                //console.log(group);
-            }
-        }
-        group.transactions.push(transaction);
-        previousDay = currentDate.getDate();
-        previousYear = currentDate.getFullYear();
-        //
-        // Handle Running Balance
         //
         total++;
         transaction.ClearedClass = '';
@@ -2103,7 +2069,7 @@ angular.module('app.controllers', [])
     // SWIPE
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, member) {
-        $state.go('tabsController.family', { memberId: member.$id, memberName: member.firstname });
+        $state.go('tabsController.family', { memberPublicId: member.public_id, memberId: member.$id, memberName: member.firstname });
     };
 
     // LIST
@@ -2146,7 +2112,7 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('loginCtrl', function($scope, $rootScope, $ionicHistory, $cacheFactory, $ionicLoading, $ionicPopup, $state, MembersFactory, myCache, CurrentUserService) {
+.controller('loginCtrl', function($scope, $rootScope, $stateParams, $ionicHistory, $cacheFactory, $ionicLoading, $ionicPopup, $state, MembersFactory, myCache, CurrentUserService) {
 
 	
 
@@ -2194,7 +2160,7 @@ angular.module('app.controllers', [])
                         $state.go('groupchoice');
                     } else {
                         $ionicLoading.hide();
-                        $state.go('tabsController.people');
+                        $state.go('tabsController.people', { memberPublicId: thisuser.public_id, memberId: authData.uid });
                     }
                 });
             }
