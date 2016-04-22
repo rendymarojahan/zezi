@@ -37,6 +37,9 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     }, 750);
     $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
             if (error === "AUTH_REQUIRED") {
+                $ionicHistory.clearCache();
+                $rootScope.authData = '';
+                fb.unauth();
                 $state.go("login");
             }
     });

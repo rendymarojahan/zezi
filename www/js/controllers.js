@@ -24,22 +24,30 @@ angular.module('app.controllers', [])
                 return true;
             },
             destructiveButtonClicked: function () {
-
-            		$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-				        if (toState.name === "login") {
-				            refresh($rootScope, $scope.transactions, $scope.publics, $scope, AccountsFactory, PublicsFactory, CurrentUserService);
-				        }
-				    });
-
-					$ionicHistory.clearCache();
-                	$ionicHistory.clearHistory();
-                	fb.unauth();
-                	myCache.removeAll();
-                    $state.go('login');
-
-                    function refresh(transactions, publics,$rootScope, $scope, AccountsFactory, myCache) {
-				    
-				    }
+            	$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+			        if (fromState.name === "tabsController") {
+			            refresh($rootScope, $scope, PublicsFactory, CurrentUserService, $stateParams.memberPublicId, $stateParams.memberId);
+			        }
+			    });
+			    function refresh($rootScope, $scope, PublicsFactory, CurrentUserService) {
+			    	this.firstname = '';
+		            this.surename = '';
+		            this.email = '';
+		            this.group_id = '';
+		            this.public_id = '';
+		            this.defaultdate = '';
+		            this.defaultbalance = '';
+		            this.lastdate = '';
+		            this.group_name = '';
+			    }
+			    $ionicHistory.clearCache('thisGroupId', 'thisUserName', 'thisMemberId', 'thisPublicId');
+            	$ionicHistory.clearHistory();
+        		$ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
+                $rootScope.authData = '';
+                fb.unauth();
+                myCache.remove('thisGroupId', 'thisUserName', 'thisMemberId', 'thisPublicId'); 
+                myCache.removeAll();
+                $state.go('login');
         		
         		
                 //Called when the destructive button is clicked.
@@ -53,6 +61,12 @@ angular.module('app.controllers', [])
 .controller('peopleCtrl', function($scope, $state, $stateParams, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService) {
 
     $scope.publics = [];
+
+    $scope.$on('$ionicView.leave', function () {
+        $scope.hideValidationMessage = true;
+        $stateParams.memberPublicId = '';
+        $stateParams.memberId = '';
+    });
 
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         if (fromState.name === "tabsController.people") {

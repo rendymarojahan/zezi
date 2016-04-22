@@ -564,6 +564,6 @@ angular.module('app.routes', [])
     controller: 'recurringCtrl'
   })
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/tabsController');
 
 });
