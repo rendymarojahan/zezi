@@ -5,7 +5,25 @@ angular.module('app.controllers', [])
     $scope.showMenuIcon = true;
     $scope.appversion = '1';
     
+    $scope.firstname = CurrentUserService.firstname;
+    $scope.surename = CurrentUserService.surename;
+    $scope.fullname = function (){
+    	return $scope.firstname +" "+ $scope.surename;
+    };
+    $scope.login = Date.now();
+
+    $scope.friends = [];
+
+    $scope.listCanSwipe = true;
+    $scope.handleSwipeOptions = function ($event, friend) {
+        $state.go('tabsController.friend', { friendId: friend.friends_id, friendName: friend.name });
+    };
+
+    $scope.friends = PublicsFactory.getFriends();
+
+    // SWIPE
     
+
     // Triggered on a the logOut button click
     $scope.showLogOutMenu = function () {
 
@@ -74,9 +92,9 @@ angular.module('app.controllers', [])
         }
     });
 
-    $scope.publics = PublicsFactory.getMemberPublics($stateParams.memberPublicId, $stateParams.memberId);
+    $scope.publics = PublicsFactory.getPublics();
     $scope.publics.$loaded().then(function (x) {
-        refresh($scope.publics, $scope, MembersFactory, PublicsFactory, $stateParams.memberPublicId, $stateParams.memberId);;
+        refresh($scope.publics, $scope, MembersFactory, PublicsFactory);;
     }).catch(function (error) {
         console.error("Error:", error);
     });
@@ -844,8 +862,26 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('chitChatCtrl', function($scope) {
+.controller('chitChatCtrl', function($scope, PublicsFactory) {
+	$scope.friends = [];
 
+    $scope.listCanSwipe = true;
+    $scope.handleSwipeOptions = function ($event, friend) {
+        $state.go('tabsController.friend', { friendId: friend.friends_id, friendName: friend.name });
+    };
+
+    $scope.friends = PublicsFactory.getFriends();
+
+    var filterBarInstance;
+    $scope.showFilterBar = function () {
+        filterBarInstance = $ionicFilterBar.show({
+            items: $scope.publics,
+            update: function (filteredItems, filterText) {
+                $scope.people = filteredItems;
+            },
+            filterProperties: 'payee'
+        });
+    };
 })
       
 .controller('settingCtrl', function($scope) {
@@ -999,6 +1035,38 @@ angular.module('app.controllers', [])
     }
     
 
+})
+
+.controller('friendCtrl', function($scope, $state, $stateParams, $filter, PublicsFactory, MembersFactory, $ionicListDelegate, $ionicActionSheet, $ionicPopover, AccountsFactory, PickTransactionServices, $ionicFilterBar) {
+
+	$scope.friends = {};
+    MembersFactory.getMemberById($stateParams.friendId).then(function (thisuser) {
+    	$scope.firstname = thisuser.firstname;
+		$scope.surename = thisuser.surename;
+		$scope.fullname = function (){
+			return $scope.firstname +" "+ $scope.surename;
+		};
+		
+    });
+
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.friend") {
+            refresh($scope.friends, $scope, AccountsFactory, PublicsFactory, $stateParams.friendId);
+        }
+    });
+
+    $scope.publics = [];
+    $scope.publics = PublicsFactory.getMemberPublics($stateParams.friendId);
+    $scope.publics.$loaded().then(function (x) {
+        refresh($scope.publics, $scope, PublicsFactory, $stateParams.friendId);
+    }).catch(function (error) {
+        console.error("Error:", error);
+    });
+
+       
+
+    function refresh(transactions, $scope, AccountsFactory, accountId) {}
+    
 })
    
 .controller('personNameCtrl', function($scope) {
@@ -1234,16 +1302,22 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('groupCreateCtrl', function ($scope, $state, GroupFactory) {
+.controller('groupCreateCtrl', function ($scope, $state, GroupFactory, myCache) {
 
     $scope.hideValidationMessage = true;
     $scope.group = {
         name: ''
     };
 
+    $scope.publicId = myCache.get('thisPublicId');
+    $scope.memberId = myCache.get('thisMemberId');
+
     $scope.saveGroup = function (group) {
 
         var group_name = group.name;
+
+        $scope.publicId = myCache.get('thisPublicId');
+    	$scope.memberId = myCache.get('thisMemberId');
 
         /* VALIDATE DATA */
         if (!group_name) {
@@ -1256,16 +1330,20 @@ angular.module('app.controllers', [])
         // Create House
         //
         GroupFactory.createGroup(group);
-        $state.go('tabsController.accounts');
+        $state.go('tabsController.accounts', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
     };
 })
 
-.controller('groupJoinCtrl', function ($scope, $state, GroupFactory) {
+.controller('groupJoinCtrl', function ($scope, $state, GroupFactory, myCache) {
 
     $scope.hideValidationMessage = true;
     $scope.group = {
         groupid: ''
     };
+
+    $scope.publicId = myCache.get('thisPublicId');
+    $scope.memberId = myCache.get('thisMemberId');
+
 
     $scope.joinGroup = function (group) {
         var group_code = group.groupid;
@@ -1279,7 +1357,7 @@ angular.module('app.controllers', [])
         GroupFactory.getGroupByCode(group_code).then(function (value) {
             if (value) {
                 GroupFactory.joinGroup(value);
-                $state.go('tabsController.accounts');
+                $state.go('tabsController.accounts', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
             }
         });
     };

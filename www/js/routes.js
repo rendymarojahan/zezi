@@ -262,6 +262,17 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.friend', {
+    url: "/friend/:friendId/:friendName",
+    cache: true,
+    views: {
+      'tab1': {
+        templateUrl: 'templates/friend.html',
+        controller: 'friendCtrl'
+      }
+    }
+  })
+
   .state('tabsController.profile', {
     url: '/profile',
     views: {

@@ -51,7 +51,7 @@ angular.module('app.services', [])
         };
 })
 
-.factory('GroupFactory', function ($state, $q, myCache) {
+.factory('GroupFactory', function ($state, $q, myCache, CurrentUserService, $firebaseArray) {
         //
         // https://github.com/oriongunning/myExpenses
         //
@@ -95,7 +95,35 @@ angular.module('app.services', [])
                 var memberRef = fb.child("members").child(authData.uid);
                 memberRef.update(temp);
                 memberRef.setPriority(id);
-            },
+
+                var member = {
+                    member_id: authData.uid,
+                    name: CurrentUserService.firstname,
+                    email: CurrentUserService.email
+                };
+                var mRef = fb.child("groups").child(id).child("members");
+                mRef.push(member);
+
+                
+                var friends = $firebaseArray(mRef);
+                friends.$loaded()
+                  .then(function(x) {
+                    var index;
+                    //
+                    for (index = 0; index < friends.length; ++index) {
+                        //
+                        var friend = friends[index];
+                        //
+                        var teman = {
+                            friends_id: friend.member_id,
+                            name: friend.name,
+                            email: friend.email
+                        };
+                        var afRef = fb.child("members").child(authData.uid).child("friends");
+                        afRef.push(teman);
+                    }
+                  });
+                },
             createGroup: function (group) {
 
                 /* PREPARE GROUP DATA */
@@ -114,6 +142,17 @@ angular.module('app.services', [])
                 
                 /* Save group_id for later use */
                 myCache.put('thisGroupId', newChildRef.key());
+
+                // CREATE MEMBERS GROUP
+                var member = {
+                    member_id: authData.uid,
+                    name: CurrentUserService.firstname,
+                    email: CurrentUserService.email
+                };
+                var mRef = fb.child("groups").child(newChildRef.key()).child("members");
+                mRef.push(member);
+                var fRef = fb.child("members").child(authData.uid).child("friends");
+                fRef.push(member);
 
                 /* UPDATE USER WITH GROUP ID AND SET PRIORITY */
                 var temp = {
@@ -173,6 +212,7 @@ angular.module('app.services', [])
         var ref = {};
         var publicRef = {};
         var familyRef = {};
+        var friendRef = {};
         var thisPublicId = myCache.get('thisPublicId');
         var thisUserId = myCache.get('thisMemberId');
         return {
@@ -185,10 +225,15 @@ angular.module('app.services', [])
                 publicRef = $firebaseArray(ref);
                 return publicRef;
             },
-            getMemberPublics: function (memberPublicId, memberid) {
-                ref = fb.child("publics").child(memberPublicId).child(memberid).orderByKey();
+            getMemberPublics: function (friendid) {
+                ref = fb.child("publics").orderByChild('userid').startAt(friendid).endAt(friendid);
                 familyRef = $firebaseArray(ref);
                 return familyRef;
+            },
+            getFriends: function () {
+                ref = fb.child("members").child(thisUserId).child("friends").orderByKey();
+                friendRef = $firebaseArray(ref);
+                return friendRef;
             },
             
             
@@ -256,7 +301,7 @@ angular.module('app.services', [])
                 return deferred.promise;
             },
             getTransactionsByDate: function (accountid) {
-                ref = fb.child("members").child(thisMemberId).child("member_transactions").child(accountid).orderByChild('date');
+                ref = fb.child("members").child(thisMemberId).child("member_transactions").orderByChild('accountId').startAt(accountid).endAt(accountid);
                 alltransactions = $firebaseArray(ref);
                 return alltransactions;
             },
@@ -310,32 +355,17 @@ angular.module('app.services', [])
                 var ref = fb.child("members").child(thisMemberId).child("member_transactions");
                 var newChildRef = ref.push(currentItem);
                 // Save posting public
-                var publicId = myCache.get('thisPublicId');
-                if (publicId = 'undefined'){
-                    var publicId = myCache.get('thisPublicId');
-                    var refPublic = fb.child("publics").child(publicId).child(currentItem.userid);
-                    refPublic.push({ name: currentItem.addedby, 
-                                     location: currentItem.payee,
-                                     note: currentItem.note,
-                                     photo: currentItem.photo,
-                                     date: currentItem.date,
-                                     likes:'',
-                                     views:'',
-                                     comments:''
-                                  });
-                } else {
-                    var publicId = myCache.get('thisPublicId');
-                    var refPublic = fb.child("publics").child(publicId).child(currentItem.userid);
-                    refPublic.push({ name: currentItem.addedby, 
-                                     location: currentItem.payee,
-                                     note: currentItem.note,
-                                     photo: currentItem.photo,
-                                     date: currentItem.date,
-                                     likes:'',
-                                     views:'',
-                                     comments:''
-                                  });
-                }
+                var refPublic = fb.child("publics");
+                refPublic.push({ name: currentItem.addedby, 
+                                 location: currentItem.payee,
+                                 userid: currentItem.userid,
+                                 note: currentItem.note,
+                                 photo: currentItem.photo,
+                                 date: currentItem.date,
+                                 likes:'',
+                                 views:'',
+                                 comments:''
+                              });
                 //
                 // Update preferences - Last Date Used
                 //

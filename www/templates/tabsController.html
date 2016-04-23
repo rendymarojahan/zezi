@@ -17,31 +17,16 @@
         			</ion-header-bar>
         			<ion-content padding="false" class="side-menu-right has-header">
             			<ion-list>
-            				<ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.family" menu-close="">
-                    			<i class="icon ion-ios-timer dark"></i>
-                    			Dashboard
-                    			<i class="icon ion-ios-arrow-right stable"></i>
-                			</ion-item>
+            				<div class="item item-avatar">
+                                <img src="img/zezi-logo.png">
+                                <h2>{{ fullname() }}</h2>
+                                <p>Last Login {{ login | date : "mediumTime" }}</p>
+                            </div>
                 			<div style="width: 283px; height: 10px;" class="spacer"></div>
-            				<ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.income">
-                    			<i class="icon ion-ios-redo positive"></i>
-                    			Income
-                    			<i class="icon ion-ios-arrow-right stable"></i>
-                			</ion-item>
-                			<ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.expense" menu-close="tabsController.income">
-                    			<i class="icon ion-ios-undo assertive"></i>
-                   				Expense
-                    			<i class="icon ion-ios-arrow-right stable"></i>
-                			</ion-item>
-                			<div style="width: 283px; height: 10px;" class="spacer"></div>
-                			<ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.budget" menu-close="">
-                    			<i class="icon ion-ios-pie energized"></i>
-                    			Budget
-                    			<i class="icon ion-ios-arrow-right stable"></i>
-                			</ion-item>
-                			<ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.recurring" menu-close="">
-                    			<i class="icon ion-ios-shuffle balanced"></i>
-                    			Recurring
+            				<ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.people">
+                    			<img src="img/zezi-logo.png">
+                    			<h2>{{ friend.name }}</h2>
+                                <p>{{ friend.email }}</p>
                     			<i class="icon ion-ios-arrow-right stable"></i>
                 			</ion-item>
                 			<div style="width: 283px; height: 10px;" class="spacer"></div>
@@ -60,98 +45,36 @@
     			<ion-side-menu-content>
         			<ion-nav-bar class="bar-balanced">
             			<ion-nav-back-button></ion-nav-back-button>
-            			<ion-nav-buttons side="right">
-                			<button class="button button-icon button-clear ion-android-more-vertical" menu-toggle="right"></button>
-            			</ion-nav-buttons>
         			</ion-nav-bar>
             		<ion-nav-view name="tab5"></ion-nav-view>
                 </ion-side-menu-content>
-    			<ion-side-menu side="right">
-        			<ion-header-bar class="bar-stable">
-            			<div class="title">Transactions</div>
-        			</ion-header-bar>
-        			<ion-content padding="false" class="side-menu-right has-header">
-            			<ion-list>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.family" menu-close="">
-                                <i class="icon ion-ios-timer dark"></i>
-                                Dashboard
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.income">
-                                <i class="icon ion-ios-redo positive"></i>
-                                Income
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.expense" menu-close="tabsController.income">
-                                <i class="icon ion-ios-undo assertive"></i>
-                                Expense
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.budget" menu-close="">
-                                <i class="icon ion-ios-pie energized"></i>
-                                Budget
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.recurring" menu-close="">
-                                <i class="icon ion-ios-shuffle balanced"></i>
-                                Recurring
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ng-click="showLogOutMenu()" menu-close="">
-                                <i class="icon ion-arrow-graph-down-left royal"></i>
-                                Logout
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                        
-        			</ion-content>
-    			</ion-side-menu>
             </ion-side-menus>
     	</ion-tab>
     	<ion-tab style="" title="Chitchat" icon="ion-ios-chatboxes-outline" ui-sref="tabsController.chitChat">
         	<ion-side-menus enable-menu-with-back-views="false">
-    			<ion-side-menu-content>
-        			<ion-nav-bar class="bar-balanced">
-            			<ion-nav-back-button></ion-nav-back-button>
-            			<ion-nav-buttons side="right">
-                			<button class="button button-icon button-clear ion-ios-compose-outline" menu-toggle="right"></button>
-            			</ion-nav-buttons>
-        			</ion-nav-bar>
-            		<ion-nav-view name="tab3"></ion-nav-view>
+                <ion-side-menu-content>
+                    <ion-nav-bar class="bar-balanced">
+                        <ion-nav-back-button></ion-nav-back-button>
+                        <ion-nav-buttons side="right">
+                            <button class="button button-icon button-clear ion-ios-compose-outline" menu-toggle="right" ng-click="showFilterBar()"></button>
+                        </ion-nav-buttons>
+                    </ion-nav-bar>
+                    <ion-nav-view name="tab3"></ion-nav-view>
                 </ion-side-menu-content>
-    			<ion-side-menu side="right">
-        			<ion-header-bar class="bar-stable">
-            			<div class="title">Transactions</div>
-        			</ion-header-bar>
-        			<ion-content padding="false" class="side-menu-right has-header">
-            			<ion-list>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.family" menu-close="">
-                                <i class="icon ion-ios-timer dark"></i>
-                                Dashboard
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
+                <ion-side-menu side="right">
+                    <ion-header-bar class="bar-assertive">
+                          <label class="item-input-wrapper">
+                            <i class="icon ion-ios-search placeholder-icon"></i>
+                            <input class="input assertive" type="search" placeholder="Search Friends">
+                          </label>
+                    </ion-header-bar>
+                    <ion-content padding="false" class="side-menu-right has-header">
+                        <ion-list>
                             <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.income">
-                                <i class="icon ion-ios-redo positive"></i>
-                                Income
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.expense" menu-close="tabsController.income">
-                                <i class="icon ion-ios-undo assertive"></i>
-                                Expense
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.budget" menu-close="">
-                                <i class="icon ion-ios-pie energized"></i>
-                                Budget
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.recurring" menu-close="">
-                                <i class="icon ion-ios-shuffle balanced"></i>
-                                Recurring
+                            <ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.chitChat">
+                                <img src="img/zezi-logo.png">
+                                <h2>{{ friend.name }}</h2>
+                                <p>{{ friend.email }}</p>
                                 <i class="icon ion-ios-arrow-right stable"></i>
                             </ion-item>
                             <div style="width: 283px; height: 10px;" class="spacer"></div>
@@ -160,9 +83,9 @@
                                 Logout
                                 <i class="icon ion-ios-arrow-right stable"></i>
                             </ion-item>
-                        
-        			</ion-content>
-    			</ion-side-menu>
+                        </ion-list>
+                    </ion-content>
+                </ion-side-menu>
             </ion-side-menus>
     	</ion-tab>
     	<ion-tab style="" title="Notification" icon="ion-ios-monitor-outline" ui-sref="tabsController.notification">
@@ -170,54 +93,9 @@
     			<ion-side-menu-content>
         			<ion-nav-bar class="bar-balanced">
             			<ion-nav-back-button></ion-nav-back-button>
-            			<ion-nav-buttons side="right">
-                			<button class="button button-icon button-clear ion-android-more-vertical" menu-toggle="right"></button>
-            			</ion-nav-buttons>
         			</ion-nav-bar>
             		<ion-nav-view name="tab2"></ion-nav-view>
                 </ion-side-menu-content>
-    			<ion-side-menu side="right">
-        			<ion-header-bar class="bar-stable">
-            			<div class="title">Transactions</div>
-        			</ion-header-bar>
-        			<ion-content padding="false" class="side-menu-right has-header">
-            			<ion-list>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.family" menu-close="">
-                                <i class="icon ion-ios-timer dark"></i>
-                                Dashboard
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.income">
-                                <i class="icon ion-ios-redo positive"></i>
-                                Income
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.expense" menu-close="tabsController.income">
-                                <i class="icon ion-ios-undo assertive"></i>
-                                Expense
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.budget" menu-close="">
-                                <i class="icon ion-ios-pie energized"></i>
-                                Budget
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.recurring" menu-close="">
-                                <i class="icon ion-ios-shuffle balanced"></i>
-                                Recurring
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ng-click="showLogOutMenu()" menu-close="">
-                                <i class="icon ion-arrow-graph-down-left royal"></i>
-                                Logout
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                        
-        			</ion-content>
-    			</ion-side-menu>
             </ion-side-menus>
     	</ion-tab>
     	<ion-tab style="" title="Setting" icon="ion-ios-settings" ui-sref="tabsController.setting">
@@ -225,54 +103,9 @@
     			<ion-side-menu-content>
         			<ion-nav-bar class="bar-balanced">
             			<ion-nav-back-button></ion-nav-back-button>
-            			<ion-nav-buttons side="right">
-                			<button class="button button-icon button-clear ion-android-more-vertical" menu-toggle="right"></button>
-            			</ion-nav-buttons>
         			</ion-nav-bar>
             		<ion-nav-view name="tab4"></ion-nav-view>
                 </ion-side-menu-content>
-    			<ion-side-menu side="right">
-        			<ion-header-bar class="bar-stable">
-            			<div class="title">Transactions</div>
-        			</ion-header-bar>
-        			<ion-content padding="false" class="side-menu-right has-header">
-            			<ion-list>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.family" menu-close="">
-                                <i class="icon ion-ios-timer dark"></i>
-                                Dashboard
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.income">
-                                <i class="icon ion-ios-redo positive"></i>
-                                Income
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.expense" menu-close="tabsController.income">
-                                <i class="icon ion-ios-undo assertive"></i>
-                                Expense
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.budget" menu-close="">
-                                <i class="icon ion-ios-pie energized"></i>
-                                Budget
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <ion-item class="item item-icon-left item-icon-right" ui-sref="tabsController.recurring" menu-close="">
-                                <i class="icon ion-ios-shuffle balanced"></i>
-                                Recurring
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ng-click="showLogOutMenu()" menu-close="">
-                                <i class="icon ion-arrow-graph-down-left royal"></i>
-                                Logout
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                        
-        			</ion-content>
-    			</ion-side-menu>
             </ion-side-menus>
     	</ion-tab>
     </ion-tabs>
