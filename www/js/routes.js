@@ -546,10 +546,15 @@ angular.module('app.routes', [])
     }
   })
   
-  .state('personName', {
-    url: '/personName',
-    templateUrl: 'templates/personName.html',
-    controller: 'personNameCtrl'
+  .state('tabsController.chat', {
+    url: "/chat/:isNew/:userId",
+    cache: true,
+    views: {
+      'tab3': {
+        templateUrl: 'templates/chat.html',
+        controller: 'chatCtrl'
+      }
+    }
   })
   
   .state('tabsController.income', {

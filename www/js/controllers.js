@@ -13,16 +13,21 @@ angular.module('app.controllers', [])
     $scope.login = Date.now();
 
     $scope.friends = [];
+    $scope.friends = PublicsFactory.getFriends();
 
+    // SWIPE FRIENDS
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, friend) {
         $state.go('tabsController.friend', { friendId: friend.friends_id, friendName: friend.name });
     };
 
-    $scope.friends = PublicsFactory.getFriends();
 
-    // SWIPE
-    
+
+    // SWIPE CHATS
+    $scope.listCanSwipe = true;
+    $scope.handleSwipeOptions = function ($event, friend) {
+        $state.go('tabsController.chat', { isNew: 'True', userId: friend.friends_id });
+    };
 
     // Triggered on a the logOut button click
     $scope.showLogOutMenu = function () {
@@ -1034,7 +1039,6 @@ angular.module('app.controllers', [])
     }
     }
     
-
 })
 
 .controller('friendCtrl', function($scope, $state, $stateParams, $filter, PublicsFactory, MembersFactory, $ionicListDelegate, $ionicActionSheet, $ionicPopover, AccountsFactory, PickTransactionServices, $ionicFilterBar) {
@@ -1069,7 +1073,7 @@ angular.module('app.controllers', [])
     
 })
    
-.controller('personNameCtrl', function($scope) {
+.controller('chatCtrl', function($scope) {
 
 })
    
@@ -1332,6 +1336,7 @@ angular.module('app.controllers', [])
         GroupFactory.createGroup(group);
         $state.go('tabsController.accounts', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
     };
+
 })
 
 .controller('groupJoinCtrl', function ($scope, $state, GroupFactory, myCache) {
@@ -1361,6 +1366,7 @@ angular.module('app.controllers', [])
             }
         });
     };
+
 })
    
 .controller('accountNameCtrl', function($scope) {
