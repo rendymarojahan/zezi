@@ -70,19 +70,14 @@
                     </ion-header-bar>
                     <ion-content padding="false" class="side-menu-right has-header">
                         <ion-list>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.chitChat">
-                                <img src="img/zezi-logo.png">
-                                <h2>{{ friend.name }}</h2>
-                                <p>{{ friend.email }}</p>
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
-                            <div style="width: 283px; height: 10px;" class="spacer"></div>
-                            <ion-item class="item item-icon-left item-icon-right" ng-click="showLogOutMenu()" menu-close="">
-                                <i class="icon ion-arrow-graph-down-left royal"></i>
-                                Logout
-                                <i class="icon ion-ios-arrow-right stable"></i>
-                            </ion-item>
+                            <div class="friend" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="tabsController.chitChat">
+                                <img src="img/zezi.png" />
+                                <p>
+                                    <strong>{{ friend.name }}</strong><br>
+                                    <span>{{ friend.email }}</span>
+                                </p>
+                                <div class="status away"></div>
+                            </div>
                         </ion-list>
                     </ion-content>
                 </ion-side-menu>

@@ -1,28 +1,14 @@
 <ion-view style="" title="ChitChat">
-    <ion-content class="has-header" overflow-scroll="true" padding="true">
-        <ion-list style=""></ion-list>
-        <div style="">
-            <div class="list">
-
-                <a class="item item-avatar" href="#">
-                    <img src="venkman.jpg">
-                    <h2>Venkman</h2>
-                    <p>Back off, man. I'm a scientist.</p>
-                </a>
-
-                <a class="item item-avatar" href="#">
-                    <img src="venkman.jpg">
-                    <h2>Venkman</h2>
-                    <p>Back off, man. I'm a scientist.</p>
-                </a>
-
-                <a class="item item-avatar" href="#">
-                    <img src="venkman.jpg">
-                    <h2>Venkman</h2>
-                    <p>Back off, man. I'm a scientist.</p>
-                </a>
-
+    <ion-content padding="false" class="side-menu-right has-header">
+        <ion-list>
+            <div class="friends" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="tabsController.chitChat">
+                <img src="img/zezi.png" />
+                <p>
+                    <strong>{{ friend.name }}</strong><br>
+                    <span>{{ friend.email }}</span>
+                </p>
+                <div class="status away"></div>
             </div>
-        </div>
+        </ion-list>
     </ion-content>
 </ion-view>
