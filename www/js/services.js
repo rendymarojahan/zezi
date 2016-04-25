@@ -51,6 +51,64 @@ angular.module('app.services', [])
         };
 })
 
+.factory('ChatsFactory', function ($firebaseArray, $q, myCache, $timeout) {
+        var ref = fb.child("chats");
+        var cRef = {};
+        var chats = {};
+        return {
+            ref: function () {
+                return ref;
+            },
+            getChatsById: function (myid, userid) {
+                cRef = ref.orderByChild('userId').startAt(myid).endAt(userid);
+                chats = $firebaseArray(cRef);
+                return chats;
+            },
+            SendMessage: function (message) {
+
+                /* PREPARE MESSAGE DATA */
+                var currentMessage = {
+                    name: group.name,
+                    admin: authData.password.email,
+                    created: Date.now(),
+                    updated: Date.now(),
+                    join_code: RandomHouseCode() + group.name,
+                    groupid: ''
+                };
+
+                /* SAVE GROUP */
+                var ref = fb.child("groups");
+                var newChildRef = ref.push(currentGroup);
+                
+                /* Save group_id for later use */
+                myCache.put('thisGroupId', newChildRef.key());
+
+                // CREATE MEMBERS GROUP
+                var member = {
+                    member_id: authData.uid,
+                    name: CurrentUserService.firstname,
+                    email: CurrentUserService.email
+                };
+                var mRef = fb.child("groups").child(newChildRef.key()).child("members");
+                mRef.push(member);
+                var fRef = fb.child("members").child(authData.uid).child("friends");
+                fRef.push(member);
+
+                /* UPDATE USER WITH GROUP ID AND SET PRIORITY */
+                var temp = {
+                    group_id: newChildRef.key(),
+                    group_name: group.name,
+                    group_join_code: RandomHouseCode() + 1
+                };
+                var memberRef = fb.child("members").child(authData.uid);
+                memberRef.update(temp);
+                memberRef.setPriority(newChildRef.key());
+
+                
+            }
+        };
+})
+
 .factory('GroupFactory', function ($state, $q, myCache, CurrentUserService, $firebaseArray) {
         //
         // https://github.com/oriongunning/myExpenses

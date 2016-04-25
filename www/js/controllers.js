@@ -1073,7 +1073,48 @@ angular.module('app.controllers', [])
     
 })
    
-.controller('chatCtrl', function($scope) {
+.controller('chatCtrl', function($scope, $state, $stateParams, ChatsFactory) {
+
+	$scope.messages = [];
+	$scope.myId = myCache.get('thisMemberId');
+    $scope.message = {
+        message: '',
+        userId: $scope.myId;
+        date: Date.now();
+    };
+    
+    $scope.messages = ChatsFactory.getChatsById($scope.myId, $stateParams.userId);
+    $scope.messages.$loaded().then(function (x) {
+        refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.userId);
+    }).catch(function (error) {
+        console.error("Error:", error);
+    });
+
+	if ($stateParams.isNew === 'True') {
+		$scope.messages = ChatsFactory.
+    } else {
+        // Edit account
+        $scope.inEditMode = true;
+        var account = AccountsFactory.getAccount($stateParams.accountId);
+        $scope.currentItem = account;
+        $scope.DisplayDate = moment(account.dateopen).format('MMMM D, YYYY');
+        SelectAccountServices.dateSelected = $scope.DisplayDate;
+        SelectAccountServices.typeSelected = $scope.currentItem.accounttype;
+        $scope.AccountTitle = "Edit Account";
+    }
+
+    $scope.send = function (message) {
+
+        var mtoSend = message.toSend;
+
+        /* VALIDATE DATA */
+        if (!mtoSend) {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "No message to send"
+            return;
+        }
+        ChatsFactory.sendMessage(mtoSend);
+    };
 
 })
    
