@@ -9,13 +9,13 @@
             <div collection-repeat="public in publics | orderBy:'-date'">
                 <div class="list card">
                     <div class="item item-avatar">
-                        <img src="img/zezi-logo.png">
+                        <img src="img/pic.jpg">
                         <h2>{{ public.name }}</h2>
                         <p>{{ public.date | date : "h:mm a" }} . {{ public.location }}</p>
                     </div>
                     <div class="item item-body">
                         <p>{{ public.note }}</p>
-                        <img class="full-image" src="img/zezi.png">
+                        <img class="full-image" src="img/post.JPG">
                         <p>
                             <a href="#" class="subdued"><i class="icon ion-thumbsup"></i>{{ public.likes }}</a>
                             <a href="#" class="subdued"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</a>

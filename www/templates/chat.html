@@ -1,14 +1,13 @@
-<ion-view style="" title="Person Name">
-    <ion-content class="has-header" padding="true">
+<ion-view>
+    <ion-nav-title>
+        <div class="chattitle">
+            <img src="img/pic.jpg">
+            <h2>{{ fullname() }}</h2>
+            <p>Last Login {{ login | date : "shortTime" }}</p>
+        </div>
+    </ion-nav-title>
+    <ion-content class="has-header" padding="false">
         <div class="chat">
-          <div class="chat-header clearfix">
-            <img src="img/zezi-logo.png" />
-            <div class="chat-about">
-              <div class="chat-with">Chat with Vincent Porter</div>
-              <div class="chat-num-messages">already 1 902 messages</div>
-            </div>
-          </div> <!-- end chat-header -->
-          
           <div class="chat-history">
             <ul>
               <li class="clearfix">
@@ -68,7 +67,7 @@
           </div> <!-- end chat-history -->
           
           <div class="chat-message clearfix">
-            <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
+            <textarea ng-model="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
                     
             <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
             <i class="fa fa-file-image-o"></i>

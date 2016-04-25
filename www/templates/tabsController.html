@@ -11,19 +11,17 @@
         			</ion-nav-bar>
             		<ion-nav-view name="tab1"></ion-nav-view>
             	</ion-side-menu-content>
-    			<ion-side-menu side="right">
-        			<ion-header-bar class="bar-assertive">
-            			<div class="title">Transactions</div>
-        			</ion-header-bar>
+    			<ion-side-menu side="right" class="stable">
+        			<ion-header-bar align-title="left">
+                        <div class="sidetitle">
+                            <img src="img/pic.jpg">
+                            <h2>{{ fullname() }}</h2>
+                            <p>Last Login {{ login | date : "mediumTime" }}</p>
+                        </div>
+                    </ion-header-bar>
         			<ion-content padding="false" class="side-menu-right has-header">
             			<ion-list>
-            				<div class="item item-avatar">
-                                <img src="img/zezi-logo.png">
-                                <h2>{{ fullname() }}</h2>
-                                <p>Last Login {{ login | date : "mediumTime" }}</p>
-                            </div>
-                			<div style="width: 283px; height: 10px;" class="spacer"></div>
-            				<ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.people">
+            				<ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="swipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.people">
                     			<img src="img/zezi-logo.png">
                     			<h2>{{ friend.name }}</h2>
                                 <p>{{ friend.email }}</p>
@@ -70,8 +68,8 @@
                     </ion-header-bar>
                     <ion-content padding="false" class="side-menu-right has-header">
                         <ion-list>
-                            <div class="friend" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="tabsController.chitChat">
-                                <img src="img/zezi.png" />
+                            <div class="friend" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="">
+                                <img src="img/pic.jpg" />
                                 <p>
                                     <strong>{{ friend.name }}</strong><br>
                                     <span>{{ friend.email }}</span>

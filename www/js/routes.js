@@ -548,7 +548,6 @@ angular.module('app.routes', [])
   
   .state('tabsController.chat', {
     url: "/chat/:isNew/:userId",
-    cache: true,
     views: {
       'tab3': {
         templateUrl: 'templates/chat.html',

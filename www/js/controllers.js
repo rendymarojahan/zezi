@@ -17,7 +17,7 @@ angular.module('app.controllers', [])
 
     // SWIPE FRIENDS
     $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, friend) {
+    $scope.swipeOptions = function ($event, friend) {
         $state.go('tabsController.friend', { friendId: friend.friends_id, friendName: friend.name });
     };
 
