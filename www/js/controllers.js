@@ -26,7 +26,7 @@ angular.module('app.controllers', [])
     // SWIPE CHATS
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, friend) {
-        $state.go('tabsController.chat', { isNew: 'True', userId: friend.friends_id });
+        $state.go('tabsController.chat', { isNew: 'True', friendId: friend.friends_id });
     };
 
     // Triggered on a the logOut button click
@@ -867,15 +867,16 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('chitChatCtrl', function($scope, PublicsFactory) {
-	$scope.friends = [];
+.controller('chitChatCtrl', function($scope, ChatsFactory, myCache) {
+	$scope.chats = [];
+	$scope.chatId = myCache.get('thisMemberId');
 
     $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, friend) {
-        $state.go('tabsController.friend', { friendId: friend.friends_id, friendName: friend.name });
+    $scope.handleSwipeOptions = function ($event, chat) {
+        $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.friendId });
     };
 
-    $scope.friends = PublicsFactory.getFriends();
+    $scope.chats = ChatsFactory.getChatList($scope.chatId);
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
@@ -1073,47 +1074,56 @@ angular.module('app.controllers', [])
     
 })
    
-.controller('chatCtrl', function($scope, $state, $stateParams, ChatsFactory) {
+.controller('chatCtrl', function($scope, $state, $stateParams, ChatsFactory, myCache) {
 
 	$scope.messages = [];
+	$scope.chatId = $stateParams.chatId;
 	$scope.myId = myCache.get('thisMemberId');
     $scope.message = {
-        message: '',
-        userId: $scope.myId;
-        date: Date.now();
+        toSend: ''
     };
+
+    if ($stateParams.chatId !== '') {
     
-    $scope.messages = ChatsFactory.getChatsById($scope.myId, $stateParams.userId);
-    $scope.messages.$loaded().then(function (x) {
-        refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.userId);
-    }).catch(function (error) {
-        console.error("Error:", error);
-    });
+	    $scope.messages = ChatsFactory.getChatsById($scope.chatId);
+	    $scope.messages.$loaded().then(function (x) {
+	        refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.friendId);
+	    }).catch(function (error) {
+	        console.error("Error:", error);
+	    });
+	}
 
-	if ($stateParams.isNew === 'True') {
-		$scope.messages = ChatsFactory.
-    } else {
-        // Edit account
-        $scope.inEditMode = true;
-        var account = AccountsFactory.getAccount($stateParams.accountId);
-        $scope.currentItem = account;
-        $scope.DisplayDate = moment(account.dateopen).format('MMMM D, YYYY');
-        SelectAccountServices.dateSelected = $scope.DisplayDate;
-        SelectAccountServices.typeSelected = $scope.currentItem.accounttype;
-        $scope.AccountTitle = "Edit Account";
-    }
-
+	
     $scope.send = function (message) {
 
-        var mtoSend = message.toSend;
+    	if ($stateParams.isNew === 'True') {
 
-        /* VALIDATE DATA */
-        if (!mtoSend) {
-            $scope.hideValidationMessage = false;
-            $scope.validationMessage = "No message to send"
-            return;
-        }
-        ChatsFactory.sendMessage(mtoSend);
+    		var mtoSend = message.toSend;
+
+	        /* VALIDATE DATA */
+	        if (!mtoSend) {
+	            $scope.hideValidationMessage = false;
+	            $scope.validationMessage = "No message to send"
+	            return;
+	        }
+	        ChatsFactory.sendMessage(message, $stateParams.friendId).then(function () {
+	                $stateParams.isNew = false;
+	        });
+
+	    } else {
+
+	        var mtoSend = message.toSend;
+
+	        /* VALIDATE DATA */
+	        if (!mtoSend) {
+	            $scope.hideValidationMessage = false;
+	            $scope.validationMessage = "No message to send"
+	            return;
+	        }
+	        ChatsFactory.sendToMessage(message, $stateParams.friendId, $scope.chatId );
+	    }
+
+        
     };
 
 })

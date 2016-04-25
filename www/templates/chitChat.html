@@ -1,11 +1,11 @@
 <ion-view style="" title="ChitChat">
     <ion-content padding="false" class="side-menu-right has-header">
         <ion-list>
-            <div class="friends" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="tabsController.chitChat">
+            <div class="friends" ng-repeat="chat in chats track by chat.$id" ng-click="handleSwipeOptions($event, chat)" menu-close="tabsController.chitChat">
                 <img src="img/zezi.png" />
                 <p>
-                    <strong>{{ friend.name }}</strong><br>
-                    <span>{{ friend.email }}</span>
+                    <strong>{{ chat.sendTo }}</strong><br>
+                    <span>{{ chat.lastchat }}</span>
                 </p>
                 <div class="status away"></div>
             </div>

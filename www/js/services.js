@@ -51,60 +51,79 @@ angular.module('app.services', [])
         };
 })
 
-.factory('ChatsFactory', function ($firebaseArray, $q, myCache, $timeout) {
+.factory('ChatsFactory', function ($firebaseArray, $q, myCache, $timeout, $stateParams, CurrentUserService) {
         var ref = fb.child("chats");
+        var lRef = {};
+        var lits = {};
         var cRef = {};
         var chats = {};
+        var myId = myCache.get('thisMemberId');
         return {
             ref: function () {
                 return ref;
             },
-            getChatsById: function (myid, userid) {
-                cRef = ref.orderByChild('userId').startAt(myid).endAt(userid);
+            getChatList: function (chatid) {
+                lRef = fb.child("chattemps").orderByChild('sendBy/sendTo').startAt(chatid).endAt(chatid);
+                list = $firebaseArray(lRef);
+                return list;
+            },
+            getChatsById: function (chatid) {
+                cRef = ref.child(chatid).orderByChild('date').limitToLast(20);
                 chats = $firebaseArray(cRef);
                 return chats;
             },
-            SendMessage: function (message) {
+            sendMessage: function (message, friendid) {
 
                 /* PREPARE MESSAGE DATA */
                 var currentMessage = {
-                    name: group.name,
-                    admin: authData.password.email,
-                    created: Date.now(),
-                    updated: Date.now(),
-                    join_code: RandomHouseCode() + group.name,
-                    groupid: ''
-                };
-
-                /* SAVE GROUP */
-                var ref = fb.child("groups");
-                var newChildRef = ref.push(currentGroup);
-                
-                /* Save group_id for later use */
-                myCache.put('thisGroupId', newChildRef.key());
-
-                // CREATE MEMBERS GROUP
-                var member = {
-                    member_id: authData.uid,
+                    message: message.toSend,
+                    sender: myId,
                     name: CurrentUserService.firstname,
-                    email: CurrentUserService.email
+                    date: Date.now()
                 };
-                var mRef = fb.child("groups").child(newChildRef.key()).child("members");
-                mRef.push(member);
-                var fRef = fb.child("members").child(authData.uid).child("friends");
-                fRef.push(member);
 
-                /* UPDATE USER WITH GROUP ID AND SET PRIORITY */
-                var temp = {
-                    group_id: newChildRef.key(),
-                    group_name: group.name,
-                    group_join_code: RandomHouseCode() + 1
+                var currentTempMessage = {
+                    lastchat: message.toSend,
+                    sendBy: myId,
+                    sendTo: friendid,
+                    date: Date.now()
                 };
-                var memberRef = fb.child("members").child(authData.uid);
-                memberRef.update(temp);
-                memberRef.setPriority(newChildRef.key());
 
-                
+                /* SAVE CHAT TEMP */
+                var ref = fb.child("chattemps");
+                var newChildRef = ref.push(currentTempMessage);
+
+                // SAVE CHAT MESSAGE
+                var cRef = fb.child("chats").child(newChildRef.key());
+                cRef.push(currentMessage);
+                cRef.on("child_added", function(snap) {
+                  return snap.val();
+                });
+            },
+            sendToMessage: function (message, friendid, chatid) {
+
+                /* PREPARE MESSAGE DATA */
+                var currentMessage = {
+                    message: message.toSend,
+                    sender: myId,
+                    name: CurrentUserService.firstname,
+                    date: Date.now()
+                };
+
+                var currentTempMessage = {
+                    lastchat: message.toSend,
+                    sendBy: myId,
+                    sendTo: friendid,
+                    date: Date.now()
+                };
+
+                /* SAVE CHAT TEMP */
+                var ref = fb.child("chattemps").child(chatid);
+                ref.update(currentTempMessage);
+
+                // SAVE CHAT MESSAGE
+                var cRef = fb.child("chats").child(chatid);
+                cRef.push(currentMessage);
             }
         };
 })
