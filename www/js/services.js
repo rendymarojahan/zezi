@@ -57,22 +57,34 @@ angular.module('app.services', [])
         var lits = {};
         var cRef = {};
         var chats = {};
+        lRef = fb.child("chattemps").orderByChild('param');
+        lits = $firebaseArray(lRef);
         var myId = myCache.get('thisMemberId');
         return {
             ref: function () {
                 return ref;
             },
             getChatList: function (chatid) {
-                lRef = fb.child("chattemps").orderByChild('sendBy/sendTo').startAt(chatid).endAt(chatid);
-                list = $firebaseArray(lRef);
-                return list;
+                var deferred = $q.defer();
+                lits.$loaded()
+                  .then(function(x) {
+                    var matches = lits.filter(function (lit) {
+                    if (lit.param.toLowerCase().indexOf(chatid.toLowerCase()) !== -1) {
+                        return true;
+                        }
+                    });
+                    $timeout(function () {
+                    deferred.resolve(matches);
+                    }, 100);
+                  });
+                return deferred.promise;
             },
             getChatsById: function (chatid) {
                 cRef = ref.child(chatid).orderByChild('date').limitToLast(20);
                 chats = $firebaseArray(cRef);
                 return chats;
             },
-            sendMessage: function (message, friendid) {
+            sendMessage: function (message, friendid, friendname) {
 
                 /* PREPARE MESSAGE DATA */
                 var currentMessage = {
@@ -85,22 +97,29 @@ angular.module('app.services', [])
                 var currentTempMessage = {
                     lastchat: message.toSend,
                     sendBy: myId,
+                    sender: CurrentUserService.firstname,
                     sendTo: friendid,
-                    date: Date.now()
+                    recipier: friendname,
+                    date: Date.now(),
+                    param: myId+friendid
                 };
 
                 /* SAVE CHAT TEMP */
+                var deferred = $q.defer();
                 var ref = fb.child("chattemps");
                 var newChildRef = ref.push(currentTempMessage);
+                    
 
                 // SAVE CHAT MESSAGE
                 var cRef = fb.child("chats").child(newChildRef.key());
                 cRef.push(currentMessage);
-                cRef.on("child_added", function(snap) {
-                  return snap.val();
-                });
+
+                ref.on("child_added", function(snap) {
+                      deferred.resolve(snap.val());
+                    });
+                return deferred.promise;
             },
-            sendToMessage: function (message, friendid, chatid) {
+            sendToMessage: function (message, friendid, chatid, friendname) {
 
                 /* PREPARE MESSAGE DATA */
                 var currentMessage = {
@@ -113,17 +132,26 @@ angular.module('app.services', [])
                 var currentTempMessage = {
                     lastchat: message.toSend,
                     sendBy: myId,
+                    sender: CurrentUserService.firstname,
                     sendTo: friendid,
-                    date: Date.now()
+                    recipier: friendname,
+                    date: Date.now(),
+                    param: myId+friendid
                 };
 
                 /* SAVE CHAT TEMP */
+                var deferred = $q.defer();
                 var ref = fb.child("chattemps").child(chatid);
                 ref.update(currentTempMessage);
 
                 // SAVE CHAT MESSAGE
                 var cRef = fb.child("chats").child(chatid);
                 cRef.push(currentMessage);
+
+                ref.on("child_added", function(snap) {
+                      deferred.resolve(snap.val());
+                    });
+                return deferred.promise;
             }
         };
 })

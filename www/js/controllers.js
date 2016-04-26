@@ -26,7 +26,7 @@ angular.module('app.controllers', [])
     // SWIPE CHATS
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, friend) {
-        $state.go('tabsController.chat', { isNew: 'True', friendId: friend.friends_id });
+        $state.go('tabsController.chat', { isNew: 'True', friendId: friend.friends_id, friendName: friend.name });
     };
 
     // Triggered on a the logOut button click
@@ -867,16 +867,20 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('chitChatCtrl', function($scope, ChatsFactory, myCache) {
+.controller('chitChatCtrl', function($scope, $state, ChatsFactory, myCache) {
 	$scope.chats = [];
 	$scope.chatId = myCache.get('thisMemberId');
 
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, chat) {
-        $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.friendId });
+        $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.sendTo, friendName: chat.recipier });
     };
 
-    $scope.chats = ChatsFactory.getChatList($scope.chatId);
+    ChatsFactory.getChatList($scope.chatId).then(
+            function (matches) {
+                $scope.chats = matches;
+            }
+    );
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
@@ -1074,10 +1078,15 @@ angular.module('app.controllers', [])
     
 })
    
-.controller('chatCtrl', function($scope, $state, $stateParams, ChatsFactory, myCache) {
+.controller('chatCtrl', function($scope, $state, $stateParams, ChatsFactory, myCache, CurrentUserService) {
 
 	$scope.messages = [];
 	$scope.chatId = $stateParams.chatId;
+	$scope.sendTo = $stateParams.friendId;
+	$scope.recipier = $stateParams.friendName;
+	$scope.sender = CurrentUserService.firstname;
+	$scope.isMe = false;
+	$scope.isFriend = false;
 	$scope.myId = myCache.get('thisMemberId');
     $scope.message = {
         toSend: ''
@@ -1087,7 +1096,7 @@ angular.module('app.controllers', [])
     
 	    $scope.messages = ChatsFactory.getChatsById($scope.chatId);
 	    $scope.messages.$loaded().then(function (x) {
-	        refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.friendId);
+	        refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.friendId, $stateParams.friendName);
 	    }).catch(function (error) {
 	        console.error("Error:", error);
 	    });
@@ -1096,7 +1105,7 @@ angular.module('app.controllers', [])
 	
     $scope.send = function (message) {
 
-    	if ($stateParams.isNew === 'True') {
+    	if ($stateParams.isNew === '') {
 
     		var mtoSend = message.toSend;
 
@@ -1106,8 +1115,9 @@ angular.module('app.controllers', [])
 	            $scope.validationMessage = "No message to send"
 	            return;
 	        }
-	        ChatsFactory.sendMessage(message, $stateParams.friendId).then(function () {
-	                $stateParams.isNew = false;
+	        
+	        ChatsFactory.sendToMessage(message, $stateParams.friendId, $scope.chatId, $stateParams.friendName).then(function () {
+	                refresh($scope.messages);
 	        });
 
 	    } else {
@@ -1120,11 +1130,28 @@ angular.module('app.controllers', [])
 	            $scope.validationMessage = "No message to send"
 	            return;
 	        }
-	        ChatsFactory.sendToMessage(message, $stateParams.friendId, $scope.chatId );
+	        ChatsFactory.sendMessage(message, $stateParams.friendId, $stateParams.friendName).then(function () {
+	                $stateParams.isNew = false;
+	                refresh($scope.messages);
+	        });
 	    }
-
         
     };
+
+    function refresh(messages, $scope, AccountsFactory, accountId) {
+
+    	var index;
+    //
+	    for (index = 0; index < messages.length; ++index) {
+	        //
+	        var message = messages[index];
+	        if (message.name === $scope.recipier) {
+	        	$scope.isFriend = true;
+	        } else if (message.name === $scope.sender) {
+	            $scope.isMe = true;
+	        }
+	    }
+    }
 
 })
    
