@@ -57,6 +57,7 @@ angular.module('app.services', [])
         var lits = {};
         var cRef = {};
         var chats = {};
+        var newChat = {};
         lRef = fb.child("chattemps").orderByChild('param');
         lits = $firebaseArray(lRef);
         var myId = myCache.get('thisMemberId');
@@ -84,6 +85,11 @@ angular.module('app.services', [])
                 chats = $firebaseArray(cRef);
                 return chats;
             },
+            getNewChatsById: function (chatid) {
+                cRef = ref.child(chatid).orderByChild('date').limitToLast(1);
+                chats = $firebaseArray(cRef);
+                return chats;
+            },
             sendMessage: function (message, friendid, friendname) {
 
                 /* PREPARE MESSAGE DATA */
@@ -105,7 +111,6 @@ angular.module('app.services', [])
                 };
 
                 /* SAVE CHAT TEMP */
-                var deferred = $q.defer();
                 var ref = fb.child("chattemps");
                 var newChildRef = ref.push(currentTempMessage);
                     
@@ -114,10 +119,9 @@ angular.module('app.services', [])
                 var cRef = fb.child("chats").child(newChildRef.key());
                 cRef.push(currentMessage);
 
-                ref.on("child_added", function(snap) {
-                      deferred.resolve(snap.val());
-                    });
-                return deferred.promise;
+                cRef.on("child_added");
+                newChat = $firebaseArray(cRef);
+                return newChat;
             },
             sendToMessage: function (message, friendid, chatid, friendname) {
 
@@ -148,10 +152,9 @@ angular.module('app.services', [])
                 var cRef = fb.child("chats").child(chatid);
                 cRef.push(currentMessage);
 
-                ref.on("child_added", function(snap) {
-                      deferred.resolve(snap.val());
-                    });
-                return deferred.promise;
+                cRef.on("child_added");
+                newChat = $firebaseArray(cRef);
+                return newChat;
             }
         };
 })
@@ -217,15 +220,17 @@ angular.module('app.services', [])
                     //
                     for (index = 0; index < friends.length; ++index) {
                         //
-                        var friend = friends[index];
-                        //
-                        var teman = {
-                            friends_id: friend.member_id,
-                            name: friend.name,
-                            email: friend.email
-                        };
-                        var afRef = fb.child("members").child(authData.uid).child("friends");
-                        afRef.push(teman);
+                        if (authData.uid !== friend.member_id) {
+                            var friend = friends[index];
+                            //
+                            var teman = {
+                                friends_id: friend.member_id,
+                                name: friend.name,
+                                email: friend.email
+                            };
+                            var afRef = fb.child("members").child(authData.uid).child("friends");
+                            afRef.push(teman);
+                        }
                     }
                   });
                 },

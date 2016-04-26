@@ -871,6 +871,12 @@ angular.module('app.controllers', [])
 	$scope.chats = [];
 	$scope.chatId = myCache.get('thisMemberId');
 
+	$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.chtiChat") {
+            refresh($scope.chats, $scope, ChatsFactory, $stateParams.chatId, $stateParams.friendId, $stateParams.friendName);
+        }
+    });
+
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, chat) {
         $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.sendTo, friendName: chat.recipier });
@@ -892,6 +898,8 @@ angular.module('app.controllers', [])
             filterProperties: 'payee'
         });
     };
+
+    function refresh(chats, $scope, ChatsFactory, chatId, friendId, friendName) {}
 })
       
 .controller('settingCtrl', function($scope) {
@@ -1102,6 +1110,13 @@ angular.module('app.controllers', [])
 	    });
 	}
 
+	$scope.doRefresh = function() {
+	  ChatsFactory.getNewChatsById($scope.chatId).then(function(chats){
+	    $scope.messages = chats.concat($scope.messages);
+	    $scope.$broadcast('scroll.refreshComplete');
+	  });
+	};
+
 	
     $scope.send = function (message) {
 
@@ -1116,8 +1131,8 @@ angular.module('app.controllers', [])
 	            return;
 	        }
 	        
-	        ChatsFactory.sendToMessage(message, $stateParams.friendId, $scope.chatId, $stateParams.friendName).then(function () {
-	                refresh($scope.messages);
+	        ChatsFactory.sendToMessage(message, $stateParams.friendId, $scope.chatId, $stateParams.friendName).then(function (newChat) {
+	                $scope.messages = newChat.concat($scope.messages);
 	        });
 
 	    } else {
@@ -1130,9 +1145,9 @@ angular.module('app.controllers', [])
 	            $scope.validationMessage = "No message to send"
 	            return;
 	        }
-	        ChatsFactory.sendMessage(message, $stateParams.friendId, $stateParams.friendName).then(function () {
+	        ChatsFactory.sendMessage(message, $stateParams.friendId, $stateParams.friendName).then(function (newChat) {
 	                $stateParams.isNew = false;
-	                refresh($scope.messages);
+	                $scope.messages = newChat.concat($scope.messages);
 	        });
 	    }
         

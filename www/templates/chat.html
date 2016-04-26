@@ -9,8 +9,10 @@
     <ion-content class="has-header" padding="false">
         <div class="chat">
           <div class="chat-history">
+          <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
+          </ion-refresher>
             <ul ng-repeat="message in messages">
-              <li ng-hide="isFriend" class="clearfix">
+              <li ng-hide="!isFriend" class="clearfix">
                 <div class="message-data align-right">
                   <span class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
                   <span class="message-data-name" >{{ message.name }}</span> <i class="fa fa-circle me"></i>
@@ -21,7 +23,7 @@
                 </div>
               </li>
               
-              <li ng-hide="isMe">
+              <li ng-hide="!isMe">
                 <div class="message-data">
                   <span class="message-data-name"><i class="fa fa-circle online"></i> {{ message.name }}</span>
                   <span class="message-data-time">{{ message.date | date : "shortTime" }}</span>
@@ -30,13 +32,6 @@
                   {{ message.message }}
                 </div>
               </li>
-              
-              <li>
-                <i class="fa fa-circle online"></i>
-                <i class="fa fa-circle online" style="color: #AED2A6"></i>
-                <i class="fa fa-circle online" style="color:#DAE9DA"></i>
-              </li>
-              
             </ul>
             
           </div> <!-- end chat-history -->
