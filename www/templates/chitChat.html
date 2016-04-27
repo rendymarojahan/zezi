@@ -6,7 +6,7 @@
             <div class="friends" ng-repeat="chat in chats track by chat.$id" ng-click="handleSwipeOptions($event, chat)">
                 <img src="img/zezi.png" />
                 <p>
-                    <strong>{{ chat.recipier }}</strong><br>
+                    <strong ng-hide="{{ me }}">{{ chat.recipier }}</strong><strong ng-hide="{{ you }}">{{ chat.sender }}</strong><br>
                     <span>{{ chat.lastchat }}</span>
                 </p>
                 <div class="status away"></div>

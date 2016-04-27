@@ -883,7 +883,7 @@ angular.module('app.controllers', [])
 
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, chat) {
-        $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.sendTo, friendName: chat.recipier });
+        $state.go('tabsController.chat', { chatId: chat.$id, friendId: $scope.sendTo, friendName: $scope.recipier });
     };
 
     ChatsFactory.getChatList($scope.chatId).then(
@@ -913,7 +913,45 @@ angular.module('app.controllers', [])
         });
     };
 
-    function refresh(chats, $scope, ChatsFactory, chatId, friendId, friendName) {}
+    var index;
+    //
+	    for (index = 0; index < $scope.chats.length; ++index) {
+	        //
+	        var chat = chats[index];
+	        if (chat.sendBy === $scope.chatId) {
+	        	$scope.sendTo = chat.sendTo;
+	        	$scope.recipier = chat.recipier;
+	        	$scope.me ="true";
+	        	$scope.you = "false";
+	        } else{
+	            $scope.sendTo = chat.sendBy;
+	        	$scope.recipier = chat.sender;
+	        	$scope.me ="false";
+	        	$scope.you = "true";
+	        }
+	    }
+
+    function refresh(chats, $scope, ChatsFactory, chatId, friendId, friendName) {
+
+    	var index;
+    	var chatid = myCache.get('thisMemberId');
+    //
+	    for (index = 0; index < chats.length; ++index) {
+	        //
+	        var chat = chats[index];
+	        if (chat.sendBy === chatid) {
+	        	$scope.sendTo = chat.sendTo;
+	        	$scope.recipier = chat.recipier;
+	        	$scope.me ="true";
+	        	$scope.you = "false";
+	        } else{
+	            $scope.sendTo = chat.sendBy;
+	        	$scope.recipier = chat.sender;
+	        	$scope.me ="false";
+	        	$scope.you = "true";
+	        }
+	    }
+    }
 })
       
 .controller('settingCtrl', function($scope) {
@@ -1186,12 +1224,14 @@ angular.module('app.controllers', [])
 	        //
 	        var message = messages[index];
 	        if (message.name === $scope.recipier) {
-	        	$scope.isFriend = "isFriend";
+	        	$scope.isFriend = "!isFriend";
+	        	$scope.isMe = "isMe"
 	        	$scope.li = "clearfix";
 	        	$scope.divli = "message-data align-right";
 	        	$scope.divme = "message other-message float-right";
 	        } else if (message.name === $scope.sender) {
-	            $scope.isFriend = "isMe";
+	        	$scope.isFriend = "isFriend";
+	            $scope.isMe = "!isMe";
 	            $scope.li = "";
 	        	$scope.divli = "message-data";
 	        	$scope.divme = "message my-message";

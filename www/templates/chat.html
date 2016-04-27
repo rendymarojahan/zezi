@@ -14,10 +14,10 @@
             <ul>
               <li  ng-repeat="message in messages" ng-hide="{{ isFriend }}" class="{{ li }}">
                 <div class="{{ divli }}">
-                  <span ng-hide="!{{ isFriend }}" class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
-                  <span ng-hide="!{{ isFriend }}" class="message-data-name" >{{ message.name }}</span> <i ng-hide="!{{ isFriend }}" class="fa fa-circle me"></i>
-                  <span ng-hide="{{ isFriend }}" class="message-data-name"><i ng-hide="{{ isFriend }}" class="fa fa-circle online"></i> {{ message.name }}</span>
-                  <span ng-hide="{{ isFriend }}" class="message-data-time">{{ message.date | date : "shortTime" }}</span>
+                  <span ng-hide="{{ isFriend }}" class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
+                  <span ng-hide="{{ isFriend }}" class="message-data-name" >{{ message.name }}</span> <i ng-hide="!{{ isFriend }}" class="fa fa-circle me"></i>
+                  <span ng-hide="{{ isMe }}" class="message-data-name"><i ng-hide="{{ isMe }}" class="fa fa-circle online"></i> {{ message.name }}</span>
+                  <span ng-hide="{{ isMe }}" class="message-data-time">{{ message.date | date : "shortTime" }}</span>
                   
                 </div>
                 <div class="{{ divme }}">
