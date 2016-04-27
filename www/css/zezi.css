@@ -1182,7 +1182,7 @@ a.logo {
   .chat-history {
     border-bottom: 2px solid white;
     overflow-y: scroll;
-    height: 575px;
+    height: 405px;
   }
     
     .message-data {

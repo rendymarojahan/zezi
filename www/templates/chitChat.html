@@ -1,5 +1,7 @@
 <ion-view style="" title="ChitChat">
     <ion-content padding="false" class="side-menu-right has-header">
+    <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
+    </ion-refresher>
         <ion-list>
             <div class="friends" ng-repeat="chat in chats track by chat.$id" ng-click="handleSwipeOptions($event, chat)">
                 <img src="img/zezi.png" />

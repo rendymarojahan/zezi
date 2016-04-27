@@ -51,13 +51,13 @@ angular.module('app.services', [])
         };
 })
 
-.factory('ChatsFactory', function ($firebaseArray, $q, myCache, $timeout, $stateParams, CurrentUserService) {
+.factory('ChatsFactory', function ($firebaseArray, $q, myCache, $timeout, $stateParams, CurrentUserService, ChatService) {
         var ref = fb.child("chats");
         var lRef = {};
         var lits = {};
         var cRef = {};
         var chats = {};
-        var newChat = {};
+        var newChat = [];
         lRef = fb.child("chattemps").orderByChild('param');
         lits = $firebaseArray(lRef);
         var myId = myCache.get('thisMemberId');
@@ -113,14 +113,16 @@ angular.module('app.services', [])
                 /* SAVE CHAT TEMP */
                 var ref = fb.child("chattemps");
                 var newChildRef = ref.push(currentTempMessage);
+                ChatService.selectChat(newChildRef.key());
                     
 
                 // SAVE CHAT MESSAGE
                 var cRef = fb.child("chats").child(newChildRef.key());
                 cRef.push(currentMessage);
 
-                cRef.on("child_added");
-                newChat = $firebaseArray(cRef);
+                cRef.on("child_added", function () {
+                    newChat = $firebaseArray(cRef);
+                });
                 return newChat;
             },
             sendToMessage: function (message, friendid, chatid, friendname) {
@@ -152,8 +154,9 @@ angular.module('app.services', [])
                 var cRef = fb.child("chats").child(chatid);
                 cRef.push(currentMessage);
 
-                cRef.on("child_added");
-                newChat = $firebaseArray(cRef);
+                cRef.on("child_added", function () {
+                    newChat = $firebaseArray(cRef);
+                });
                 return newChat;
             }
         };
@@ -648,6 +651,12 @@ angular.module('app.services', [])
         var type = this;
         type.updateType = function (value) {
             this.typeSelected = value;
+        }
+})
+.service("ChatService", function () {
+        var type = this;
+        type.selectChat = function (id) {
+            this.chatSelected = id;
         }
 })
 
