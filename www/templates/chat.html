@@ -12,10 +12,10 @@
           <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
           </ion-refresher>
             <ul>
-              <li  ng-repeat="message in messages" ng-hide="{{ isFriend }}" class="{{ li }}">
+              <li  ng-repeat="message in messages" class="{{ li }}">
                 <div class="{{ divli }}">
                   <span ng-hide="{{ isFriend }}" class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
-                  <span ng-hide="{{ isFriend }}" class="message-data-name" >{{ message.name }}</span> <i ng-hide="!{{ isFriend }}" class="fa fa-circle me"></i>
+                  <span ng-hide="{{ isFriend }}" class="message-data-name" >{{ message.name }}</span> <i ng-hide="{{ isFriend }}" class="fa fa-circle me"></i>
                   <span ng-hide="{{ isMe }}" class="message-data-name"><i ng-hide="{{ isMe }}" class="fa fa-circle online"></i> {{ message.name }}</span>
                   <span ng-hide="{{ isMe }}" class="message-data-time">{{ message.date | date : "shortTime" }}</span>
                   

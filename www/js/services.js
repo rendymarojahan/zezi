@@ -97,7 +97,9 @@ angular.module('app.services', [])
                     message: message.toSend,
                     sender: myId,
                     name: CurrentUserService.firstname,
-                    date: Date.now()
+                    date: Date.now(),
+                    isMe:false,
+                    isFriend:false
                 };
 
                 var currentTempMessage = {
@@ -106,6 +108,12 @@ angular.module('app.services', [])
                     sender: CurrentUserService.firstname,
                     sendTo: friendid,
                     recipier: friendname,
+                    isMe: false,
+                    isFriend: false,
+                    switchSendBy: '',
+                    switchSender: '',
+                    switchSendTo: '',
+                    switchRecipier: '',
                     date: Date.now(),
                     param: myId+friendid
                 };
@@ -132,7 +140,9 @@ angular.module('app.services', [])
                     message: message.toSend,
                     sender: myId,
                     name: CurrentUserService.firstname,
-                    date: Date.now()
+                    date: Date.now(),
+                    isMe:false,
+                    isFriend:false
                 };
 
                 var currentTempMessage = {
@@ -141,6 +151,12 @@ angular.module('app.services', [])
                     sender: CurrentUserService.firstname,
                     sendTo: friendid,
                     recipier: friendname,
+                    isMe: false,
+                    isFriend: false,
+                    switchSendBy: '',
+                    switchSender: '',
+                    switchSendTo: '',
+                    switchRecipier: '',
                     date: Date.now(),
                     param: myId+friendid
                 };

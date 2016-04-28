@@ -883,7 +883,7 @@ angular.module('app.controllers', [])
 
     $scope.listCanSwipe = true;
     $scope.handleSwipeOptions = function ($event, chat) {
-        $state.go('tabsController.chat', { chatId: chat.$id, friendId: $scope.sendTo, friendName: $scope.recipier });
+        $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.switchSendTo, friendName: chat.switchRecipier });
     };
 
     ChatsFactory.getChatList($scope.chatId).then(
@@ -913,24 +913,6 @@ angular.module('app.controllers', [])
         });
     };
 
-    var index;
-    //
-	    for (index = 0; index < $scope.chats.length; ++index) {
-	        //
-	        var chat = chats[index];
-	        if (chat.sendBy === $scope.chatId) {
-	        	$scope.sendTo = chat.sendTo;
-	        	$scope.recipier = chat.recipier;
-	        	$scope.me ="true";
-	        	$scope.you = "false";
-	        } else{
-	            $scope.sendTo = chat.sendBy;
-	        	$scope.recipier = chat.sender;
-	        	$scope.me ="false";
-	        	$scope.you = "true";
-	        }
-	    }
-
     function refresh(chats, $scope, ChatsFactory, chatId, friendId, friendName) {
 
     	var index;
@@ -939,16 +921,22 @@ angular.module('app.controllers', [])
 	    for (index = 0; index < chats.length; ++index) {
 	        //
 	        var chat = chats[index];
+	        chat.isMe = false;
+	        chat.isFriend = false;
+	        chat.switchRecipier = '';
+	        chat.switchSendBy = '';
+	        chat.switchSendTo = '';
+	        chat.switchSender = '';
 	        if (chat.sendBy === chatid) {
-	        	$scope.sendTo = chat.sendTo;
-	        	$scope.recipier = chat.recipier;
-	        	$scope.me ="true";
-	        	$scope.you = "false";
+	        	chat.switchSendTo = chat.sendTo;
+	        	chat.switchRecipier = chat.recipier;
+	        	chat.isMe = true;
+	        	chat.isFriend = false;
 	        } else{
-	            $scope.sendTo = chat.sendBy;
-	        	$scope.recipier = chat.sender;
-	        	$scope.me ="false";
-	        	$scope.you = "true";
+	            chat.switchSendTo = chat.sendBy;
+	        	chat.switchRecipier = chat.sender;
+	        	chat.isMe = false;
+	        	chat.isFriend = true;
 	        }
 	    }
     }
@@ -1151,6 +1139,9 @@ angular.module('app.controllers', [])
     $scope.message = {
         toSend: ''
     };
+    $scope.$on('$ionicView.beforeEnter', function () {
+    	refresh($scope.messages, $scope, ChatsFactory, $scope.myId, $stateParams.friendId, $stateParams.friendName);
+    });
 
     if ($scope.chatId !== '') {
     
@@ -1224,14 +1215,14 @@ angular.module('app.controllers', [])
 	        //
 	        var message = messages[index];
 	        if (message.name === $scope.recipier) {
-	        	$scope.isFriend = "!isFriend";
-	        	$scope.isMe = "isMe"
+	        	$scope.isFriend = false;
+	        	$scope.isMe = true;
 	        	$scope.li = "clearfix";
 	        	$scope.divli = "message-data align-right";
 	        	$scope.divme = "message other-message float-right";
 	        } else if (message.name === $scope.sender) {
-	        	$scope.isFriend = "isFriend";
-	            $scope.isMe = "!isMe";
+	        	$scope.isFriend = true;
+	            $scope.isMe = false;
 	            $scope.li = "";
 	        	$scope.divli = "message-data";
 	        	$scope.divme = "message my-message";
