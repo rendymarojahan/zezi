@@ -99,7 +99,10 @@ angular.module('app.services', [])
                     name: CurrentUserService.firstname,
                     date: Date.now(),
                     isMe:false,
-                    isFriend:false
+                    isFriend:false,
+                    li:'',
+                    divli:'',
+                    divme:''
                 };
 
                 var currentTempMessage = {
@@ -142,7 +145,10 @@ angular.module('app.services', [])
                     name: CurrentUserService.firstname,
                     date: Date.now(),
                     isMe:false,
-                    isFriend:false
+                    isFriend:false,
+                    li:'',
+                    divli:'',
+                    divme:''
                 };
 
                 var currentTempMessage = {

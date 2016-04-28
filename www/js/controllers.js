@@ -870,10 +870,12 @@ angular.module('app.controllers', [])
 .controller('chitChatCtrl', function($scope, $state, ChatsFactory, myCache, $stateParams) {
 	$scope.chats = [];
 	$scope.chatId = myCache.get('thisMemberId');
-
-	 $scope.$on('$ionicView.beforeEnter', function () {
-        $scope.hideValidationMessage = true;
-    });
+	ChatsFactory.getChatList($scope.chatId).then(
+            function (matches) {
+                $scope.chats = matches;
+                refresh($scope.chats, $scope, ChatsFactory, $stateParams.chatId, $stateParams.friendId, $stateParams.friendName);
+            }
+    );
 
 	$scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         if (fromState.name === "tabsController.chitChat") {
@@ -886,11 +888,7 @@ angular.module('app.controllers', [])
         $state.go('tabsController.chat', { chatId: chat.$id, friendId: chat.switchSendTo, friendName: chat.switchRecipier });
     };
 
-    ChatsFactory.getChatList($scope.chatId).then(
-            function (matches) {
-                $scope.chats = matches;
-            }
-    );
+    
 
     $scope.doRefresh = function() {
 		ChatsFactory.getChatList($scope.chatId).then(
@@ -1133,8 +1131,7 @@ angular.module('app.controllers', [])
 	$scope.sendTo = $stateParams.friendId;
 	$scope.recipier = $stateParams.friendName;
 	$scope.sender = CurrentUserService.firstname;
-	$scope.isMe = false;
-	$scope.isFriend = false;
+	$scope.txt = "Type your message";
 	$scope.myId = myCache.get('thisMemberId');
     $scope.message = {
         toSend: ''
@@ -1184,6 +1181,7 @@ angular.module('app.controllers', [])
 		    }).catch(function (error) {
 		        console.error("Error:", error);
 		    });
+		    $scope.message.toSend = "";
 
 	    } else {
 
@@ -1203,6 +1201,7 @@ angular.module('app.controllers', [])
 		    }).catch(function (error) {
 		        console.error("Error:", error);
 		    });
+		    $scope.message.toSend = "";
 	    }
         
     };
@@ -1214,18 +1213,21 @@ angular.module('app.controllers', [])
 	    for (index = 0; index < messages.length; ++index) {
 	        //
 	        var message = messages[index];
+
+	        message.isMe = false;
+	        message.isFriend = false;
 	        if (message.name === $scope.recipier) {
-	        	$scope.isFriend = false;
-	        	$scope.isMe = true;
-	        	$scope.li = "clearfix";
-	        	$scope.divli = "message-data align-right";
-	        	$scope.divme = "message other-message float-right";
+	        	message.isFriend = false;
+	        	message.isMe = true;
+	        	message.li = "clearfix";
+	        	message.divli = "message-data align-right";
+	        	message.divme = "message other-message float-right";
 	        } else if (message.name === $scope.sender) {
-	        	$scope.isFriend = true;
-	            $scope.isMe = false;
-	            $scope.li = "";
-	        	$scope.divli = "message-data";
-	        	$scope.divme = "message my-message";
+	        	message.isFriend = true;
+	            message.isMe = false;
+	            message.li = "";
+	        	message.divli = "message-data";
+	        	message.divme = "message my-message";
 	        }
 	    }
     }

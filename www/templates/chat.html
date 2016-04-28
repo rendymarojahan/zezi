@@ -12,15 +12,15 @@
           <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
           </ion-refresher>
             <ul>
-              <li  ng-repeat="message in messages" class="{{ li }}">
-                <div class="{{ divli }}">
-                  <span ng-hide="{{ isFriend }}" class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
-                  <span ng-hide="{{ isFriend }}" class="message-data-name" >{{ message.name }}</span> <i ng-hide="{{ isFriend }}" class="fa fa-circle me"></i>
-                  <span ng-hide="{{ isMe }}" class="message-data-name"><i ng-hide="{{ isMe }}" class="fa fa-circle online"></i> {{ message.name }}</span>
-                  <span ng-hide="{{ isMe }}" class="message-data-time">{{ message.date | date : "shortTime" }}</span>
+              <li  ng-repeat="message in messages" class="{{ message.li }}">
+                <div class="{{ message.divli }}">
+                  <span ng-if="message.isMe" class="message-data-time" >{{ message.date | date : "shortTime" }}</span> &nbsp; &nbsp;
+                  <span ng-if="message.isFriend" class="message-data-name" ><i ng-if="message.isFriend" class="fa fa-circle online"></i>{{ message.name }}</span> 
+                  <span ng-if="message.isMe" class="message-data-name">{{ message.name }}</span><i ng-if="message.isMe" class="fa fa-circle me"></i> 
+                  <span ng-if="message.isFriend" class="message-data-time">{{ message.date | date : "shortTime" }}</span>
                   
                 </div>
-                <div class="{{ divme }}">
+                <div class="{{ message.divme }}">
                   {{ message.message }}
                 </div>
               </li>
@@ -29,12 +29,11 @@
           </div> <!-- end chat-history -->
           
           <div class="chat-message clearfix">
-            <textarea ng-model="message.toSend" id="message-to-send" placeholder ="Type your message" rows="3" focus-me></textarea>
-                    
-            <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-            <i class="fa fa-file-image-o"></i>
-            
+            <i class="ion-ios-navigate-outline"></i>
+            <textarea ng-model="message.toSend" id="message-to-send" placeholder ="{{ txt }}" rows="3" focus-me></textarea>
             <button ng-click="send(message)">Send</button>
+            
+            
 
           </div> <!-- end chat-message -->
           

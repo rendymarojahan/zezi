@@ -1182,9 +1182,31 @@ a.logo {
   .chat-history {
     border-bottom: 2px solid white;
     overflow-y: scroll;
-    height: 405px;
+    height: 545px;
   }
-    
+    /* Let's get this party started */
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+     
+    /* Track */
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+     
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background: rgba(255,0,0,0.8); 
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    }
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background: rgba(255,0,0,0.4); 
+    }
+
     .message-data {
       margin-bottom: 15px;
     }
@@ -1242,36 +1264,40 @@ a.logo {
       }
   
   .chat-message {
-    padding: 30px;
+    padding: 5px;
+    height: 44px;
   }
     
-    textarea {
-      width: 100%;
+    .chat-message textarea {
+      width: 75%;
       border: none;
-      padding: 10px 20px;
+      padding: 6px 5px;
       font: 14px/22px "Lato", Arial, sans-serif;
-      margin-bottom: 10px;
-      border-radius: 5px;
+      border-radius: 10px;
       resize: none;
+      margin-left: 30px;
+      height: 35px;
+      position: absolute;
       
     }
     
-    .fa-file-o, .fa-file-image-o {
-      font-size: 16px;
-      color: gray;
-      cursor: pointer;
+    .chat-message .ion-ios-navigate-outline, .fa-file-image-o {
+        font-size: 26px;
+        color: #33cd5f;
+        cursor: pointer;
+        position: absolute;
       
     }
     
-    button {
-      float: right;
-      color: #94C2ED;
-      font-size: 16px;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      background: #F2F5F8;
+    .chat-message button {
+        float: right;
+        color: rgba(40, 165, 76, 0.67);
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        background: #F2F5F8;
+        padding-top: 7px;
     }
       
       :hover {
@@ -1279,7 +1305,7 @@ a.logo {
       }
 
 .online, .offline, .me {
-    margin-right: 3px;
+    padding: 4px;
     font-size: 10px;
   }
   
