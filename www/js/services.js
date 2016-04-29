@@ -124,7 +124,6 @@ angular.module('app.services', [])
                 /* SAVE CHAT TEMP */
                 var ref = fb.child("chattemps");
                 var newChildRef = ref.push(currentTempMessage);
-                ChatService.selectChat(newChildRef.key());
                     
 
                 // SAVE CHAT MESSAGE
@@ -133,6 +132,7 @@ angular.module('app.services', [])
 
                 cRef.on("child_added", function () {
                     newChat = $firebaseArray(cRef);
+                    ChatService.selectChat = newChildRef.key();
                 });
                 return newChat;
             },
@@ -663,22 +663,25 @@ angular.module('app.services', [])
             this.typeSelected = value;
         }
 })
+
 .service("PickParentCategoryService", function () {
         var cat = this;
         cat.updateParentCategory = function (value) {
             this.parentcategorySelected = value;
         }
 })
+
 .service("PickCategoryTypeService", function () {
         var type = this;
         type.updateType = function (value) {
             this.typeSelected = value;
         }
 })
+
 .service("ChatService", function () {
         var type = this;
-        type.selectChat = function (id) {
-            this.chatSelected = id;
+        type.selectChat = function (value) {
+            this.chatSelected = value;
         }
 })
 

@@ -1181,6 +1181,7 @@ angular.module('app.controllers', [])
 		    }).catch(function (error) {
 		        console.error("Error:", error);
 		    });
+		    
 		    $scope.message.toSend = "";
 
 	    } else {
