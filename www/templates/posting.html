@@ -21,8 +21,11 @@
                     <textarea placeholder="Describe your moment" ng-model="currentItem.note" readonly ui-sref="tabsController.pickposttransactionnote"></textarea>
                 </label>
             </div>
+            <div class="list card">
+                    <img ng-if="currentItem.isphoto" class="full-image" src="data:image/jpeg;base64,{{currentItem.photo}}">
+            </div>
             <div class="item range">
-                <i class="icon ion-ios-camera placeholder-icon" ui-sref="tabsController.picktransactionphoto"></i>
+                <i class="icon ion-ios-camera placeholder-icon" ng-click="pickPostPhoto()"></i>
                 <i class="icon ion-ios-paper placeholder-icon" ng-click="pickPostTransactionType()"></i>
                 <i ng-hide="!isTransfer" class="icon ion-ios-redo placeholder-icon" ui-sref="tabsController.pickposttransactionaccountfrom"></i>
                 <i ng-hide="!isTransfer" class="icon ion-ios-undo placeholder-icon" ui-sref="tabsController.pickposttransactionaccountto"></i>

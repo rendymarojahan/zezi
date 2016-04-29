@@ -245,9 +245,9 @@ angular.module('app.services', [])
                     //
                     for (index = 0; index < friends.length; ++index) {
                         //
+                        var friend = friends[index];
                         if (authData.uid !== friend.member_id) {
-                            var friend = friends[index];
-                            //
+                            
                             var teman = {
                                 friends_id: friend.member_id,
                                 name: friend.name,
@@ -286,8 +286,6 @@ angular.module('app.services', [])
                 };
                 var mRef = fb.child("groups").child(newChildRef.key()).child("members");
                 mRef.push(member);
-                var fRef = fb.child("members").child(authData.uid).child("friends");
-                fRef.push(member);
 
                 /* UPDATE USER WITH GROUP ID AND SET PRIORITY */
                 var temp = {
@@ -698,6 +696,7 @@ angular.module('app.services', [])
             this.defaultbalance = user.defaultbalance;
             this.lastdate = user.lastdate;
             this.group_name = user.group_name;
+            this.photo = user.photo;
         }
 })
 

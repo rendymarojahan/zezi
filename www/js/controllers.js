@@ -81,9 +81,12 @@ angular.module('app.controllers', [])
     };
 })
   
-.controller('peopleCtrl', function($scope, $state, $stateParams, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService) {
+.controller('peopleCtrl', function($scope, $state, $stateParams, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService, myCache) {
 
     $scope.publics = [];
+    $scope.friends = [];
+    $scope.userId = myCache.get('thisMemberId')
+    $scope.photo = CurrentUserService.photo;
 
     $scope.$on('$ionicView.beforeLeave', function () {
         $scope.hideValidationMessage = true;
@@ -97,14 +100,61 @@ angular.module('app.controllers', [])
         }
     });
 
-    $scope.publics = PublicsFactory.getPublics();
+    $scope.publics = PublicsFactory.getMemberPublics($scope.userId);
     $scope.publics.$loaded().then(function (x) {
+    	refresh($scope.publics, $scope, MembersFactory, PublicsFactory);
+    }).catch(function (error) {
+        console.error("Error:", error);
+    });
+
+    $scope.friends = PublicsFactory.getFriends();
+    $scope.friends.$loaded().then(function (x) {
+    	var index;
+    //
+	    for (index = 0; index < $scope.friends.length; ++index) {
+	        //
+	        var friend = $scope.friends[index];
+
+	        if (friend.friends_id !== '') {
+	        	$scope.temans = PublicsFactory.getMemberPublics(friend.friends_id);
+			    $scope.temans.$loaded().then(function (x) {
+			    	$scope.publics = $scope.temans.concat($scope.publics);
+			    }).catch(function (error) {
+			        console.error("Error:", error);
+			    });
+	        }
+	    }
         refresh($scope.publics, $scope, MembersFactory, PublicsFactory);;
     }).catch(function (error) {
         console.error("Error:", error);
     });
 
-    
+    $scope.doRefresh = function (){
+
+    	$scope.friends = PublicsFactory.getFriends();
+	    $scope.friends.$loaded().then(function (x) {
+	    	var index;
+	    //
+		    for (index = 0; index < $scope.friends.length; ++index) {
+		        //
+		        var friend = $scope.friends[index];
+
+		        if (friend.member_id !== '') {
+		        	$scope.temans = PublicsFactory.getMemberPublics(friend.member_id);
+				    $scope.temans.$loaded().then(function (x) {
+				    	$scope.publics = $scope.temans.concat($scope.publics);
+				    }).catch(function (error) {
+				        console.error("Error:", error);
+				    });
+		        }
+		    }
+	        refresh($scope.publics, $scope, MembersFactory, PublicsFactory);
+	        $scope.$broadcast('scroll.refreshComplete');
+	    }).catch(function (error) {
+	        console.error("Error:", error);
+	    });
+
+    };
 
     var filterBarInstance;
     $scope.showFilterBar = function () {
@@ -152,7 +202,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('postingCtrl', function ($scope, $state, $stateParams, $ionicHistory, AccountsFactory, PickTransactionServices, PayeesService, myCache, CurrentUserService) {
+.controller('postingCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $ionicActionSheet, $ionicHistory, AccountsFactory, PickTransactionServices, PayeesService, myCache, CurrentUserService) {
 
     $scope.hideValidationMessage = true;
     $scope.loadedClass = 'hidden';
@@ -208,8 +258,9 @@ angular.module('app.controllers', [])
         $scope.currentItem.accountTo = PickTransactionServices.accountToSelected;
         $scope.currentItem.accountToId = PickTransactionServices.accountToId;
         $scope.currentItem.photo = PickTransactionServices.photoSelected;
-        if ($scope.currentItem.photo === '') {
-            $scope.currentItem.photo = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        if ($scope.currentItem.photo === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==') {
+            $scope.currentItem.photo = '';
+            $scope.currentItem.isphoto = false;
         }
         $scope.currentItem.note = PickTransactionServices.noteSelected;
         $scope.isTransfer = ($scope.currentItem.typedisplay === "Transfer") ? true : false;
@@ -241,6 +292,72 @@ angular.module('app.controllers', [])
         	$scope.amount = function (){ return " " + $scope.currentItem.amount;};
     	}
     });
+
+    // PICK TRANSACTION TYPE
+    $scope.pickPostPhoto = function() {
+	
+		$scope.hideSheet = $ionicActionSheet.show({
+
+			buttons: [
+        		{ text: '<i class="icon ion-camera"></i> Take Picture' },
+        		{ text: '<i class="icon ion-images"></i> Choose Album' },
+    		],
+			buttonClicked: function(index) {
+				switch (index) {
+                case 0:
+                    $scope.currentItem = { photo: PickTransactionServices.photoSelected };
+        				
+            				var options = {
+			                quality: 75,
+			                destinationType: Camera.DestinationType.DATA_URL,
+			                sourceType: Camera.PictureSourceType.CAMERA,
+			                allowEdit: false,
+			                encodingType: Camera.EncodingType.JPEG,
+			                popoverOptions: CameraPopoverOptions,
+			                targetWidth: 800,
+			                targetHeight: 800,
+			                saveToPhotoAlbum: false
+            				};
+				            $cordovaCamera.getPicture(options).then(function (imageData) {
+				                $scope.currentItem.photo = imageData;
+								PickTransactionServices.updatePhoto($scope.currentItem.photo);
+								$scope.currentItem.isphoto = true;
+				            }, function (error) {
+				                console.error(error);
+				            })
+
+                break;
+                case 1:
+                	$scope.currentItem = { photo: PickTransactionServices.photoSelected };
+            				var options = {
+			                quality: 75,
+			                destinationType: Camera.DestinationType.DATA_URL,
+			                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+			                allowEdit: false,
+			                encodingType: Camera.EncodingType.JPEG,
+			                popoverOptions: CameraPopoverOptions,
+			                targetWidth: 800,
+			                targetHeight: 800,
+			                saveToPhotoAlbum: false
+            				};
+				            $cordovaCamera.getPicture(options).then(function (imageData) {
+				                $scope.currentItem.photo = imageData;
+				                PickTransactionServices.updatePhoto($scope.currentItem.photo);
+				                $scope.currentItem.isphoto = true;
+				            }, function (error) {
+				                console.error(error);
+				            })
+        			
+                break;
+            	}
+            	return true;
+    		},
+			cancelText: 'Cancel',
+				cancel: function() {
+				console.log('CANCELLED');
+			}
+		});	
+	}
 
     
 
@@ -321,13 +438,7 @@ angular.module('app.controllers', [])
             $scope.currentItem.istransfer = false;
         }
 
-        // Handle default blank photo
-        if ($scope.currentItem.photo === 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==') {
-            $scope.currentItem.photo = '';
-            $scope.currentItem.isphoto = false;
-        } else {
-            $scope.currentItem.isphoto = true;
-        }
+       
 
         if ($scope.inEditMode) {
             //
@@ -425,10 +536,6 @@ angular.module('app.controllers', [])
             if (isNaN($scope.currentItem.notes)) {
                 $scope.currentItem.notes = "";
             }
-            if (isNaN($scope.currentItem.photo)) {
-                $scope.currentItem.photo = "";
-            }
-            // Set current house member
             $scope.currentItem.addedby = myCache.get('thisUserName');
             $scope.currentItem.userid = myCache.get('thisMemberId');
             //
@@ -1243,7 +1350,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('registerCtrl', function($scope, $state, $ionicLoading, MembersFactory, PickTransactionServices, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup) {
+.controller('registerCtrl', function($scope, $state, $ionicLoading, MembersFactory, CurrentUserService, PickTransactionServices, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup, myCache) {
 
 	$scope.user = {};
 	$scope.currentItem = {'photo': ''};
@@ -1394,25 +1501,21 @@ angular.module('app.controllers', [])
         					photo = '';
         				}
 
-        				/* PREPARE DATA FOR TEMP*/
-                    	var temp = {
-                            temp: ''
-                        }
-                        /*SAVE TEMP*/
-                        var tempref = fb.child("temps");
-                        var newTempRef = tempref.push(temp);
-
 
                     	/* PREPARE DATA FOR PUBLICS*/
                     	var post = {
                             name: user.firstname,
                             location: 'zezi',
+                            userid: authData.uid,
                             note: 'Welcome to zezi, your personal financial application. Share your moment to control your money',
                             photo: photo,
-                            date: Date.now()
+                            date: Date.now(),
+                            likes:'',
+                            views:'',
+                            comments:''
                         }
                         /*SAVE FIRST POSTING*/
-                        var ref = fb.child("publics").child(newTempRef.key()).child(authData.uid);
+                        var ref = fb.child("publics");
                         var newChildRef = ref.push(post);
 
 
@@ -1426,8 +1529,7 @@ angular.module('app.controllers', [])
                             group_id: '',
                             photo: photo,
                             datecreated: Date.now(),
-                            dateupdated: Date.now(),
-                            public_id: newTempRef.key()
+                            dateupdated: Date.now()
                         }
 
 
@@ -1444,8 +1546,21 @@ angular.module('app.controllers', [])
                 		refTypes.push({ name: 'Credit Card', icon: 'ion-closed-captioning' });
                 		refTypes.push({ name: 'Debit Card', icon: 'ion-card' });
 
-                		/* REMOVE TEMP*/
-                		var remTempRef = tempref.remove();
+                		MembersFactory.getMember(authData).then(function (thisuser) {
+
+		                	$scope.firstname = thisuser.firstname;
+		    				$scope.surename = thisuser.surename;
+		    				$scope.fullname = function (){
+		    					return $scope.firstname +" "+ $scope.surename;
+		    				};
+		                    
+		                    /* Save user data for later use */
+		                    myCache.put('thisGroupId', thisuser.group_id);
+		                    myCache.put('thisUserName', $scope.fullname());
+		                    myCache.put('thisMemberId', authData.uid);
+		                    myCache.put('thisPublicId', thisuser.public_id);
+		                    CurrentUserService.updateUser(thisuser);
+		                });
 
                         $ionicLoading.hide();
                         $state.go('groupchoice');
@@ -1486,13 +1601,11 @@ angular.module('app.controllers', [])
             $scope.hideValidationMessage = false;
             $scope.validationMessage = "Please enter a name for this group"
             return;
-        }
+        }else {
         $scope.hideValidationMessage = true;
-        //
-        // Create House
-        //
         GroupFactory.createGroup(group);
-        $state.go('tabsController.accounts', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
+        $state.go('tabsController.people', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
+    	}
     };
 
 })
@@ -1520,7 +1633,7 @@ angular.module('app.controllers', [])
         GroupFactory.getGroupByCode(group_code).then(function (value) {
             if (value) {
                 GroupFactory.joinGroup(value);
-                $state.go('tabsController.accounts', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
+                $state.go('tabsController.people', { memberPublicId: $scope.publicId, memberId: $scope.memberId });
             }
         });
     };

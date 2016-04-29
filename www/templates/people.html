@@ -5,17 +5,19 @@
     <button class="button button-post" ng-click="createPosting()">
         <i class="icon ion-ios-pricetags-outline"></i>
     </button>
-    <ion-content class="has-header" overflow-scroll="false" padding="true">
+    <ion-content class="has-header" padding="true">
+    <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
+          </ion-refresher>
             <div collection-repeat="public in publics | orderBy:'-date'">
                 <div class="list card">
                     <div class="item item-avatar">
-                        <img src="img/pic.jpg">
+                        <img src="data:image/jpeg;base64,{{ photo }}">
                         <h2>{{ public.name }}</h2>
                         <p>{{ public.date | date : "h:mm a" }} . {{ public.location }}</p>
                     </div>
                     <div class="item item-body">
                         <p>{{ public.note }}</p>
-                        <img class="full-image" src="img/post.JPG">
+                        <img class="full-image" src="data:image/jpeg;base64,{{ public.photo }}">
                         <p>
                             <a href="#" class="subdued"><i class="icon ion-thumbsup"></i>{{ public.likes }}</a>
                             <a href="#" class="subdued"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</a>
