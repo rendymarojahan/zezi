@@ -9,6 +9,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
 .run(function($ionicPlatform, $rootScope, $ionicLoading, $state, Auth, $cordovaStatusbar, $cordovaSplashscreen, $cordovaTouchID, $localStorage) {
   $ionicPlatform.ready(function() {
+
+    var push = new Ionic.Push({
+      "debug": true
+    });
+    push.register(function(token) {
+      console.log("My Device token:",token.token);
+      push.saveToken(c3f994a39f491ebf6b834d015f4f8abd37eca8e924b2692b);  // persist the token in the Ionic Platform
+    });
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     setTimeout(function () {
