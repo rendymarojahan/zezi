@@ -251,7 +251,8 @@ angular.module('app.services', [])
                             var teman = {
                                 friends_id: friend.member_id,
                                 name: friend.name,
-                                email: friend.email
+                                email: friend.email,
+                                photo: friend.photo
                             };
                             var afRef = fb.child("members").child(authData.uid).child("friends");
                             afRef.push(teman);
@@ -282,7 +283,8 @@ angular.module('app.services', [])
                 var member = {
                     member_id: authData.uid,
                     name: CurrentUserService.firstname,
-                    email: CurrentUserService.email
+                    email: CurrentUserService.email,
+                    photo: CurrentUserService.photo
                 };
                 var mRef = fb.child("groups").child(newChildRef.key()).child("members");
                 mRef.push(member);

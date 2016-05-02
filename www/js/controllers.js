@@ -10,6 +10,7 @@ angular.module('app.controllers', [])
     $scope.fullname = function (){
     	return $scope.firstname +" "+ $scope.surename;
     };
+    $scope.photo = CurrentUserService.photo;
     $scope.login = Date.now();
 
     $scope.friends = [];
@@ -240,6 +241,7 @@ angular.module('app.controllers', [])
     $scope.fullname = function (){
     	return $scope.firstname +" "+ $scope.surename;
     };
+    $scope.photo = CurrentUserService.photo;
 
     $scope.$on('$ionicView.beforeEnter', function () {
         $scope.hideValidationMessage = true;

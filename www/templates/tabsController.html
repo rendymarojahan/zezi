@@ -14,7 +14,7 @@
     			<ion-side-menu side="right" class="stable">
         			<ion-header-bar align-title="left">
                         <div class="sidetitle">
-                            <img src="img/pic.jpg">
+                            <img src="data:image/jpeg;base64,{{ photo }}">
                             <h2>{{ fullname() }}</h2>
                             <p>Last Login {{ login | date : "mediumTime" }}</p>
                         </div>
@@ -22,7 +22,7 @@
         			<ion-content padding="false" class="side-menu-right has-header">
             			<ion-list>
             				<ion-item ng-repeat="friend in friends track by friend.friends_id" ng-click="swipeOptions($event, friend)" class="item item-avatar item-icon-right" menu-close="tabsController.people">
-                    			<img src="img/zezi-logo.png">
+                    			<img src="data:image/jpeg;base64,{{ friend.photo }}">
                     			<h2>{{ friend.name }}</h2>
                                 <p>{{ friend.email }}</p>
                     			<i class="icon ion-ios-arrow-right stable"></i>
@@ -69,7 +69,7 @@
                     <ion-content padding="false" class="side-menu-right has-header">
                         <ion-list>
                             <div class="friend" ng-repeat="friend in friends track by friend.friends_id" ng-click="handleSwipeOptions($event, friend)" menu-close="tabsController.chitChat">
-                                <img src="img/pic.jpg" />
+                                <img src="data:image/jpeg;base64,{{ friend.photo }}" />
                                 <p>
                                     <strong>{{ friend.name }}</strong><br>
                                     <span>{{ friend.email }}</span>
