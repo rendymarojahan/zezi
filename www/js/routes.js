@@ -324,9 +324,9 @@ angular.module('app.routes', [])
   })
 
   .state('tabsController.post', {
-    url: '/post',
+    url: '/post/:postId',
     views: {
-      'tab2': {
+      'tab1': {
         templateUrl: 'templates/post.html',
         controller: 'postCtrl'
       }

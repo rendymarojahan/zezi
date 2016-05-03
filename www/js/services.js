@@ -355,10 +355,13 @@ angular.module('app.services', [])
                 ref = fb.child("publics").child(thisPublicId).child(thisUserId);
                 return ref;
             },
-            getPublics: function () {
-                ref = fb.child("publics").child(thisPublicId).child(thisUserId).orderByKey();
-                publicRef = $firebaseArray(ref);
-                return publicRef;
+            getPublics: function (publicid) {
+                var deferred = $q.defer();
+                ref = fb.child("publics").child(publicid);
+                ref.once("value", function (snap) {
+                    deferred.resolve(snap.val());
+                });
+                return deferred.promise;
             },
             getMemberPublics: function (friendid) {
                 ref = fb.child("publics").orderByChild('userid').startAt(friendid).endAt(friendid);

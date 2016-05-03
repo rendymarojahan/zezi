@@ -169,14 +169,8 @@ angular.module('app.controllers', [])
     };
 
     $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, account) {
-        $event.stopPropagation();
-        var options = $event.currentTarget.querySelector('.item-options');
-        if (!options.classList.contains('invisible')) {
-            $ionicListDelegate.closeOptionButtons();
-        } else {
-            $state.go('tabsController.transactions', { accountId: account.$id, accountName: account.accountname });
-        }
+    $scope.handleSwipeOptions = function ($event, people) {
+        $state.go('tabsController.post', { postId: people.$id });
     };
 
     $scope.createPosting = function () {
@@ -2428,7 +2422,57 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('postCtrl', function($scope) {
+.controller('postCtrl', function($scope, $state, $stateParams, MembersFactory, PublicsFactory, $ionicFilterBar, $ionicListDelegate, PickTransactionServices, CurrentUserService, myCache) {
+
+	$scope.posts = [];
+    $scope.friends = [];
+    $scope.userId = myCache.get('thisMemberId')
+    $scope.photo = CurrentUserService.photo;
+
+    $scope.$on('$ionicView.beforeLeave', function () {
+        $scope.hideValidationMessage = true;
+        $stateParams.memberPublicId = '';
+        $stateParams.memberId = '';
+    });
+
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        if (fromState.name === "tabsController.post") {
+            refresh($scope.posts, $scope, MembersFactory, PublicsFactory);
+        }
+    });
+
+    MembersFactory.getMemberById($stateParams.postId).then(function (post) {
+    	$scope.name = post.name;
+		
+    });
+
+    $scope.friends = PublicsFactory.getFriends();
+    $scope.friends.$loaded().then(function (x) {
+        refresh($scope.posts, $scope, MembersFactory, PublicsFactory);;
+    }).catch(function (error) {
+        console.error("Error:", error);
+    });
+
+    $scope.doRefresh = function (){
+
+    	$scope.posts = PublicsFactory.getPublics($stateParams.postId);
+    	scope.posts.$loaded().then(function (x) {
+    	refresh($scope.publics, $scope, PublicsFactory, $stateParams.postId);
+	        $scope.$broadcast('scroll.refreshComplete');
+	    }).catch(function (error) {
+	        console.error("Error:", error);
+	    });
+
+    };
+
+    $scope.listCanSwipe = true;
+    $scope.handleSwipeOptions = function ($event, people) {
+        $state.go('tabsController.post', { postId: people.$id });
+    };
+
+    function refresh(posts, $scope, MembersFactory, PublicsFactory) {
+    
+    }
 
 })
    

@@ -7,7 +7,7 @@
     </button>
     <ion-content class="has-header" padding="true">
     <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
-          </ion-refresher>
+    </ion-refresher>
             <div collection-repeat="public in publics | orderBy:'-date'">
                 <div class="list card">
                     <div class="item item-avatar">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="item item-body">
                         <p>{{ public.note }}</p>
-                        <img class="full-image" src="data:image/jpeg;base64,{{ public.photo }}">
+                        <img class="full-image" src="data:image/jpeg;base64,{{ public.photo }}" ng-click="handleSwipeOptions($event, public)">
                         <div class="row">
                           <div class="col col-10"><i class="icon ion-thumbsup"></i>{{ public.likes }}</div>
                           <div class="col col-10"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</div>

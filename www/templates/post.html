@@ -1,28 +1,23 @@
 <ion-view style="" title="Post">
-    <ion-content class="has-header" overflow-scroll="true" padding="true">
-        <div style="">
+    <ion-content class="has-header" padding="true">
+    <ion-refresher pulling-text="Pull to refresh" refreshing-text="Loading..." refreshing-icon="ion-loading-c" pulling-icon="ion-ios7-arrow-thin-down" on-refresh="doRefresh()">
+    </ion-refresher>
             <div class="list card">
-
                 <div class="item item-avatar">
-                    <img src="mcfly.jpg">
-                    <h2>Marty McFly</h2>
-                    <p>November 05, 1955</p>
+                    <img src="data:image/jpeg;base64,{{ photo }}">
+                    <h2>{{ name }}</h2>
+                    <p>{{ date | date : "h:mm a" }} . {{ location }}</p>
                 </div>
-
                 <div class="item item-body">
-                    <img class="full-image" src="delorean.jpg">
-                    <p>
-                        This is a "Facebook" styled Card. The header is created from a Thumbnail List item, the content is from a card-body consisting of an image and paragraph text. The footer consists of tabs, icons aligned left, within the card-footer.
-                    </p>
-                    <p>
-                        <a href="#" class="subdued">1 Like</a>
-                        <a href="#" class="subdued">5 Comments</a>
-                    </p>
+                    <p>{{ note }}</p>
+                    <img class="full-image" src="data:image/jpeg;base64,{{ photo }}" ng-click="handleSwipeOptions($event, postpost)">
+                    <div class="row">
+                      <div class="col col-10"><i class="icon ion-thumbsup"></i>{{ likes }}</div>
+                      <div class="col col-10"><i class="icon ion-ios-chatboxes"></i>{{ comments }}</div>
+                      <div class="col col-10"><i class="icon ion-ios-eye"></i>{{ views }}</div>
+                    </div>
                 </div>
-
             </div>
-        </div>
-        <div style="">
             <div class="list">
 
                 <a class="item item-avatar" href="#">
@@ -44,6 +39,5 @@
                 </a>
 
             </div>
-        </div>
     </ion-content>
 </ion-view>
