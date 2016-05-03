@@ -18,11 +18,11 @@
                     <div class="item item-body">
                         <p>{{ public.note }}</p>
                         <img class="full-image" src="data:image/jpeg;base64,{{ public.photo }}">
-                        <p>
-                            <a href="#" class="subdued"><i class="icon ion-thumbsup"></i>{{ public.likes }}</a>
-                            <a href="#" class="subdued"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</a>
-                            <a href="#" class="subdued"><i class="icon ion-ios-eye"></i>{{ public.views }}</a>
-                        </p>
+                        <div class="row">
+                          <div class="col col-10"><i class="icon ion-thumbsup"></i>{{ public.likes }}</div>
+                          <div class="col col-10"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</div>
+                          <div class="col col-10"><i class="icon ion-ios-eye"></i>{{ public.views }}</div>
+                        </div>
                     </div>
                 </div>
                 <div style="width: 283px; height: 8px;" class="spacer"></div>

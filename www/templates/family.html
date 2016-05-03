@@ -1,7 +1,7 @@
 <ion-view style="" title="{{ AccountTitle }}">
     <ion-content class="has-header" padding="true">
         <div style="text-align: center;">
-            <img src="img/tDn85ZSQRkaIqkMXKvpk_Jogja 187.JPG" height="auto" width="100%">
+            <img src="data:image/jpeg;base64,{{ photo }}" height="300px" width="100%">
         </div>
         <h3 style="">{{ fullname() }}</h3>
         <div style="" class="button-bar family">
@@ -38,13 +38,13 @@
             <div collection-repeat="public in publics | orderBy:'-date'">
                 <div class="list card">
                     <div class="item item-avatar">
-                        <img src="img/zezi-logo.png">
+                        <img src="data:image/jpeg;base64,{{ photo }}">
                         <h2>{{ public.name }}</h2>
                         <p>{{ public.date | date : "h:mm a" }} . {{ public.location }}</p>
                     </div>
                     <div class="item item-body">
                         <p>{{ public.note }}</p>
-                        <img class="full-image" src="img/zezi.png">
+                        <img class="full-image" src="data:image/jpeg;base64,{{ public.photo }}">
                         <p>
                             <a href="#" class="subdued"><i class="icon ion-thumbsup"></i>{{ public.likes }}</a>
                             <a href="#" class="subdued"><i class="icon ion-ios-chatboxes"></i>{{ public.comments }}</a>

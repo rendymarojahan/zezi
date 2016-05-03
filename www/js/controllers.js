@@ -1062,6 +1062,7 @@ angular.module('app.controllers', [])
 		$scope.fullname = function (){
 			return $scope.firstname +" "+ $scope.surename;
 		};
+		$scope.photo = thisuser.photo;
 		
     });
 
@@ -1075,9 +1076,9 @@ angular.module('app.controllers', [])
     $scope.inEditMode = false;
     $scope.editIndex = 0;
     $scope.publics = [];
-    $scope.publics = PublicsFactory.getMemberPublics($stateParams.memberPublicId, $stateParams.memberId);
+    $scope.publics = PublicsFactory.getMemberPublics($stateParams.memberId);
     $scope.publics.$loaded().then(function (x) {
-        refresh($scope.publics, $scope, PublicsFactory, $stateParams.memberId, $stateParams.memberPublicId);
+        refresh($scope.publics, $scope, PublicsFactory, $stateParams.memberId);
     }).catch(function (error) {
         console.error("Error:", error);
     });
