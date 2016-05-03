@@ -169,8 +169,8 @@ angular.module('app.controllers', [])
     };
 
     $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, people) {
-        $state.go('tabsController.post', { postId: people.$id });
+    $scope.handleSwipeOptions = function ($event, public) {
+        $state.go('tabsController.post', { postId: public.$id });
     };
 
     $scope.createPosting = function () {
@@ -2426,8 +2426,10 @@ angular.module('app.controllers', [])
 
 	$scope.posts = [];
     $scope.friends = [];
-    $scope.userId = myCache.get('thisMemberId')
-    $scope.photo = CurrentUserService.photo;
+    $scope.userId = myCache.get('thisMemberId');
+    $scope.photo = {
+        userid: ''
+    };
 
     $scope.$on('$ionicView.beforeLeave', function () {
         $scope.hideValidationMessage = true;
@@ -2441,17 +2443,21 @@ angular.module('app.controllers', [])
         }
     });
 
-    MembersFactory.getMemberById($stateParams.postId).then(function (post) {
+    PublicsFactory.getPublics($stateParams.postId).then(function (post) {
     	$scope.name = post.name;
-		
+    	$scope.date = post.date;
+    	$scope.location = post.location;
+    	$scope.note = post.note;
+    	$scope.photo = post.photo;
+    	$scope.likes = post.likes;
+    	$scope.views = post.views;
+    	$scope.comments = post.comments;
+    	MembersFactory.getMemberById(post.userid).then(function (user) {
+	    	$scope.userphoto = user.photo;
+	    });
     });
 
-    $scope.friends = PublicsFactory.getFriends();
-    $scope.friends.$loaded().then(function (x) {
-        refresh($scope.posts, $scope, MembersFactory, PublicsFactory);;
-    }).catch(function (error) {
-        console.error("Error:", error);
-    });
+    
 
     $scope.doRefresh = function (){
 
@@ -2463,11 +2469,6 @@ angular.module('app.controllers', [])
 	        console.error("Error:", error);
 	    });
 
-    };
-
-    $scope.listCanSwipe = true;
-    $scope.handleSwipeOptions = function ($event, people) {
-        $state.go('tabsController.post', { postId: people.$id });
     };
 
     function refresh(posts, $scope, MembersFactory, PublicsFactory) {

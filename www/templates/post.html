@@ -4,13 +4,13 @@
     </ion-refresher>
             <div class="list card">
                 <div class="item item-avatar">
-                    <img src="data:image/jpeg;base64,{{ photo }}">
+                    <img src="data:image/jpeg;base64,{{ userphoto }}">
                     <h2>{{ name }}</h2>
                     <p>{{ date | date : "h:mm a" }} . {{ location }}</p>
                 </div>
                 <div class="item item-body">
                     <p>{{ note }}</p>
-                    <img class="full-image" src="data:image/jpeg;base64,{{ photo }}" ng-click="handleSwipeOptions($event, postpost)">
+                    <img class="full-image" src="data:image/jpeg;base64,{{ photo }}" ng-click="doRefresh()">
                     <div class="row">
                       <div class="col col-10"><i class="icon ion-thumbsup"></i>{{ likes }}</div>
                       <div class="col col-10"><i class="icon ion-ios-chatboxes"></i>{{ comments }}</div>
