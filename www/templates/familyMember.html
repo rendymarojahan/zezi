@@ -1,7 +1,7 @@
 <ion-view style="" title="{{ AccountTitle }}">
     <ion-content class="has-header" padding="true">
         <ion-list can-swipe="listCanSwipe">
-            <div class="friends" ng-repeat="member in members track by member.$id" ng-click="handleSwipeOptions($event, member)">
+            <div class="friends" ng-repeat="member in members track by member.$id" ng-click="profil()">
                 <img src="data:image/jpeg;base64,{{ member.photo }}">
                 <p>
                     <strong>{{ member.firstname + " " + member.surename }}</strong><br>

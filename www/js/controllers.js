@@ -2496,7 +2496,73 @@ angular.module('app.controllers', [])
             }
     )
 
-    
+    $scope.profil = function (){
+		
+		angular.element(document).ready(function() {
+
+		  document.getElementById(".friends").each(function() {
+		    document.getElementById(this).click(function() {
+		      var childOffset = document.getElementById(this).offset();
+		      var parentOffset = document.getElementById(this).parent().parent().offset();
+		      var childTop = childOffset.top - parentOffset.top;
+		      var clone = document.getElementById(this).find('img').eq(0).clone();
+		      var top = childTop + 12 + "px";
+
+		      document.getElementById(clone).css({
+		        'top': top
+		      }).addClass("floatingImg").appendTo("#chatbox");
+
+		      setTimeout(function() {
+		        document.getElementById("#profile p").addClass("animate");
+		        document.getElementById("#profile").addClass("animate");
+		      }, 100);
+		      setTimeout(function() {
+		        document.getElementById("#chat-messages").addClass("animate");
+		        document.getElementById('.cx, .cy').addClass('s1');
+		        setTimeout(function() {
+		          document.getElementById('.cx, .cy').addClass('s2');
+		        }, 100);
+		        setTimeout(function() {
+		          document.getElementById('.cx, .cy').addClass('s3');
+		        }, 200);
+		      }, 150);
+
+		      document.getElementById('.floatingImg').animate({
+		        'width': "68px",
+		        'left': '108px',
+		        'top': '20px'
+		      }, 200);
+
+		      var name = document.getElementById(this).find("p strong").html();
+		      var email = document.getElementById(this).find("p span").html();
+		      document.getElementById("#profile p").html(name);
+		      document.getElementById("#profile span").html(email);
+
+		      document.getElementById(".message").not(".right").find("img").attr("src", document.getElementById(clone).attr("src"));
+		      document.getElementById('#friendslist').fadeOut();
+		      document.getElementById('#chatview').fadeIn();
+
+		      document.getElementById('#close').unbind("click").click(function() {
+		        document.getElementById("#chat-messages, #profile, #profile p").removeClass("animate");
+		        document.getElementById('.cx, .cy').removeClass("s1 s2 s3");
+		        document.getElementById('.floatingImg').animate({
+		          'width': "40px",
+		          'top': top,
+		          'left': '12px'
+		        }, 200, function() {
+		          document.getElementById('.floatingImg').remove()
+		        });
+
+		        setTimeout(function() {
+		          document.getElementById('#chatview').fadeOut();
+		          document.getElementById('#friendslist').fadeIn();
+		        }, 50);
+		      });
+
+		    });
+		  });
+		});			
+	};
 })
    
 .controller('incomeCtrl', function($scope) {
