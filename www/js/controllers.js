@@ -2477,7 +2477,7 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('familyMemberCtrl', function($scope, $state, $ionicListDelegate, $ionicActionSheet, MembersFactory, SelectAccountServices, CurrentUserService, myCache) {
+.controller('familyMemberCtrl', function($scope, $state, $ionicPlatform, $ionicListDelegate, $ionicActionSheet, MembersFactory, SelectAccountServices, CurrentUserService, myCache) {
 
 	$scope.members = [];
 	$scope.groups = myCache.get('thisGroupId');
@@ -2495,6 +2495,8 @@ angular.module('app.controllers', [])
                 $scope.members = matches;
             }
     )
+
+    
 })
    
 .controller('incomeCtrl', function($scope) {
