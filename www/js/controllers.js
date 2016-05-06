@@ -214,6 +214,8 @@ angular.module('app.controllers', [])
         'accountFromId': '',
         'accountTo': '',
         'accountToId': '',
+        'account': '',
+        'accountId': '',
         'amount': '',
         'category': '',
         'categoryid': '',
@@ -283,6 +285,9 @@ angular.module('app.controllers', [])
     	}
         if ($scope.currentItem.payee !== ''){
         	$scope.location = function (){ return " at " + $scope.currentItem.payee;};
+    	}
+    	if ($scope.currentItem.account !== '' && $scope.currentItem.account !== 'undefined'){
+        	$scope.account = function (){ return " using " + $scope.currentItem.account;};
     	}
     	if ($scope.currentItem.amount !== ''){
         	$scope.amount = function (){ return " " + $scope.currentItem.amount;};
