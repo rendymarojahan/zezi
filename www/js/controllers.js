@@ -286,7 +286,7 @@ angular.module('app.controllers', [])
         if ($scope.currentItem.payee !== ''){
         	$scope.location = function (){ return " at " + $scope.currentItem.payee;};
     	}
-    	if ($scope.currentItem.account !== '' && $scope.currentItem.account !== 'undefined'){
+    	if (typeof PickTransactionServices.accountSelected !== 'undefined'){
         	$scope.account = function (){ return " using " + $scope.currentItem.account;};
     	}
     	if ($scope.currentItem.amount !== ''){
@@ -1062,6 +1062,7 @@ angular.module('app.controllers', [])
 			return $scope.firstname +" "+ $scope.surename;
 		};
 		$scope.photo = thisuser.photo;
+		$scope.note = thisuser.note;
 		
     });
 

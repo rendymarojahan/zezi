@@ -1568,264 +1568,150 @@ a.logo {
 }
 
 /* Profil */
-#chatview{
-    width:290px;
-    height:484px;
-    position:absolute;
-    top:0;
-    left:0; 
-    display:none;
-    background:#fff;
+figure.snip0057 {
+  font-family: 'Raleway', Arial, sans-serif;
+  position: relative;
+  float: left;
+  overflow: hidden;
+  width: 100%;
+  background: #ffffff;
+  color: #000000;
+  min-height: 200px;
+  height: 70%;
 }
-#profile{
-    height:153px;
-    overflow:hidden;
-    text-align:center;
-    color:#fff;
+figure.snip0057 * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.35s ease-in-out;
+  transition: all 0.35s ease-in-out;
 }
-.p1 #profile{
-    background:#fff url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png") 0 0 no-repeat;
+figure.snip0057 .image {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  -webkit-transform: skewX(-15deg);
+  transform: skewX(-15deg);
 }
-#profile .avatar{
-    width:68px;
-    border:3px solid #fff;
-    margin:23px 0 0;
-    border-radius:50%;
+figure.snip0057 .image img {
+  position: relative;
+  height: 100%;
+  display: block;
+  left: -30%;
+  z-index: 1;
+  -webkit-transform: skew(15deg);
+  transform: skew(15deg);
 }
-#profile  p{
-    font-weight:600;
-    font-size:15px;
-    margin:118px 0 -1px;
-    opacity:0;
-    -webkit-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-       -moz-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-        -ms-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-         -o-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-            transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000); 
+figure.snip0057:before {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 45%;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-transform: skewX(-17deg);
+  transform: skewX(-17deg);
+  -webkit-box-shadow: 15px 0px 25px rgba(0, 0, 0, 0.7);
+  box-shadow: 15px 0px 25px rgba(0, 0, 0, 0.7);
 }
-#profile  p.animate{
-    margin-top:97px;
-    opacity:1;
-    -webkit-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-       -moz-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-        -ms-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-         -o-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-            transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000); 
+figure.snip0057 figcaption {
+  padding: 20px 30px 20px 20px;
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  width: 50%;
 }
-#profile  span{
-    font-weight:400;
-    font-size:11px;
+figure.snip0057 figcaption h2,
+figure.snip0057 figcaption p {
+  margin: 0;
+  text-align: right;
+  padding: 10px 0;
+  width: 100%;
 }
-#chat-messages{
-    opacity:0;
-    margin-top:30px;
-    width:290px;
-    height:270px;
-    overflow-y:scroll;  
-    overflow-x:hidden;
-    padding-right: 20px;
-    -webkit-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-       -moz-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-        -ms-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-         -o-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
-            transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+figure.snip0057 figcaption h2 {
+  font-size: 1.3em;
+  font-weight: 300;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
-#chat-messages.animate{
-    opacity:1;
-    margin-top:0;
+figure.snip0057 figcaption h2 span {
+  font-weight: 800;
 }
-#chat-messages label{
-    color:#aab8c2;
-    font-weight:600;
-    font-size:12px;
-    text-align:center;
-    margin:15px 0;
-    width:290px;
-    display:block;  
+figure.snip0057 figcaption p {
+  font-size: 0.9em;
+  opacity: 0.8;
 }
-#chat-messages div.message{
-    padding:0 0 30px 58px;
-    clear:both;
-    margin-bottom:45px;
+figure.snip0057 figcaption .icons {
+  width: 100%;
+  text-align: right;
 }
-#chat-messages div.message.right{
-      padding: 0 58px 30px 0;
-      margin-right: -19px;
-      margin-left: 19px;
+figure.snip0057 figcaption .icons i {
+  font-size: 26px;
+  padding: 5px;
+  top: 50%;
+  color: #000000;
+  opacity: 0;
 }
-#chat-messages .message img{
-      float: left;
-      margin-left: -38px;
-      border-radius: 50%;
-      width: 30px;
-      margin-top: 12px;
+figure.snip0057 figcaption a {
+  opacity: 0.3;
 }
-#chat-messages div.message.right img{
-    float: right;   
-    margin-left: 0;
-    margin-right: -38px;    
+figure.snip0057 figcaption a:hover {
+  opacity: 0.8;
 }
-.message .bubble{   
-    background:#f0f4f7;
-    font-size:13px;
-    font-weight:600;
-    padding:12px 13px;
-    border-radius:5px 5px 5px 0px;
-    color:#8495a3;
-    position:relative;
-    float:left;
+figure.snip0057 .position {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  padding: 15px 30px;
+  font-size: 0.9em;
+  opacity: 1;
+  font-style: italic;
+  color: #ffffff;
+  background: #000000;
 }
-#chat-messages div.message.right .bubble{
-    float:right;
-    border-radius:5px 5px 0px 5px ;
+figure.snip0057.blue .position {
+  background: #20638f;
 }
-.bubble .corner{
-    background:url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/bubble-corner.png") 0 0 no-repeat;
-    position:absolute;
-    width:7px;
-    height:7px;
-    left:-5px;
-    bottom:0;
+figure.snip0057.red .position {
+  background: #962d22;
 }
-div.message.right .corner{
-    background:url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/bubble-cornerR.png") 0 0 no-repeat;
-    left:auto;
-    right:-5px;
+figure.snip0057.yellow .position {
+  background: #bf6516;
 }
-.bubble span{
-      color: #aab8c2;
-      font-size: 11px;
-      position: absolute;
-      right: 0;
-      bottom: -22px;
+figure.snip0057:hover figcaption,
+figure.snip0057.hover figcaption {
+  bottom: 40px;
 }
-#sendmessage{
-    height:60px;
-    border-top:1px solid #e7ebee;   
-    position:absolute;
-    bottom:0;
-    right:0px;
-    width:290px;
-    background:#fff;
-    padding-bottm:50px;
+figure.snip0057:hover .icons i,
+figure.snip0057.hover .icons i {
+  opacity: 1;
+  -webkit-transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
-#sendmessage input{
-    border
+figure.snip0057:hover:before,
+figure.snip0057.hover:before {
+  -webkit-animation: shadow 0.6s ease-in-out;
+  animation: shadow 0.6s ease-in-out;
 }
-#sendmessage input{
-    background:#fff;
-    margin:21px 0 0 21px;
-    border:none;
-    padding:0;
-    font-size:14px;
-    font-family:"Open Sans", sans-serif; 
-    font-weight:400px;
-    color:#aab8c2;
+@-webkit-keyframes shadow {
+  0% {
+    left: 0px;
+  }
+  50% {
+    left: -5px;
+  }
+  100% {
+    left: 0px;
+  }
 }
-#sendmessage input:focus{
-     outline: 0;
-}
-#sendmessage button{
-    background:#fff url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/send.png") 0 -41px no-repeat;
-    width:30px;
-    height:30px;
-    position:absolute;
-    right: 15px;
-    top: 23px;
-    border:none;
-}
-#sendmessage button:hover{
-    cursor:pointer;
-    background-position: 0 0 ;
-}
-#sendmessage button:focus{
-     outline: 0;     
-}
-
-#close{
-    position:absolute;
-    top: 8px;   
-    opacity:0.8;
-    right: 10px;
-    width:20px;
-    height:20px;
-    cursor:pointer;
-}
-#close:hover{
-    opacity:1;
-}
-.cx, .cy{
-    background:#fff;
-    position:absolute;
-    width:0px;
-    top:15px;
-    right:15px;
-    height:3px;
-    -webkit-transition: all 250ms ease-in-out;
-       -moz-transition: all 250ms ease-in-out;
-        -ms-transition: all 250ms ease-in-out;
-         -o-transition: all 250ms ease-in-out;
-            transition: all 250ms ease-in-out;
-}
-.cx.s1, .cy.s1{ 
-    right:0;    
-    width:20px; 
-    -webkit-transition: all 100ms ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ms ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-.cy.s2{ 
-    -ms-transform: rotate(50deg); 
-    -webkit-transform: rotate(50deg); 
-    transform: rotate(50deg);        
-    -webkit-transition: all 100ms ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ms ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-.cy.s3{ 
-    -ms-transform: rotate(45deg); 
-    -webkit-transform: rotate(45deg); 
-    transform: rotate(45deg);        
-    -webkit-transition: all 100ms ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ms ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-.cx.s1{ 
-    right:0;    
-    width:20px; 
-    -webkit-transition: all 100ms ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ms ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-.cx.s2{ 
-    -ms-transform: rotate(140deg); 
-    -webkit-transform: rotate(140deg); 
-    transform: rotate(140deg);       
-    -webkit-transition: all 100ms ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-.cx.s3{ 
-    -ms-transform: rotate(135deg); 
-    -webkit-transform: rotate(135deg); 
-    transform: rotate(135deg);       
-    -webkit-transition: all 100ease-out;
-       -moz-transition: all 100ms ease-out;
-        -ms-transition: all 100ms ease-out;
-         -o-transition: all 100ms ease-out;
-            transition: all 100ms ease-out;
-}
-#chatview, #sendmessage { 
-overflow:hidden; 
-border-radius:6px; 
+@keyframes shadow {
+  0% {
+    left: 0px;
+  }
+  50% {
+    left: -5px;
+  }
+  100% {
+    left: 0px;
+  }
 }

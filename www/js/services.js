@@ -511,7 +511,8 @@ angular.module('app.services', [])
                 var usersRef = MembersFactory.ref();
                 var myUser = usersRef.child(fbAuth.uid);
                 var temp = {
-                    lastdate: currentItem.date
+                    lastdate: currentItem.date,
+                    note: currentItem.note
                 }
                 myUser.update(temp, function () {
                     CurrentUserService.lastdate = temp.lastdate;
@@ -702,6 +703,7 @@ angular.module('app.services', [])
             this.lastdate = user.lastdate;
             this.group_name = user.group_name;
             this.photo = user.photo;
+            this.note = user.note;
         }
 })
 

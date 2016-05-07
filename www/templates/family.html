@@ -1,9 +1,13 @@
 <ion-view style="" title="{{ AccountTitle }}">
     <ion-content class="has-header" padding="true">
-        <div style="text-align: center;">
-            <img src="data:image/jpeg;base64,{{ photo }}" height="300px" width="100%">
-        </div>
-        <h3 style="">{{ fullname() }}</h3>
+        <figure class="snip0057 red">
+          <figcaption>
+            <h2>{{ firstname }} <span>{{ surename }}</span></h2>
+            <p>{{ note }}</p>
+            <div class="icons"><a href="#"><i class="ion-ios-home"></i></a><a href="#"><i class="ion-ios-email"></i></a><a href="#"><i class="ion-ios-telephone"></i></a></div>
+          </figcaption>
+          <div class="image"><img src="data:image/jpeg;base64,{{ photo }}" alt="sample4"/></div>
+        </figure>
         <div style="" class="button-bar family">
             <button style="" class="button icon ion-ios-clock-outline" ng-click="today()"></button>
             <button style="" class="button icon ion-ios-moon-outline" ng-click="tomonth()"></button>
