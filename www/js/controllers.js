@@ -197,7 +197,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('postingCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $ionicActionSheet, $ionicHistory, AccountsFactory, PickTransactionServices, PayeesService, myCache, CurrentUserService) {
+.controller('postingCtrl', function ($scope, $state, $stateParams, $cordovaSocialSharing, $cordovaCamera, $ionicActionSheet, $ionicHistory, AccountsFactory, PickTransactionServices, PayeesService, myCache, CurrentUserService) {
 
     $scope.hideValidationMessage = true;
     $scope.loadedClass = 'hidden';
@@ -292,6 +292,9 @@ angular.module('app.controllers', [])
     	if ($scope.currentItem.amount !== ''){
         	$scope.amount = function (){ return " " + $scope.currentItem.amount;};
     	}
+    	if ($scope.currentItem.note !== ''){
+        	$scope.note = function (){ return " " + $scope.currentItem.note;};
+    	}
     });
 
     // PICK TRANSACTION TYPE
@@ -384,6 +387,44 @@ angular.module('app.controllers', [])
         } else {
             $state.go('tabsController.pickposttransactionpayee');
         }
+    }
+
+    $scope.shareViaTwitter = function(message, image, link) {
+    	if (typeof $scope.currentItem.note === 'undefined' || $scope.currentItem.note === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please type some note"
+            return;
+        }
+        if (typeof $scope.currentItem.photo === 'undefined' || $scope.currentItem.photo === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please take a photo"
+            return;
+        }else {
+	        $cordovaSocialSharing.canShareVia("twitter", message, image, link).then(function(result) {
+	            $cordovaSocialSharing.shareViaTwitter(message, image, link);
+	        }, function(error) {
+	            alert("Cannot share on Twitter");
+	        });
+	    }
+    }
+
+    $scope.shareViaFacebook = function(message, image, link) {
+    	if (typeof $scope.currentItem.note === 'undefined' || $scope.currentItem.note === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please type some note"
+            return;
+        }
+        if (typeof $scope.currentItem.photo === 'undefined' || $scope.currentItem.photo === '') {
+            $scope.hideValidationMessage = false;
+            $scope.validationMessage = "Please take a photo"
+            return;
+        }else {
+	        $cordovaSocialSharing.canShareVia("facebook", message, image, link).then(function(result) {
+	            $cordovaSocialSharing.shareViaFacebook(message, image, link);
+	        }, function(error) {
+	            alert("Cannot share on Twitter");
+	        });
+	    }
     }
 
     // SAVE
