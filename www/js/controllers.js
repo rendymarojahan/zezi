@@ -224,7 +224,7 @@ angular.module('app.controllers', [])
         'isrecurring': false,
         'istransfer': false,
         'isphoto': false,
-        'notes': '',
+        'note': '',
         'payee': '',
         'photo': '',
         'runningbal': '',
@@ -294,6 +294,9 @@ angular.module('app.controllers', [])
     	}
     	if ($scope.currentItem.note !== ''){
         	$scope.note = function (){ return " " + $scope.currentItem.note;};
+    	}
+    	if ($scope.currentItem.photo !== ''){
+        	$scope.sphoto = function (){ return " " + $scope.currentItem.photo;};
     	}
     });
 
@@ -419,10 +422,10 @@ angular.module('app.controllers', [])
             $scope.validationMessage = "Please take a photo"
             return;
         }else {
-	        $cordovaSocialSharing.canShareVia("facebook", message, image, link).then(function(result) {
-	            $cordovaSocialSharing.shareViaFacebook(message, image, link);
+	        $cordovaSocialSharing.shareViaFacebook(message, image, link).then(function(result) {
+	            alert("Share on Facebook Success");
 	        }, function(error) {
-	            alert("Cannot share on Twitter");
+	            alert("Cannot share on Facebook");
 	        });
 	    }
     }
