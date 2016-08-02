@@ -466,118 +466,102 @@ angular.module('app.services', [])
             },
             createTransaction: function (currentAccountId, currentItem) {
                 //
-                var otherAccountId = '';
-                var OtherTransaction = {};
-                //
-                if (currentItem.istransfer) {
-                    angular.copy(currentItem, OtherTransaction);
-                    if (currentAccountId === currentItem.accountToId) {
-                        //For current account: transfer is coming into the current account as an income
-                        currentItem.type = 'Income';
-                        accountId = currentItem.accountToId;
-                        otherAccountId = currentItem.accountFromId;
-                        OtherTransaction.type = 'Expense';
+                var connectedRef = new Firebase('https://zezi.firebaseio.com/.info/connected');
+                connectedRef.on('value', function(snap) {
+                  if (snap.val() === true) {
+                    var myObj = JSON.parse(window.localStorage.get("saved"));
+                    var otherAccountId = '';
+                    var OtherTransaction = {};
+                    //
+                    if (currentItem.istransfer) {
+                        angular.copy(currentItem, OtherTransaction);
+                        if (currentAccountId === currentItem.accountToId) {
+                            //For current account: transfer is coming into the current account as an income
+                            currentItem.type = 'Income';
+                            accountId = currentItem.accountToId;
+                            otherAccountId = currentItem.accountFromId;
+                            OtherTransaction.type = 'Expense';
+                        } else {
+                            //For current account: transfer is moving into the other account as an expense
+                            currentItem.type = 'Expense';
+                            accountId = currentItem.accountFromId;
+                            otherAccountId = currentItem.accountToId;
+                            OtherTransaction.type = 'Income';
+                        }
                     } else {
-                        //For current account: transfer is moving into the other account as an expense
-                        currentItem.type = 'Expense';
-                        accountId = currentItem.accountFromId;
-                        otherAccountId = currentItem.accountToId;
-                        OtherTransaction.type = 'Income';
+                        currentAccountId = currentItem.accountId;
                     }
-                } else {
-                    currentAccountId = currentItem.accountId;
-                }
-                //
-                // Save transaction
-                //
-                var ref = fb.child("members").child(thisMemberId).child("member_transactions");
-                var newChildRef = ref.push(currentItem);
-                // Save posting public
-                var refPublic = fb.child("publics");
-                refPublic.push({ name: currentItem.addedby, 
-                                 location: currentItem.payee,
-                                 userid: currentItem.userid,
-                                 note: currentItem.note,
-                                 photo: currentItem.photo,
-                                 date: currentItem.date,
-                                 likes:'',
-                                 views:'',
-                                 comments:''
-                              });
-                //
-                // Update preferences - Last Date Used
-                //
-                var fbAuth = fb.getAuth();
-                var usersRef = MembersFactory.ref();
-                var myUser = usersRef.child(fbAuth.uid);
-                var temp = {
-                    lastdate: currentItem.date,
-                    note: currentItem.note
-                }
-                myUser.update(temp, function () {
-                    CurrentUserService.lastdate = temp.lastdate;
-                });
-
-                ////
-                //// Save transaction under category
-                ////
-                //var categoryTransactionRef = fb.child("groups").child(thisGroupId).child("membertransactionsbycategory").child(currentItem.categoryid).child(newChildRef.key());
-                //var categoryTransaction = {
-                //    payee: currentItem.payee,
-                //    amount: currentItem.amount,
-                //    date: currentItem.date,
-                //    type: currentItem.type,
-                //    iscleared: currentItem.iscleared
-                //};
-                //categoryTransactionRef.update(categoryTransaction);
-                ////
-                //// Save transaction under payee
-                ////
-                //var payeeTransactionRef = fb.child("groups").child(thisGroupId).child("membertransactionsbypayee").child(currentItem.payeeid).child(newChildRef.key());
-                //var payeeTransaction = {
-                //    payee: currentItem.payee,
-                //    amount: currentItem.amount,
-                //    date: currentItem.date,
-                //    type: currentItem.type,
-                //    iscleared: currentItem.iscleared
-                //};
-                //payeeTransactionRef.update(payeeTransaction);
-
-
-                //
-                // Save payee-category relationship
-                //
-                var payee = {};
-                var payeeRef = fb.child("groups").child(thisGroupId).child("memberpayees").child(currentItem.payeeid);
-                if (currentItem.type === "Income") {
-                    payee = {
-                        lastamountincome: currentItem.amount,
-                        lastcategoryincome: currentItem.category,
-                        lastcategoryidincome: currentItem.categoryid
-                    };
-                } else if (currentItem.type === "Expense") {
-                    payee = {
-                        lastamount: currentItem.amount,
-                        lastcategory: currentItem.category,
-                        lastcategoryid: currentItem.categoryid
-                    };
-                }
-                payeeRef.update(payee);
-
-                if (currentItem.istransfer) {
                     //
-                    // Save the other transaction, get the transaction id and link it to this transaction
+                    // Save transaction
                     //
-                    OtherTransaction.linkedtransactionid = newChildRef.key();
-                    var othertransRef = fb.child("members").child(thisMemberId).child("transfertransactions").child(otherAccountId);
-                    var sync = $firebaseArray(othertransRef);
-                    sync.$add(OtherTransaction).then(function (otherChildRef) {
-                        //
-                        // Update this transaction with other transaction id
-                        newChildRef.update({ linkedtransactionid: otherChildRef.key() })
-                        //
+                    var ref = fb.child("members").child(thisMemberId).child("member_transactions");
+                    var newChildRef = ref.push(currentItem);
+                    // Save posting public
+                    var refPublic = fb.child("publics");
+                    refPublic.push({ name: currentItem.addedby, 
+                                     location: currentItem.payee,
+                                     userid: currentItem.userid,
+                                     note: currentItem.note,
+                                     photo: currentItem.photo,
+                                     date: currentItem.date,
+                                     likes:'',
+                                     views:'',
+                                     comments:''
+                                  });
+                    //
+                    // Update preferences - Last Date Used
+                    //
+                    var fbAuth = fb.getAuth();
+                    var usersRef = MembersFactory.ref();
+                    var myUser = usersRef.child(fbAuth.uid);
+                    var temp = {
+                        lastdate: currentItem.date,
+                        note: currentItem.note
+                    }
+                    myUser.update(temp, function () {
+                        CurrentUserService.lastdate = temp.lastdate;
                     });
-                }
+                    var payee = {};
+                    var payeeRef = fb.child("groups").child(thisGroupId).child("memberpayees").child(currentItem.payeeid);
+                    if (currentItem.type === "Income") {
+                        payee = {
+                            lastamountincome: currentItem.amount,
+                            lastcategoryincome: currentItem.category,
+                            lastcategoryidincome: currentItem.categoryid
+                        };
+                    } else if (currentItem.type === "Expense") {
+                        payee = {
+                            lastamount: currentItem.amount,
+                            lastcategory: currentItem.category,
+                            lastcategoryid: currentItem.categoryid
+                        };
+                    }
+                    payeeRef.update(payee);
+
+                    if (currentItem.istransfer) {
+                        //
+                        // Save the other transaction, get the transaction id and link it to this transaction
+                        //
+                        OtherTransaction.linkedtransactionid = newChildRef.key();
+                        var othertransRef = fb.child("members").child(thisMemberId).child("transfertransactions").child(otherAccountId);
+                        var sync = $firebaseArray(othertransRef);
+                        sync.$add(OtherTransaction).then(function (otherChildRef) {
+                            //
+                            // Update this transaction with other transaction id
+                            newChildRef.update({ linkedtransactionid: otherChildRef.key() })
+                            //
+                        });
+                    }
+                    var con = myConnectionsRef.push(true);
+                        
+                    con.onDisconnect().remove();
+                    // when I disconnect, update the last time I was seen online
+                    lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+                  }
+
+                    window.localStorage.set("saved", JSON.stringify(currentItem));
+                });
+                
             },
             deleteTransaction: function () {
                 return alltransactions;
