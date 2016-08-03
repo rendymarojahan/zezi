@@ -1,28 +1,32 @@
-<ion-view style="" title="Profile">
-    <ion-content class="has-header" overflow-scroll="true" padding="true">
-        <div style="text-align: center;">
-            <img src="img/WYHupbWSfG6tzXD3X9rw_Jogja 124.JPG" height="50%" width="100%">
+<ion-view style="" title="Edit Profile">
+    <ion-content class="has-header" padding="true">
+        <figure class="snip0057 red">
+          <figcaption>
+            <h2>{{ firstname }} <span>{{ surename }}</span></h2>
+            <p>{{ note }}</p>
+            <div class="icons"><a ng-click="doAction()"><i class="ion-ios-camera" ></i></a></div>
+          </figcaption>
+          <div ng-if="!isphoto" class="image"><img src="data:image/jpeg;base64,{{ photo }}" alt="sample4"/></div>
+          <div ng-if="isphoto" class="image"><img src="data:image/jpeg;base64,{{ currentItem.photo }}" alt="sample4"/></div>
+        </figure>
+        <div style="" class="button-bar family">
         </div>
-        <form style="" class="list">
-            <ion-item style="" class="item-divider">Basic Information</ion-item>
-            <label style="" name="email" class="item item-input">
-                <input placeholder="Email" type="email">
-            </label>
-            <label style="" name="password" class="item item-input">
-                <input placeholder="Password" type="password">
-            </label>
-            <label style="" name="name" class="item item-input">
-                <input placeholder="Name" type="text">
-            </label>
-            <label style="" name="phone" class="item item-input">
-                <input placeholder="Phone" type="tel">
-            </label>
-            <label style="" name="birthday" class="item item-input">
-                <input placeholder="Birthday" type="date">
-            </label>
-            <ion-checkbox style="" name="male">Male</ion-checkbox>
-            <ion-checkbox style="" name="male">Female</ion-checkbox>
-            <div style="width: 283px; height: 50px;" class="spacer"></div>
-        </form>
+        <div style="">
+            <form style="" class="list">
+                <label style="" name="name" class="item item-input">
+                    <input placeholder="{{ firstname }}" type="text" ng-model="user.firstname">
+                </label>
+                <label style="" name="name" class="item item-input">
+                    <input placeholder="{{ surename }}" type="text" ng-model="user.surename">
+                </label>
+                <label style="" name="phone" class="item item-input">
+                    <input placeholder="{{ phone }}" type="tel" ng-model="user.phone">
+                </label>
+                <div style="width: 283px; height: 46px;" class="spacer"></div>
+            </form>
+            <button class="button button-float" ng-click="createMember(user)">
+            <i class="icon ion-ios-person-outline"></i>
+            </button>
+        </div>
     </ion-content>
 </ion-view>

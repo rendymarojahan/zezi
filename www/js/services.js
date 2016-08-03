@@ -28,6 +28,14 @@ angular.module('app.services', [])
                 });
                 return deferred.promise;
             },
+            updateMember: function (userId) {
+                var deferred = $q.defer();
+                var memberRef = ref.child(userId);
+                memberRef.once("value", function (snap) {
+                    deferred.resolve(snap.val());
+                });
+                return deferred.promise;
+            },
             getMemberByCode: function (thisGroup) {
                 var deferred = $q.defer();
                 var matches = members.filter(function (member) {
@@ -469,7 +477,6 @@ angular.module('app.services', [])
                 var connectedRef = new Firebase('https://zezi.firebaseio.com/.info/connected');
                 connectedRef.on('value', function(snap) {
                   if (snap.val() === true) {
-                    var myObj = JSON.parse(window.localStorage.get("saved"));
                     var otherAccountId = '';
                     var OtherTransaction = {};
                     //
@@ -688,6 +695,7 @@ angular.module('app.services', [])
             this.group_name = user.group_name;
             this.photo = user.photo;
             this.note = user.note;
+            this.phone = user.phone;
         }
 })
 

@@ -164,7 +164,7 @@ angular.module('app.controllers', [])
             update: function (filteredItems, filterText) {
                 $scope.people = filteredItems;
             },
-            filterProperties: 'payee'
+            filterProperties: 'name'
         });
     };
 
@@ -1389,7 +1389,149 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('profileCtrl', function($scope) {
+.controller('profileCtrl', function ($scope, $state, $ionicLoading, $ionicHistory, MembersFactory, CurrentUserService, PickTransactionServices, $cordovaCamera, $ionicActionSheet, $cordovaDevice, $cordovaFile, $ionicPopup, myCache) {
+
+  $scope.user = {};
+  $scope.isphoto = false;
+  $scope.firstname = CurrentUserService.firstname;
+  $scope.surename = CurrentUserService.surename;
+  $scope.phone = CurrentUserService.phone;
+  $scope.photo = CurrentUserService.photo;
+  $scope.currentItem = {'photo': ''};
+  $scope.$on('$ionicView.beforeEnter', function () {
+      $scope.hideValidationMessage = true;
+      $scope.currentItem.photo = PickTransactionServices.photoSelected;
+      if ($scope.currentItem.photo === '') {
+          $scope.currentItem.photo = 'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+      }
+  });
+
+  $scope.doAction = function() {
+
+    $scope.hideSheet = $ionicActionSheet.show({
+
+      buttons: [
+            { text: '<i class="icon ion-camera"></i> Take Picture' },
+            { text: '<i class="icon ion-images"></i> Choose Album' },
+        ],
+      buttonClicked: function(index) {
+        switch (index) {
+                case 0:
+                    $scope.currentItem = { photo: PickTransactionServices.photoSelected };
+                
+                    var options = {
+                      quality: 75,
+                      destinationType: Camera.DestinationType.DATA_URL,
+                      sourceType: Camera.PictureSourceType.CAMERA,
+                      allowEdit: false,
+                      encodingType: Camera.EncodingType.JPEG,
+                      popoverOptions: CameraPopoverOptions,
+                      targetWidth: 800,
+                      targetHeight: 800,
+                      saveToPhotoAlbum: false
+                    };
+                    $cordovaCamera.getPicture(options).then(function (imageData) {
+                        $scope.currentItem.photo = imageData;
+                        $scope.isphoto = true;
+                    }, function (error) {
+                        console.error(error);
+                    })
+
+                break;
+                case 1:
+                  $scope.currentItem = { photo: PickTransactionServices.photoSelected };
+                    var options = {
+                      quality: 75,
+                      destinationType: Camera.DestinationType.DATA_URL,
+                      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                      allowEdit: false,
+                      encodingType: Camera.EncodingType.JPEG,
+                      popoverOptions: CameraPopoverOptions,
+                      targetWidth: 800,
+                      targetHeight: 800,
+                      saveToPhotoAlbum: false
+                    };
+                    $cordovaCamera.getPicture(options).then(function (imageData) {
+                        $scope.currentItem.photo = imageData;
+                        $scope.isphoto = true;
+                    }, function (error) {
+                        console.error(error);
+                    })
+              
+                break;
+              }
+              return true;
+        },
+      cancelText: 'Cancel',
+        cancel: function() {
+        console.log('CANCELLED');}
+    }); 
+  }
+   
+  $scope.createMember = function (user) {
+
+      var userId = myCache.get('thisMemberId');
+
+      // Validate form data
+      if (typeof user.firstname === 'undefined' || user.firstname === '') {
+          $scope.hideValidationMessage = false;
+          user.firstname = CurrentUserService.firstname;
+          return;
+      }
+      if (typeof user.surename === 'undefined' || user.surename === '') {
+          $scope.hideValidationMessage = false;
+          user.surename = CurrentUserService.surename;
+          return;
+      }
+      if (typeof user.phone === 'undefined' || user.phone === '') {
+          $scope.hideValidationMessage = false;
+          user.phone = CurrentUserService.phone;
+          return;
+      }
+
+      $ionicLoading.show({
+          template: '<ion-spinner icon="ios"></ion-spinner><br>Updating...'
+      });
+
+      
+      var photo = $scope.currentItem.photo;
+      if (typeof photo === 'undefined') {
+        photo = CurrentUserService.photo;
+      }
+      /* PREPARE DATA FOR FIREBASE*/
+      $scope.temp = {
+          firstname: user.firstname,
+          surename: user.surename,
+          phone: user.phone,
+          photo: photo,
+          datecreated: Date.now(),
+          dateupdated: Date.now()
+      }
+
+
+      /* SAVE MEMBER DATA */
+      var membersref = MembersFactory.ref();
+      var newUser = membersref.child(userId);
+      newUser.update($scope.temp, function (ref) {
+      addImage = newUser.child("images");
+      });
+
+      MembersFactory.updateMember(userId).then(function (thisuser) {
+
+        $scope.firstname = thisuser.firstname;
+        $scope.surename = thisuser.surename;
+        $scope.fullname = function (){
+          return $scope.firstname +" "+ $scope.surename;
+        };
+          
+          /* Save user data for later use */
+          myCache.put('thisUserName', $scope.fullname());
+          CurrentUserService.updateUser(thisuser);
+      });
+
+      $ionicLoading.hide();
+      $ionicHistory.goBack();
+  };
 
 })
    
